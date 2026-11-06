@@ -87,7 +87,7 @@ N_INVALID_DEFINITION = (
     "validation is missing_name, unknown_tool, or schema_invalid. "
     "A complete call omitted by the native parser is not a model syntax error "
     "and is not counted. truncated_fragment, generation_truncated, no_tool_call, "
-    "tool_error, exception, order_or_token, and timeout are reported separately "
+    "tool_error, exception, order_or_token, and elapsed_limit_exceeded are reported separately "
     "and are not counted. C is preliminary."
 )
 
@@ -409,10 +409,12 @@ def _base_step(source: str, episode: RefundEpisode, step_id: int) -> dict:
         "new_token_count": None,
         "stop": "not_generated",
         "stop_reason": None,
+        "round_limit_reached": False,
         "budget_exhausted": False,
         "pending_unexecuted_calls": [],
         "pending_unexecuted_reason": None,
-        "timeout": False,
+        "elapsed_limit_exceeded": False,
+        "timeout_enforced": False,
         "elapsed_s": None,
         "final_answer": None,
         "task_success_harness": False,
@@ -424,14 +426,16 @@ def _base_step(source: str, episode: RefundEpisode, step_id: int) -> dict:
 def _finish(steps: list[dict], episode: RefundEpisode, final_answer: str | None, elapsed: float | None) -> None:
     harness_ok = bool(episode.submitted)
     answer_ok = _answer_ok(final_answer, episode.amount_cents)
-    timeout = elapsed is not None and elapsed > config.EPISODE_TIMEOUT_S
+    # Measured after the episode returns. Nothing is interrupted when this is true.
+    elapsed_limit_exceeded = elapsed is not None and elapsed > config.EPISODE_TIMEOUT_S
     for step in steps:
         step["final_answer"] = final_answer
         step["task_success_harness"] = harness_ok
         step["task_success_answer"] = answer_ok
         step["task_success"] = harness_ok and answer_ok
-        step["timeout"] = timeout
         step["elapsed_s"] = elapsed
+        step["elapsed_limit_exceeded"] = elapsed_limit_exceeded
+        step["timeout_enforced"] = False
 
 
 def _summarize(steps: list[dict], label: str) -> dict:
@@ -448,7 +452,7 @@ def _summarize(steps: list[dict], label: str) -> dict:
     exception = 0
     order_or_token = 0
     truncated_steps = 0
-    timeout_episodes = 0
+    elapsed_limit_exceeded_episodes = 0
     harness_ok = 0
     answer_ok = 0
     both_ok = 0
@@ -467,8 +471,8 @@ def _summarize(steps: list[dict], label: str) -> dict:
         order_or_token += sum(bool(call.get("order_or_token")) for call in calls)
         truncated_steps += sum(bool(step.get("generation_truncated")) for step in ep_steps)
         head = ep_steps[0]
-        if head.get("timeout"):
-            timeout_episodes += 1
+        if head.get("elapsed_limit_exceeded"):
+            elapsed_limit_exceeded_episodes += 1
         if head.get("task_success_harness"):
             harness_ok += 1
         if head.get("task_success_answer"):
@@ -527,7 +531,8 @@ def _summarize(steps: list[dict], label: str) -> dict:
         "episodes_with_no_attempt": _rate(silent, n_episodes),
         "schema_invalid_per_parsed_call": _rate(schema_invalid, parsed_calls),
         "generation_truncated_steps": _rate(truncated_steps, n_steps),
-        "timeout_episodes": _rate(timeout_episodes, n_episodes),
+        "elapsed_limit_exceeded_episodes": _rate(elapsed_limit_exceeded_episodes, n_episodes),
+        "timeout_enforced": False,
         "rewards": rewards,
         "N_invalid_components": _n_invalid_components(steps),
         "N_invalid_definition": N_INVALID_DEFINITION,
@@ -708,6 +713,8 @@ def _assign_budget(rows: list[dict]) -> None:
     reason = "max_steps" if exhausted else "ended_without_tool_call"
     for step in rows:
         step["stop_reason"] = reason
+        step["round_limit_reached"] = exhausted
+        # Alias kept so a full four-round success is not read as a failed stop.
         step["budget_exhausted"] = exhausted
     if not rows:
         return
@@ -1185,6 +1192,12 @@ def _check_fixtures(rows: list[dict]) -> list[str]:
         problems.append("scripted success repeated or skipped a tool")
     if success[-1].get("pending_unexecuted_calls"):
         problems.append("scripted success left a pending call")
+    if not success[-1].get("round_limit_reached"):
+        problems.append("scripted success did not record that the four rounds were used")
+    if success[-1].get("timeout_enforced") is not False:
+        problems.append("scripted success enforced a timeout")
+    if "elapsed_s" not in success[-1] or "elapsed_limit_exceeded" not in success[-1]:
+        problems.append("scripted success did not store elapsed fields")
     budget_steps = by_case["budget_exhausted"]
     if budget_steps[-1]["function_entries"] != [
         "lookup_order",
@@ -1712,19 +1725,387 @@ def _model_revision_from_hub() -> dict:
         return {"hub_sha": None, "hub_error": _redact(f"{type(exc).__name__}: {exc}")}
 
 
+def _environment_fingerprint(episode: RefundEpisode) -> str:
+    import hashlib
+
+    payload = "\n".join(episode.hidden_strings())
+    return hashlib.sha256(payload.encode()).hexdigest()
+
+
+def _seed_generation(seed: int) -> None:
+    import torch
+
+    torch.manual_seed(seed)
+    if torch.backends.mps.is_available():
+        torch.mps.manual_seed(seed)
+
+
+def _reward_spread(values: list[float]) -> dict:
+    import statistics
+
+    mean = statistics.fmean(values)
+    std = statistics.stdev(values)
+    return {
+        "values": values,
+        "mean": mean,
+        "std": std,
+        "ddof": 1,
+        "n_distinct": len(set(values)),
+        "zero_std": std == 0.0,
+        "centered": [value - mean for value in values],
+        "centered_is_trl_advantage": False,
+        "note": "centered = r - mean(r) inside this group. A trainer was not run.",
+    }
+
+
+def _one_model_rollout(
+    factory,
+    engine,
+    tokenizer,
+    schema_list,
+    probe,
+    episode: RefundEpisode,
+    *,
+    generation_seed: int,
+    environment_seed: int,
+    max_new_tokens: int,
+    temperature: float,
+    do_sample: bool,
+    top_p: float | None,
+) -> tuple[list[dict], list[str]]:
+    from agenttune.agentic.rollout_engines.rollout_factory import create_rollout_fn
+
+    _seed_generation(generation_seed)
+    limitations = []
+    guards, _episode_schemas = make_guarded_tools(episode)
+    tool_names = {guard.__name__ for guard in guards}
+    gen_log: list[dict] = []
+    extract_log: list[dict] = []
+    wrapped = _RecordingEngine(engine, gen_log, tokenizer)
+    original = factory._extract_tool_calls
+    factory._extract_tool_calls = original
+    _install_extract_hook(factory, extract_log)
+    rollout = create_rollout_fn(
+        rollout_engine=wrapped,
+        tools=guards,
+        max_steps=config.MAX_STEPS,
+        system_prompt=SYSTEM_PROMPT,
+        enable_thinking=config.ENABLE_THINKING,
+        force_final_answer=config.FORCE_FINAL_ANSWER,
+        force_action_on_stall=config.FORCE_ACTION_ON_STALL,
+        context_length=config.CONTEXT_LENGTH,
+        tools_fallback_prompt=TOOLS_FALLBACK_PROMPT,
+        tool_result_format=TOOL_RESULT_FORMAT,
+    )
+    started = time.monotonic()
+    try:
+        kwargs = {
+            "max_new_tokens": max_new_tokens,
+            "temperature": temperature,
+            "do_sample": do_sample,
+            "max_length": config.CONTEXT_LENGTH,
+        }
+        if top_p is not None:
+            kwargs["top_p"] = top_p
+        result = rollout([user_prompt(episode.order_id, episode.customer_id)], **kwargs)
+    finally:
+        factory._extract_tool_calls = original
+    elapsed = time.monotonic() - started
+    trajectory = result["trajectories"][0]
+    final_answer = trajectory.final_response
+    loop_steps = list(trajectory.steps or [])
+    cursor = [0]
+    used_extract = 0
+    ep_rows = []
+    fingerprint = _environment_fingerprint(episode)
+    for step_id, generated in enumerate(gen_log):
+        raw = generated["completions_raw"]
+        extract = None
+        if used_extract < len(extract_log) and extract_log[used_extract]["raw_output"] == raw:
+            extract = extract_log[used_extract]
+            used_extract += 1
+        parser_invoked = extract is not None
+        parser_result = extract["parser_result"] if parser_invoked else None
+        diagnostic, parser_result, pending, _pending_reason = _generation_diagnosis(
+            raw, parser_invoked, parser_result, original, episode
+        )
+        calls = (
+            _consume_guard_records(parser_result, tool_names, episode, cursor)
+            if parser_invoked
+            else []
+        )
+        thought = None
+        if diagnostic["parse_status"] == "parsed" and loop_steps:
+            thought = loop_steps.pop(0).thought
+        visible = _tool_names_visible(generated["rendered_prompt"], schema_list)
+        row = _base_step("model", episode, step_id)
+        row.update(
+            {
+                "rollout_id": f"{episode.episode_id}-g{generation_seed}",
+                "generation_seed": generation_seed,
+                "environment_seed": environment_seed,
+                "environment_fingerprint": fingerprint,
+                "temperature": temperature,
+                "do_sample": do_sample,
+                "top_p": top_p,
+                "messages": generated["messages"],
+                "rendered_prompt": generated["rendered_prompt"],
+                "tools_passed_to_generate": [
+                    ((item.get("function") or item).get("name"))
+                    for item in (generated["tools_passed"] or [])
+                ],
+                "template_renders_tools": probe["template_renders_tools"],
+                "probe_with_tools_kw": probe["probe_with_tools_kw"],
+                "probe_without_tools_kw": probe["probe_without_tools_kw"],
+                "tool_names_in_rendered_prompt": visible["tool_names"],
+                "parameter_names_in_rendered_prompt": visible["parameter_names"],
+                "hidden_strings_in_rendered_prompt": _hidden_hits(
+                    generated["rendered_prompt"], episode
+                ),
+                "raw_output": raw,
+                "raw_output_source": "generation_engine",
+                "loop_step_thought": thought,
+                "parser_invoked_by_loop": parser_invoked,
+                "parser_result": parser_result,
+                "diagnostic": diagnostic,
+                "diagnostic_executed": False,
+                "parse_status": diagnostic["parse_status"],
+                "malformed_syntax": diagnostic["malformed_syntax"],
+                "omitted_by_native_parser": diagnostic["omitted_by_native_parser"],
+                "truncated_fragments": diagnostic["truncated_fragments"],
+                "calls": calls,
+                "pending_unexecuted_calls": pending,
+                "function_entries": list(episode.function_entries),
+                "execution_path": PATH,
+                "generation_truncated": generated["generation_truncated"],
+                "prompt_truncated": generated["prompt_truncated"],
+                "new_token_count": generated["new_token_count"],
+                "stop": "generation_truncated" if generated["generation_truncated"] else "eos_or_other",
+                "prompt_len": generated["prompt_len"],
+            }
+        )
+        ep_rows.append(row)
+    if used_extract != len(extract_log):
+        limitations.append(
+            f"{episode.episode_id} g{generation_seed}: extract hook records did not align"
+        )
+    _finish(ep_rows, episode, final_answer, elapsed)
+    _assign_budget(ep_rows)
+    return ep_rows, limitations
+
+
+def _rollout_view(rows: list[dict]) -> dict:
+    last = rows[-1]
+    components = _n_invalid_components(rows)
+    calls = [call for step in rows for call in step.get("calls") or []]
+    reward = _rewards(bool(last.get("task_success")), components["N_invalid_provisional"])
+    return {
+        "rollout_id": last.get("rollout_id"),
+        "episode_id": last.get("episode_id"),
+        "generation_seed": last.get("generation_seed"),
+        "environment_seed": last.get("environment_seed"),
+        "environment_fingerprint": last.get("environment_fingerprint"),
+        "task_success": bool(last.get("task_success")),
+        "B": reward["B"],
+        "C": reward["C"],
+        "C_status": "preliminary",
+        "N_invalid": components,
+        "parsed_calls": len(calls),
+        "no_calls": len(calls) == 0,
+        "generation_truncated_steps": sum(bool(step.get("generation_truncated")) for step in rows),
+        "round_limit_reached": bool(last.get("round_limit_reached")),
+        "pending_unexecuted_calls": _call_names(last.get("pending_unexecuted_calls")),
+        "elapsed_s": last.get("elapsed_s"),
+        "elapsed_limit_exceeded": bool(last.get("elapsed_limit_exceeded")),
+        "timeout_enforced": False,
+        "reward": reward,
+    }
+
+
+def run_variability(out: Path) -> int:
+    """Eight sampled rollouts. Pins are written before the first generation."""
+    _bind_output(out)
+    ARTIFACTS.mkdir(parents=True, exist_ok=True)
+    if config.FORCE_FINAL_ANSWER or config.FORCE_ACTION_ON_STALL:
+        raise RuntimeError("automatic output repair flags must stay off")
+    pinned = {
+        "model_id": config.MODEL_ID,
+        "model_revision": config.MODEL_REVISION,
+        "dtype": config.DTYPE,
+        "quantization": config.QUANTIZATION,
+        "environment_seed": config.VARIABILITY_ENVIRONMENT_SEED,
+        "generation_seeds": list(config.VARIABILITY_GENERATION_SEEDS),
+        "do_sample": config.VARIABILITY_DO_SAMPLE,
+        "temperature": config.VARIABILITY_TEMPERATURE,
+        "top_p": config.VARIABILITY_TOP_P,
+        "max_steps": config.VARIABILITY_MAX_STEPS,
+        "max_new_tokens": config.VARIABILITY_MAX_NEW_TOKENS,
+        "tasks": [
+            {
+                "episode_id": episode_id,
+                "order_id": order_id,
+                "customer_id": customer_id,
+                "amount_cents": amount,
+            }
+            for episode_id, order_id, customer_id, amount in config.VARIABILITY_TASKS
+        ],
+        "prompt": "v1.4 tools_fallback_prompt, tool_result_format, system prompt, user prompt",
+        "parser": "unchanged AgentTune _extract_tool_calls",
+        "reward": {
+            "B": "I(task_success)",
+            "C": "preliminary: I(task_success) - lambda * N_invalid",
+            "lambda": config.LAMBDA,
+            "N_invalid": N_INVALID_DEFINITION,
+            "changed_after_results": False,
+        },
+        "timeout_enforced": False,
+        "lora": False,
+        "grpo": False,
+        "trainer": False,
+    }
+    manifest = {
+        "pinned_before_launch": pinned,
+        "launch_command": (
+            ".venv/bin/python run_contract.py --variability --out artifacts/task-2"
+        ),
+    }
+    _write_json(MANIFEST_PATH, manifest)
+
+    import agenttune.agentic.rollout_engines.rollout_factory as factory
+
+    fixture_rows = run_fixtures(factory)
+    fixture_problems = _check_fixtures(fixture_rows)
+    _dump(FIXTURE_PATH, fixture_rows)
+    if fixture_problems:
+        _write_json(SUMMARY_PATH, {"fixture_problems": fixture_problems, "rollouts": []})
+        return 1
+
+    rows: list[dict] = []
+    errors = []
+    try:
+        engine, tokenizer, loaded = _load_model()
+        manifest["loaded_model"] = loaded
+        _write_json(MANIFEST_PATH, manifest)
+        _probe_guards, schema_list = make_guarded_tools(
+            RefundEpisode("schema-probe", "ORD-1001", "CUS-501", 1840, config.SEED)
+        )
+        probe = _probe(tokenizer, schema_list)
+        for episode_id, order_id, customer_id, amount in config.VARIABILITY_TASKS:
+            for generation_seed in config.VARIABILITY_GENERATION_SEEDS:
+                print(f"variability {episode_id} g{generation_seed}", flush=True)
+                episode = RefundEpisode(
+                    episode_id=episode_id,
+                    order_id=order_id,
+                    customer_id=customer_id,
+                    amount_cents=amount,
+                    seed=config.VARIABILITY_ENVIRONMENT_SEED,
+                )
+                try:
+                    ep_rows, limits = _one_model_rollout(
+                        factory,
+                        engine,
+                        tokenizer,
+                        schema_list,
+                        probe,
+                        episode,
+                        generation_seed=generation_seed,
+                        environment_seed=config.VARIABILITY_ENVIRONMENT_SEED,
+                        max_new_tokens=config.VARIABILITY_MAX_NEW_TOKENS,
+                        temperature=config.VARIABILITY_TEMPERATURE,
+                        do_sample=config.VARIABILITY_DO_SAMPLE,
+                        top_p=config.VARIABILITY_TOP_P,
+                    )
+                    errors.extend(limits)
+                except Exception as exc:
+                    ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+                    errors.append(f"{episode_id} g{generation_seed}: {type(exc).__name__}: {_redact(str(exc))}")
+                    _dump(MODEL_PATH, rows)
+                    _write_json(
+                        SUMMARY_PATH,
+                        {"partial": True, "errors": errors, "completed_rollouts": len({r.get('rollout_id') for r in rows})},
+                    )
+                    print(errors[-1], file=sys.stderr)
+                    return 2
+                rows.extend(ep_rows)
+                _dump(MODEL_PATH, rows)
+    except Exception as exc:
+        ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+        _dump(MODEL_PATH, rows)
+        _write_json(SUMMARY_PATH, {"partial": True, "errors": [f"{type(exc).__name__}: {_redact(str(exc))}"]})
+        return 2
+
+    grouped: dict[str, list[dict]] = {}
+    for row in rows:
+        grouped.setdefault(row["rollout_id"], []).append(row)
+    by_task: dict[str, list[dict]] = {}
+    for rollout_rows in grouped.values():
+        view = _rollout_view(rollout_rows)
+        by_task.setdefault(view["episode_id"], []).append(view)
+    groups = {}
+    homogeneous = True
+    for task, views in by_task.items():
+        fingerprints = {view["environment_fingerprint"] for view in views}
+        b_stats = _reward_spread([view["B"] for view in views])
+        c_stats = _reward_spread([view["C"] for view in views])
+        if not (b_stats["zero_std"] and c_stats["zero_std"]):
+            homogeneous = False
+        groups[task] = {
+            "rollouts": views,
+            "environment_fingerprints_identical": len(fingerprints) == 1,
+            "B": b_stats,
+            "C": c_stats,
+        }
+    summary = {
+        "groups": groups,
+        "homogeneous": homogeneous,
+        "additional_rollouts_launched": False,
+        "parameters_changed_after_results": False,
+        "reward_changed_after_results": False,
+        "centered_rewards_are_trl_advantages": False,
+        "trainer_ran": False,
+        "fixture_problems": fixture_problems,
+        "errors": errors,
+        "note": (
+            "Both rewards are computed on the saved trajectories. "
+            "Centered values are r - mean(r). They are not TRL advantages."
+        ),
+    }
+    if homogeneous:
+        summary["homogeneity_note"] = (
+            "Both groups have zero standard deviation for B and for C. No further rollouts were launched."
+        )
+    _write_json(SUMMARY_PATH, summary)
+    print(json.dumps({"homogeneous": homogeneous, "groups": {k: {"B": v["B"]["values"], "C": v["C"]["values"]} for k, v in groups.items()}}, indent=2))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--out", default=str(ROOT / "artifacts" / "contract"))
     parser.add_argument("--max-new-tokens", type=int, default=PINNED_MAX_NEW_TOKENS)
+    parser.add_argument("--variability", action="store_true")
     args = parser.parse_args(argv)
     out = Path(args.out)
     if not out.is_absolute():
         out = ROOT / out
+    if args.variability:
+        if out.resolve() in {
+            (ROOT / "artifacts" / "contract").resolve(),
+            (ROOT / "artifacts" / "contract-128").resolve(),
+            (ROOT / "artifacts" / "contract-512").resolve(),
+            (ROOT / "artifacts" / "contract-512-v13").resolve(),
+            (ROOT / "artifacts" / "contract-512-v14").resolve(),
+            (ROOT / "artifacts" / "task-1-2").resolve(),
+            (ROOT / "artifacts" / "task-1-3").resolve(),
+        }:
+            raise SystemExit(f"refusing to overwrite {out}")
+        return run_variability(out)
     protected = {
         (ROOT / "artifacts" / "contract").resolve(),
         (ROOT / "artifacts" / "contract-128").resolve(),
         (ROOT / "artifacts" / "contract-512").resolve(),
         (ROOT / "artifacts" / "contract-512-v13").resolve(),
+        (ROOT / "artifacts" / "contract-512-v14").resolve(),
         (ROOT / "artifacts" / "task-1-2").resolve(),
         (ROOT / "artifacts" / "task-1-3").resolve(),
     }

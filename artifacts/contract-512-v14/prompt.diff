@@ -1,0 +1,24 @@
+--- a/tools_fallback_prompt
++++ b/tools_fallback_prompt
+@@ -1,4 +1,4 @@
+ You can call these tools:
+ {tools}
+ 
+-To call tools, reply with only a JSON list, one object per call, and no other text: [{{"tool_name": "<name>", "parameters": {{"<argument>": <value>}}}}]. Use a list even for one call. A user turn that starts with "Tool result" is the output of your call, not a new message from the user: use it to answer the user's original question as plain text.
++To call tools, reply with only a JSON list, one object per call, and no other text: [{{"tool_name": "<name>", "parameters": {{"<argument>": <value>}}}}]. Use a list even for one call. A user turn that starts with "Tool result" is an observation, not a new message from the user. After an observation you may continue with more tool calls. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.
+--- a/tool_result_format
++++ b/tool_result_format
+@@ -1,2 +1,2 @@
+ Tool result for {name}: {content}
+-Use this result to answer the original question.
++This is an observation. You may continue with more tool calls. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.
+--- a/system_prompt
++++ b/system_prompt
+@@ -1 +1 @@
+-You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. When the refund is submitted, give the amount in cents as the final answer.
++You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. Tool results are observations, and you may continue calling tools after one. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.
+--- a/user_prompt
++++ b/user_prompt
+@@ -1 +1 @@
+-Refund order ORD-1001 for customer CUS-501. Look up the order, look up the customer, calculate the refund, then submit it. Finish with the refund amount in cents.
++Refund order ORD-1001 for customer CUS-501. Look up the order, look up the customer, calculate the refund, then submit it. After submit_refund is confirmed, finish with exactly REFUND_SUBMITTED amount_cents=<integer>.

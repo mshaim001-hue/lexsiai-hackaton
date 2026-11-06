@@ -1,0 +1,63 @@
+{
+  "pinned_before_launch": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "dtype": "float16",
+    "quantization": null,
+    "environment_seed": 0,
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_steps": 4,
+    "max_new_tokens": 512,
+    "tasks": [
+      {
+        "episode_id": "m0",
+        "order_id": "ORD-1001",
+        "customer_id": "CUS-501",
+        "amount_cents": 1840
+      },
+      {
+        "episode_id": "m2",
+        "order_id": "ORD-1003",
+        "customer_id": "CUS-503",
+        "amount_cents": 930
+      }
+    ],
+    "prompt": "v1.4 tools_fallback_prompt, tool_result_format, system prompt, user prompt",
+    "parser": "unchanged AgentTune _extract_tool_calls",
+    "reward": {
+      "B": "I(task_success)",
+      "C": "preliminary: I(task_success) - lambda * N_invalid",
+      "lambda": 0.5,
+      "N_invalid": "Preliminary, pending an agreed penalty definition. N_invalid counts malformed_syntax fragments plus parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. A complete call omitted by the native parser is not a model syntax error and is not counted. truncated_fragment, generation_truncated, no_tool_call, tool_error, exception, order_or_token, and elapsed_limit_exceeded are reported separately and are not counted. C is preliminary.",
+      "changed_after_results": false
+    },
+    "timeout_enforced": false,
+    "lora": false,
+    "grpo": false,
+    "trainer": false
+  },
+  "launch_command": ".venv/bin/python run_contract.py --variability --out artifacts/task-2",
+  "loaded_model": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "requested_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "config_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_class": "TokenizersBackend",
+    "vocab_size": 261000,
+    "device": "mps",
+    "dtype": "float16",
+    "quantization": null,
+    "distribution": "public_gated",
+    "local_token_configured": true,
+    "config_json": "loaded",
+    "tokenizer": "loaded"
+  }
+}

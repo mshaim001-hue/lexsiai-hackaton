@@ -1,0 +1,25 @@
+diff --git a/vendor/AgentTune/src/agenttune/agentic/rollout_engines/transformers_engine.py b/vendor/AgentTune/src/agenttune/agentic/rollout_engines/transformers_engine.py
+--- a/vendor/AgentTune/src/agenttune/agentic/rollout_engines/transformers_engine.py
++++ b/vendor/AgentTune/src/agenttune/agentic/rollout_engines/transformers_engine.py
+@@
+-        with torch.no_grad():
+-            output_ids = self.model.generate(
+-                **encoded,
+-                max_new_tokens=max_new_tokens,
+-                temperature=gen_cfg.get("temperature", 0.7),
+-                do_sample=gen_cfg.get("do_sample", True),
+-                pad_token_id=self.tokenizer.pad_token_id,
+-                eos_token_id=eos_token_id,
+-            )
++        generate_kwargs = {
++            "max_new_tokens": max_new_tokens,
++            "temperature": gen_cfg.get("temperature", 0.7),
++            "do_sample": gen_cfg.get("do_sample", True),
++            "pad_token_id": self.tokenizer.pad_token_id,
++            "eos_token_id": eos_token_id,
++        }
++        if gen_cfg.get("top_p") is not None:
++            generate_kwargs["top_p"] = gen_cfg["top_p"]
++
++        with torch.no_grad():
++            output_ids = self.model.generate(**encoded, **generate_kwargs)

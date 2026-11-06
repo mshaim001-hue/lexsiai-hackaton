@@ -1,0 +1,42 @@
+--- v13/rendered_prompt_m0_step0.txt
++++ v14/rendered_prompt_m0_step0.txt
+@@ -35,7 +35,8 @@
+         },
+         "required": [
+           "order_id"
+-        ]
++        ],
++        "additionalProperties": false
+       },
+       "return": {
+         "type": "string",
+@@ -58,7 +59,8 @@
+         },
+         "required": [
+           "customer_id"
+-        ]
++        ],
++        "additionalProperties": false
+       },
+       "return": {
+         "type": "string",
+@@ -86,7 +88,8 @@
+         "required": [
+           "order_context_token",
+           "customer_validation_token"
+-        ]
++        ],
++        "additionalProperties": false
+       },
+       "return": {
+         "type": "string",
+@@ -124,7 +127,8 @@
+           "order_id",
+           "customer_id",
+           "amount_cents"
+-        ]
++        ],
++        "additionalProperties": false
+       },
+       "return": {
+         "type": "string",

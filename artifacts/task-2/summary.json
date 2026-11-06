@@ -1,0 +1,436 @@
+{
+  "groups": {
+    "m0": {
+      "rollouts": [
+        {
+          "rollout_id": "m0-g100",
+          "episode_id": "m0",
+          "generation_seed": 100,
+          "environment_seed": 0,
+          "environment_fingerprint": "09402fe19f34e782a38a48bab994eae8d4724e0f874b7c5d1afa485be89377d1",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 9,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "submit_refund"
+          ],
+          "elapsed_s": 232.12357224989682,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m0-g101",
+          "episode_id": "m0",
+          "generation_seed": 101,
+          "environment_seed": 0,
+          "environment_fingerprint": "09402fe19f34e782a38a48bab994eae8d4724e0f874b7c5d1afa485be89377d1",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 4,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 3,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "lookup_order"
+          ],
+          "elapsed_s": 303.04636362497695,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m0-g102",
+          "episode_id": "m0",
+          "generation_seed": 102,
+          "environment_seed": 0,
+          "environment_fingerprint": "09402fe19f34e782a38a48bab994eae8d4724e0f874b7c5d1afa485be89377d1",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 9,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "get_customer"
+          ],
+          "elapsed_s": 315.44116733409464,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m0-g103",
+          "episode_id": "m0",
+          "generation_seed": 103,
+          "environment_seed": 0,
+          "environment_fingerprint": "09402fe19f34e782a38a48bab994eae8d4724e0f874b7c5d1afa485be89377d1",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 9,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "lookup_order"
+          ],
+          "elapsed_s": 386.3097414171789,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        }
+      ],
+      "environment_fingerprints_identical": true,
+      "B": {
+        "values": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ddof": 1,
+        "n_distinct": 1,
+        "zero_std": true,
+        "centered": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "centered_is_trl_advantage": false,
+        "note": "centered = r - mean(r) inside this group. A trainer was not run."
+      },
+      "C": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ddof": 1,
+        "n_distinct": 1,
+        "zero_std": true,
+        "centered": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "centered_is_trl_advantage": false,
+        "note": "centered = r - mean(r) inside this group. A trainer was not run."
+      }
+    },
+    "m2": {
+      "rollouts": [
+        {
+          "rollout_id": "m2-g100",
+          "episode_id": "m2",
+          "generation_seed": 100,
+          "environment_seed": 0,
+          "environment_fingerprint": "81e484752ea60dfd63d6a8556da9d6a5d61df4b801856a694dbd7593952c727f",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 9,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "submit_refund"
+          ],
+          "elapsed_s": 333.6734795831144,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m2-g101",
+          "episode_id": "m2",
+          "generation_seed": 101,
+          "environment_seed": 0,
+          "environment_fingerprint": "81e484752ea60dfd63d6a8556da9d6a5d61df4b801856a694dbd7593952c727f",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 6,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 1,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "lookup_order"
+          ],
+          "elapsed_s": 367.69028508407064,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m2-g102",
+          "episode_id": "m2",
+          "generation_seed": 102,
+          "environment_seed": 0,
+          "environment_fingerprint": "81e484752ea60dfd63d6a8556da9d6a5d61df4b801856a694dbd7593952c727f",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 8,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "get_customer"
+          ],
+          "elapsed_s": 311.2033276250586,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        },
+        {
+          "rollout_id": "m2-g103",
+          "episode_id": "m2",
+          "generation_seed": 103,
+          "environment_seed": 0,
+          "environment_fingerprint": "81e484752ea60dfd63d6a8556da9d6a5d61df4b801856a694dbd7593952c727f",
+          "task_success": false,
+          "B": 0,
+          "C": 0.0,
+          "C_status": "preliminary",
+          "N_invalid": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 8,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "parsed_calls": 4,
+          "no_calls": false,
+          "generation_truncated_steps": 0,
+          "round_limit_reached": true,
+          "pending_unexecuted_calls": [
+            "calculate_refund"
+          ],
+          "elapsed_s": 289.60483375005424,
+          "elapsed_limit_exceeded": true,
+          "timeout_enforced": false,
+          "reward": {
+            "B": 0,
+            "C": 0.0,
+            "C_status": "preliminary",
+            "lambda": 0.5,
+            "N_invalid": 0,
+            "N_invalid_status": "preliminary",
+            "task_success": false
+          }
+        }
+      ],
+      "environment_fingerprints_identical": true,
+      "B": {
+        "values": [
+          0,
+          0,
+          0,
+          0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ddof": 1,
+        "n_distinct": 1,
+        "zero_std": true,
+        "centered": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "centered_is_trl_advantage": false,
+        "note": "centered = r - mean(r) inside this group. A trainer was not run."
+      },
+      "C": {
+        "values": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "mean": 0.0,
+        "std": 0.0,
+        "ddof": 1,
+        "n_distinct": 1,
+        "zero_std": true,
+        "centered": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "centered_is_trl_advantage": false,
+        "note": "centered = r - mean(r) inside this group. A trainer was not run."
+      }
+    }
+  },
+  "homogeneous": true,
+  "additional_rollouts_launched": false,
+  "parameters_changed_after_results": false,
+  "reward_changed_after_results": false,
+  "centered_rewards_are_trl_advantages": false,
+  "trainer_ran": false,
+  "fixture_problems": [],
+  "errors": [],
+  "note": "Both rewards are computed on the saved trajectories. Centered values are r - mean(r). They are not TRL advantages.",
+  "homogeneity_note": "Both groups have zero standard deviation for B and for C. No further rollouts were launched."
+}
