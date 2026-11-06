@@ -1,0 +1,6 @@
+.venv/
+vendor/
+**/.DS_Store
+.hf-cache/
+**/__pycache__/
+*.pyc

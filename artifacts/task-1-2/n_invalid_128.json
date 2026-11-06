@@ -1,0 +1,291 @@
+{
+  "source": "/Users/Guest/lexsiai-hackaton/artifacts/contract-128/model_episodes.jsonl",
+  "source_unchanged": true,
+  "C_status": "preliminary",
+  "definition": "Preliminary, pending an agreed penalty definition. N_invalid counts malformed_syntax fragments plus parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. A complete call omitted by the native parser is not a model syntax error and is not counted. truncated_fragment, generation_truncated, no_tool_call, tool_error, exception, order_or_token, and timeout are reported separately and are not counted. C is preliminary.",
+  "note": "The frozen summary counted complete calls omitted by the native parser as malformed fragments. That is not a model syntax error, and those frozen C values are not the provisional penalty.",
+  "frozen_summary_rewards": [
+    {
+      "episode_id": "m0",
+      "B": 0,
+      "C": -1.0,
+      "lambda": 0.5,
+      "N_invalid": 2,
+      "task_success": false
+    },
+    {
+      "episode_id": "m1",
+      "B": 0,
+      "C": -1.0,
+      "lambda": 0.5,
+      "N_invalid": 2,
+      "task_success": false
+    },
+    {
+      "episode_id": "m2",
+      "B": 0,
+      "C": -1.0,
+      "lambda": 0.5,
+      "N_invalid": 2,
+      "task_success": false
+    },
+    {
+      "episode_id": "m3",
+      "B": 0,
+      "C": -1.0,
+      "lambda": 0.5,
+      "N_invalid": 2,
+      "task_success": false
+    },
+    {
+      "episode_id": "m4",
+      "B": 0,
+      "C": -1.0,
+      "lambda": 0.5,
+      "N_invalid": 2,
+      "task_success": false
+    }
+  ],
+  "episodes": {
+    "m0": {
+      "steps": 2,
+      "generation_truncated": [
+        true,
+        false
+      ],
+      "new_token_count": [
+        128,
+        31
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 2,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 1,
+        "generation_truncated": 1,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m1": {
+      "steps": 2,
+      "generation_truncated": [
+        true,
+        false
+      ],
+      "new_token_count": [
+        128,
+        30
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 2,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 1,
+        "generation_truncated": 1,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m2": {
+      "steps": 2,
+      "generation_truncated": [
+        true,
+        false
+      ],
+      "new_token_count": [
+        128,
+        30
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 2,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 1,
+        "generation_truncated": 1,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m3": {
+      "steps": 2,
+      "generation_truncated": [
+        true,
+        false
+      ],
+      "new_token_count": [
+        128,
+        30
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 2,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 1,
+        "generation_truncated": 1,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m4": {
+      "steps": 2,
+      "generation_truncated": [
+        true,
+        false
+      ],
+      "new_token_count": [
+        128,
+        38
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 2,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 1,
+        "generation_truncated": 1,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    }
+  },
+  "totals": {
+    "malformed_syntax": 0,
+    "omitted_by_native_parser": 10,
+    "schema_invalid": 0,
+    "unknown_tool": 0,
+    "missing_name": 0,
+    "truncated_fragment": 5,
+    "generation_truncated": 5,
+    "N_invalid_provisional": 0,
+    "C_status": "preliminary"
+  },
+  "prompt_instruction_in_rendered_prompt": {
+    "json_list": true,
+    "list_even_for_one_call": true
+  }
+}

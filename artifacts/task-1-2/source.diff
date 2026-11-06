@@ -1,0 +1,1987 @@
+diff --git a/contract/classify.py b/contract/classify.py
+index 354acbd..c4d8e74 100644
+--- a/contract/classify.py
++++ b/contract/classify.py
+@@ -1,7 +1,5 @@
+-"""Stage labels for one raw model string.
++"""Diagnostic labels for one raw string. This module does not execute tools.
+ 
+-malformed versus no_tool_call
+------------------------------
+ An attempt span is only one of these:
+ 
+ - a ``<tool_call>`` / ``<toolcall>`` tag, closed or still open
+@@ -13,16 +11,23 @@ An attempt span is only one of these:
+   ``arguments`` / ``parameters`` / ``args`` / ``input``, or ``type=function``
+ 
+ Prose is not an attempt. A JSON list that is not a list of objects, such as
+-``[2, 3]``, is not an attempt. Naming a tool in a sentence is not an attempt.
+-
+-``no_tool_call``: the real parser returns no calls and there is no attempt span.
+-``malformed_tool_call``: at least one attempt span is not represented by a
+-parsed call.
+-``parsed``: the real parser returned one or more calls.
+-
+-A partial parse does not hide a broken fragment. Each parsed call is stored.
+-Each attempt span that the parser did not return is stored as malformed.
+-Spans strictly inside a larger span are not counted twice.
++``[2, 3]``, is not an attempt.
++
++Categories, kept separate:
++
++- ``malformed_syntax``: a finished attempt that the native parser does not
++  accept and that does not itself parse into a call. A closed tag with invalid
++  JSON is syntax. A complete object is never placed here.
++- ``omitted_by_native_parser``: a syntactically complete call that parses on
++  its own, while the native parser did not return it. This is not a syntax
++  error.
++- ``truncated_fragment``: an attempt that runs off the end of the text without
++  a closer. Generation truncation is a separate flag supplied by the caller
++  and can occur together with any of these categories.
++- schema-invalid calls are a validation result, not a parse category.
++
++``parsed`` means the native parser returned one or more calls. ``no_tool_call``
++means it returned none. Spans strictly inside a larger span are not counted twice.
+ """
+ 
+ from __future__ import annotations
+@@ -139,37 +144,105 @@ def _parser_message(text: str) -> dict:
+     return {"role": "assistant", "content": text}
+ 
+ 
++def _span_is_closed(span: dict) -> bool:
++    kind = span["kind"]
++    text = span["text"]
++    if kind == "tool_call_tag":
++        return bool(re.search(r"</tool_?call\s*>", text, re.IGNORECASE))
++    if kind == "function_tag":
++        return "</function>" in text.lower()
++    if kind in ("tool_call_tag_unclosed", "function_tag_unclosed"):
++        return False
++    if kind == "start_action":
++        return "<|END_ACTION|>" in text.upper() or "<|end_action|>" in text.lower()
++    return True
++
++
++def _incomplete_tail(text: str, occupied: list[tuple[int, int]]) -> dict | None:
++    """An opener that never finishes, and after which no complete value starts."""
++    decoder = json.JSONDecoder()
++    index = 0
++    while index < len(text):
++        if any(start <= index < end for start, end in occupied) or text[index] not in "{[":
++            index += 1
++            continue
++        try:
++            _obj, end = decoder.raw_decode(text, index)
++        except json.JSONDecodeError:
++            later = any(start > index for start, _end in occupied)
++            if not later and text[index:].strip():
++                return {
++                    "kind": "truncated_fragment",
++                    "text": text[index:],
++                    "parsed_alone": [],
++                    "dropped_by_full_parse": [],
++                }
++            index += 1
++            continue
++        index = max(end, index + 1)
++    return None
++
++
+ def classify_parse(raw: str, parsed: list[dict] | None, extract: Callable) -> dict:
+-    spans = attempt_spans(raw or "")
++    text = raw or ""
++    spans = attempt_spans(text)
+     parsed_calls = list(parsed or [])
+     parsed_keys = [_call_key(call) for call in parsed_calls]
+-    malformed: list[dict] = []
++    malformed_syntax: list[dict] = []
++    omitted: list[dict] = []
+     for span in spans:
+         alone = extract(_parser_message(span["text"]), span["text"])
+         alone_calls = list(alone or [])
+-        alone_keys = [_call_key(call) for call in alone_calls]
+-        covered = bool(alone_keys) and all(key in parsed_keys for key in alone_keys)
+         dropped = [call for call in alone_calls if _call_key(call) not in parsed_keys]
+-        if covered and not dropped:
++        record = {
++            "kind": span["kind"],
++            "text": span["text"],
++            "parsed_alone": alone_calls,
++            "dropped_by_full_parse": dropped,
++        }
++        if alone_calls and not dropped:
+             continue
+-        malformed.append(
+-            {
+-                "kind": span["kind"],
+-                "text": span["text"],
+-                "parsed_alone": alone_calls,
+-                "dropped_by_full_parse": dropped,
+-            }
+-        )
++        if dropped:
++            # A complete call the native parser did not return is not syntax.
++            omitted.append(record)
++            continue
++        if _span_is_closed(span):
++            malformed_syntax.append(record)
++        else:
++            # Unclosed delimiters are collected with the incomplete-tail pass
++            # when they reach EOF; a closed-failure is syntax.
++            malformed_syntax.append(record)
++    # Unclosed tag spans were classified above. An unclosed tag that failed to
++    # parse is an incomplete fragment, not malformed syntax.
++    truncated: list[dict] = []
++    still_syntax: list[dict] = []
++    for record in malformed_syntax:
++        if record["kind"] in ("tool_call_tag_unclosed", "function_tag_unclosed"):
++            truncated.append({**record, "kind": "truncated_fragment"})
++        elif record["kind"] == "start_action" and "<|END_ACTION|>" not in record["text"].upper():
++            truncated.append({**record, "kind": "truncated_fragment"})
++        else:
++            still_syntax.append(record)
++    malformed_syntax = still_syntax
++    occupied = [(span["start"], span["end"]) for span in spans]
++    tail = _incomplete_tail(text, occupied)
++    if tail is not None:
++        truncated.append(tail)
+     if parsed_calls:
+         status = "parsed"
+-    elif malformed:
+-        status = "malformed_tool_call"
++    elif malformed_syntax:
++        status = "malformed_syntax"
++    elif truncated:
++        status = "truncated_fragment"
+     else:
+         status = "no_tool_call"
+     return {
+         "parse_status": status,
++        "native_parse_status": "parsed" if parsed_calls else "no_tool_call",
+         "parsed_calls": parsed_calls,
+-        "malformed_fragments": malformed,
++        "malformed_syntax": malformed_syntax,
++        "omitted_by_native_parser": omitted,
++        "truncated_fragments": truncated,
+         "attempt_span_count": len(spans),
+     }
+ 
+@@ -272,52 +345,5 @@ def validate_call(call: dict, schemas: dict[str, dict], tool_names: set[str]) ->
+     return {"validation": "valid", "name": name, "arguments": args, "problems": []}
+ 
+ 
+-def execute_call(episode, name: str, args: dict) -> dict:
+-    tools = {fn.__name__: fn for fn in episode_tools(episode)}
+-    fn = tools[name]
+-    try:
+-        result = fn(**args)
+-    except Exception as exc:  # the real loop also catches and records this
+-        return {
+-            "execution": "exception",
+-            "order_or_token": False,
+-            "result": {"exception": type(exc).__name__, "message": str(exc)},
+-        }
+-    event = episode.events[-1] if episode.events else {}
+-    execution = event.get("execution", "success")
+-    return {
+-        "execution": execution,
+-        "order_or_token": bool(event.get("order_or_token")),
+-        "result": result,
+-    }
+-
+-
+-def episode_tools(episode):
+-    from contract.harness import make_tools
+-
+-    return make_tools(episode)
+-
+-
+-def assess_calls(parsed_calls: list[dict], episode, schemas: dict[str, dict], execute: bool) -> list[dict]:
+-    tool_names = set(schemas)
+-    assessed = []
+-    before = len(episode.events)
+-    for call in parsed_calls:
+-        verdict = validate_call(call, schemas, tool_names)
+-        record = {
+-            "call": call,
+-            "validation": verdict["validation"],
+-            "name": verdict["name"],
+-            "arguments": verdict["arguments"],
+-            "problems": verdict["problems"],
+-            "execution": "not_run",
+-            "order_or_token": False,
+-            "result": None,
+-        }
+-        if execute and verdict["validation"] == "valid":
+-            outcome = execute_call(episode, verdict["name"], verdict["arguments"])
+-            record.update(outcome)
+-        assessed.append(record)
+-    if not execute:
+-        del episode.events[before:]
+-    return assessed
++# Diagnosis stops here. Execution lives in contract.execute and is not called
++# from classification. A malformed fragment is not rewritten into a call.
+diff --git a/contract/config.py b/contract/config.py
+index 3e7c9c9..43168d9 100644
+--- a/contract/config.py
++++ b/contract/config.py
+@@ -2,6 +2,8 @@
+ 
+ SEED = 0
+ MODEL_ID = "CohereLabs/tiny-aya-global"
++# Public gated repo. Resolved by Hugging Face before config.json returned 401.
++MODEL_REVISION = "af89d219b53ed9b13b8a4645f9c8028973510324"
+ DTYPE = "float16"
+ QUANTIZATION = None
+ MAX_NEW_TOKENS = 128
+@@ -17,8 +19,8 @@ ENABLE_THINKING = False
+ LAMBDA = 0.5
+ N_MODEL_EPISODES = 5
+ 
+-# N_invalid counts format failures only.
+-# Included: malformed attempt fragments, missing_name, unknown_tool, schema_invalid.
+-# Excluded, reported separately: no_tool_call, tool_error, exception,
+-# order_or_token, timeout, generation_truncated.
++# Provisional until the penalty definition is agreed. C must be labelled preliminary.
++# Counted: malformed_syntax, missing_name, unknown_tool, schema_invalid.
++# Not counted: a complete call omitted by the native parser, truncated fragments,
++# generation_truncated, no_tool_call, tool_error, exception, order_or_token, timeout.
+ N_INVALID_VALIDATION = ("missing_name", "unknown_tool", "schema_invalid")
+diff --git a/contract/harness.py b/contract/harness.py
+index 0af4af9..89c1dcf 100644
+--- a/contract/harness.py
++++ b/contract/harness.py
+@@ -32,7 +32,10 @@ class RefundEpisode:
+     customer_done: bool = False
+     quote_done: bool = False
+     submitted: bool = False
+-    events: list[dict] = field(default_factory=list)
++    # Names of implementations that actually ran. The schema guard must not append.
++    function_entries: list[str] = field(default_factory=list)
++    # Structured tool results, appended before any str() conversion.
++    structured_results: list[dict] = field(default_factory=list)
+ 
+     def __post_init__(self) -> None:
+         self.order_token = episode_token(self.seed, self.episode_id, "order")
+@@ -47,69 +50,58 @@ class RefundEpisode:
+             str(self.amount_cents),
+         ]
+ 
+-    def lookup_order(self, order_id: str) -> str:
+-        if not isinstance(order_id, str) or not order_id:
+-            return self._schema("lookup_order", "order_id must be a non-empty string")
++    def lookup_order(self, order_id: str) -> dict:
++        self.function_entries.append("lookup_order")
+         if order_id != self.order_id:
+             return self._tool_error("lookup_order", "no such order")
+         self.lookup_done = True
+-        self.events.append(
+-            {
+-                "tool": "lookup_order",
+-                "execution": "success",
+-                "order_or_token": False,
+-            }
+-        )
+-        return f"order_context_token={self.order_token}"
+-
+-    def get_customer(self, customer_id: str) -> str:
+-        if not isinstance(customer_id, str) or not customer_id:
+-            return self._schema("get_customer", "customer_id must be a non-empty string")
++        return {
++            "ok": True,
++            "tool": "lookup_order",
++            "execution": "success",
++            "order_or_token": False,
++            "order_context_token": self.order_token,
++        }
++
++    def get_customer(self, customer_id: str) -> dict:
++        self.function_entries.append("get_customer")
+         if customer_id != self.customer_id:
+             return self._tool_error("get_customer", "no such customer")
+         self.customer_done = True
+-        self.events.append(
+-            {
+-                "tool": "get_customer",
+-                "execution": "success",
+-                "order_or_token": False,
+-            }
+-        )
+-        return f"customer_validation_token={self.customer_token}"
++        return {
++            "ok": True,
++            "tool": "get_customer",
++            "execution": "success",
++            "order_or_token": False,
++            "customer_validation_token": self.customer_token,
++        }
+ 
+     def calculate_refund(
+         self, order_context_token: str, customer_validation_token: str
+-    ) -> str:
+-        if not isinstance(order_context_token, str) or not isinstance(
+-            customer_validation_token, str
+-        ):
+-            return self._schema(
+-                "calculate_refund", "both tokens must be strings"
+-            )
++    ) -> dict:
++        self.function_entries.append("calculate_refund")
+         tokens_ok = (
+             order_context_token == self.order_token
+             and customer_validation_token == self.customer_token
+         )
+         steps_ok = self.lookup_done and self.customer_done
+         if not tokens_ok or not steps_ok:
+-            self.events.append(
+-                {
+-                    "tool": "calculate_refund",
+-                    "execution": "order_or_token",
+-                    "order_or_token": True,
+-                    "reason": "both tokens from this episode are required",
+-                }
+-            )
+-            return "rejected_order_or_token: both tokens from this episode are required"
+-        self.quote_done = True
+-        self.events.append(
+-            {
++            return {
++                "ok": False,
+                 "tool": "calculate_refund",
+-                "execution": "success",
+-                "order_or_token": False,
++                "execution": "order_or_token",
++                "order_or_token": True,
++                "reason": "both tokens from this episode are required",
+             }
+-        )
+-        return f"quote_token={self.quote_token} amount_cents={self.amount_cents}"
++        self.quote_done = True
++        return {
++            "ok": True,
++            "tool": "calculate_refund",
++            "execution": "success",
++            "order_or_token": False,
++            "quote_token": self.quote_token,
++            "amount_cents": self.amount_cents,
++        }
+ 
+     def submit_refund(
+         self,
+@@ -117,17 +109,8 @@ class RefundEpisode:
+         order_id: str,
+         customer_id: str,
+         amount_cents: int,
+-    ) -> str:
+-        if (
+-            not isinstance(quote_token, str)
+-            or not isinstance(order_id, str)
+-            or not isinstance(customer_id, str)
+-            or type(amount_cents) is not int
+-        ):
+-            return self._schema(
+-                "submit_refund",
+-                "quote_token, order_id, customer_id must be strings and amount_cents an int",
+-            )
++    ) -> dict:
++        self.function_entries.append("submit_refund")
+         quote_ok = quote_token == self.quote_token and self.quote_done
+         ids_ok = (
+             order_id == self.order_id
+@@ -135,50 +118,30 @@ class RefundEpisode:
+             and amount_cents == self.amount_cents
+         )
+         if not quote_ok or not ids_ok:
+-            self.events.append(
+-                {
+-                    "tool": "submit_refund",
+-                    "execution": "order_or_token",
+-                    "order_or_token": True,
+-                    "reason": "quote_token, amount, or identifiers do not match this episode",
+-                }
+-            )
+-            return (
+-                "rejected_order_or_token: quote_token, amount, or identifiers "
+-                "do not match this episode"
+-            )
+-        self.submitted = True
+-        self.events.append(
+-            {
++            return {
++                "ok": False,
+                 "tool": "submit_refund",
+-                "execution": "success",
+-                "order_or_token": False,
+-            }
+-        )
+-        return "refund_submitted"
+-
+-    def _tool_error(self, tool: str, reason: str) -> str:
+-        self.events.append(
+-            {
+-                "tool": tool,
+-                "execution": "tool_error",
+-                "order_or_token": False,
+-                "reason": reason,
++                "execution": "order_or_token",
++                "order_or_token": True,
++                "reason": "quote_token, amount, or identifiers do not match this episode",
+             }
+-        )
+-        return f"tool_error: {reason}"
+-
+-    def _schema(self, tool: str, reason: str) -> str:
+-        self.events.append(
+-            {
+-                "tool": tool,
+-                "execution": "not_run",
+-                "validation_inside_tool": "schema_invalid",
+-                "order_or_token": False,
+-                "reason": reason,
+-            }
+-        )
+-        return f"rejected_schema: {reason}"
++        self.submitted = True
++        return {
++            "ok": True,
++            "tool": "submit_refund",
++            "execution": "success",
++            "order_or_token": False,
++            "submitted": True,
++        }
++
++    def _tool_error(self, tool: str, reason: str) -> dict:
++        return {
++            "ok": False,
++            "tool": tool,
++            "execution": "tool_error",
++            "order_or_token": False,
++            "reason": reason,
++        }
+ 
+ 
+ def make_tools(episode: RefundEpisode) -> list:
+diff --git a/contract/run.py b/contract/run.py
+index cfc4874..d1086fa 100644
+--- a/contract/run.py
++++ b/contract/run.py
+@@ -6,6 +6,7 @@ A fixture success is never counted as a model success.
+ 
+ from __future__ import annotations
+ 
++import argparse
+ import copy
+ import json
+ import os
+@@ -29,16 +30,16 @@ os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
+ os.environ.setdefault("PYTORCH_MPS_HIGH_WATERMARK_RATIO", "0.0")
+ 
+ from contract import config
+-from contract.classify import (
+-    assess_calls,
+-    attempt_spans,
+-    classify_parse,
+-    schema_map,
++from contract.classify import classify_parse, schema_map
++from contract.execute import (
++    PATH,
++    make_guarded_tools,
++    string_after_structure,
++    validation_then_execution,
+ )
+ from contract.harness import (
+     SYSTEM_PROMPT,
+     RefundEpisode,
+-    make_tools,
+     user_prompt,
+ )
+ 
+@@ -48,18 +49,53 @@ MODEL_PATH = ARTIFACTS / "model_episodes.jsonl"
+ SUMMARY_PATH = ARTIFACTS / "summary.json"
+ MANIFEST_PATH = ARTIFACTS / "manifest.json"
+ ERROR_PATH = ARTIFACTS / "model_error.txt"
++PINNED_MAX_NEW_TOKENS = config.MAX_NEW_TOKENS
++FROZEN_128 = ROOT / "artifacts" / "contract-128"
++TASK_DIR = ROOT / "artifacts" / "task-1-2"
+ 
+ LAUNCH_COMMAND = ".venv/bin/python run_contract.py"
+ 
++MAX_STEPS_COUNTS = (
++    "In the pinned AgentTune commit, _execute_trajectory counts max_steps as "
++    "iterations of `while tool_calls and iteration_num < max_steps`. Each iteration "
++    "executes calls that were already parsed. The first generation happens before "
++    "the loop. After an iteration, iteration_num is incremented and the loop breaks "
++    "when iteration_num >= max_steps, before another in-loop generation. If the last "
++    "message is a tool result, one final generation runs outside that loop and is not "
++    "part of max_steps. force_final_answer is false, so it adds no generation. "
++    "max_steps=4 therefore holds four sequential tool calls plus the final answer. "
++    "The limit was not changed."
++)
++
+ PARSE_RULE = (
+-    "no_tool_call if the AgentTune parser returns no call and the text has no "
+-    "attempt span. An attempt span is a tool_call/toolcall tag, a <function=...> "
+-    "block, a START_ACTION block, an Action fence or Action/Action Input pair, "
+-    "or a JSON object/list of objects carrying tool_name or name+arguments. "
+-    "Prose and a non-object JSON list such as [2, 3] are not attempts. "
+-    "malformed_tool_call if an attempt span is not represented by a parsed call. "
+-    "parsed if the parser returned one or more calls. Every parsed call is kept, "
+-    "and every unparsed attempt span is kept beside it."
++    "The native parser is unchanged. parsed means it returned one or more calls; "
++    "no_tool_call means it returned none. Diagnostic categories are separate: "
++    "malformed_syntax is a finished attempt that does not parse into a call; "
++    "omitted_by_native_parser is a syntactically complete call the native parser "
++    "did not return and is not a syntax error; truncated_fragment is an unfinished "
++    "attempt. schema_invalid is a validation result. generation_truncated is an "
++    "independent generation flag and may occur together with any category."
++)
++
++N_INVALID_DEFINITION = (
++    "Preliminary, pending an agreed penalty definition. "
++    "N_invalid counts malformed_syntax fragments plus parsed calls whose "
++    "validation is missing_name, unknown_tool, or schema_invalid. "
++    "A complete call omitted by the native parser is not a model syntax error "
++    "and is not counted. truncated_fragment, generation_truncated, no_tool_call, "
++    "tool_error, exception, order_or_token, and timeout are reported separately "
++    "and are not counted. C is preliminary."
++)
++
++PARSER_FORMAT = (
++    "Pinned AgentTune _parse_cohere_json returns the first JSON value that is "
++    "a tool_name object or a list made entirely of tool_name objects. A complete "
++    "list is one value, so every object in it is returned. A bare object is also "
++    "accepted. A list such as [2, 3] is not a call. A truncated list does not "
++    "decode, so the scanner returns only the first later complete object and "
++    "drops later complete siblings. The fallback prompt in the same pinned file "
++    "tells the model to reply with only a JSON list, one object per call, and to "
++    "use a list even for one call."
+ )
+ 
+ 
+@@ -140,14 +176,49 @@ def _answer_ok(text: str | None, amount_cents: int) -> bool:
+     return re.search(rf"(?<!\d){amount_cents}(?!\d)", text) is not None
+ 
+ 
+-def _n_invalid(steps: list[dict]) -> int:
+-    total = 0
++def _diagnostic(step: dict) -> dict:
++    diagnostic = step.get("diagnostic")
++    return diagnostic if isinstance(diagnostic, dict) else {}
++
++
++def _n_invalid_components(steps: list[dict]) -> dict:
++    malformed_syntax = 0
++    omitted_calls = 0
++    truncated_fragments = 0
++    schema_invalid = 0
++    unknown_tool = 0
++    missing_name = 0
++    generation_truncated = 0
+     for step in steps:
+-        total += len(step.get("malformed_fragments") or [])
++        diagnostic = _diagnostic(step)
++        malformed_syntax += len(diagnostic.get("malformed_syntax") or [])
++        omitted_calls += sum(
++            len(item.get("dropped_by_full_parse") or [])
++            for item in diagnostic.get("omitted_by_native_parser") or []
++        )
++        truncated_fragments += len(diagnostic.get("truncated_fragments") or [])
++        generation_truncated += int(bool(step.get("generation_truncated")))
+         for call in step.get("calls") or []:
+-            if call.get("validation") in config.N_INVALID_VALIDATION:
+-                total += 1
+-    return total
++            validation = call.get("validation")
++            schema_invalid += validation == "schema_invalid"
++            unknown_tool += validation == "unknown_tool"
++            missing_name += validation == "missing_name"
++    provisional = malformed_syntax + schema_invalid + unknown_tool + missing_name
++    return {
++        "malformed_syntax": malformed_syntax,
++        "omitted_by_native_parser": omitted_calls,
++        "schema_invalid": schema_invalid,
++        "unknown_tool": unknown_tool,
++        "missing_name": missing_name,
++        "truncated_fragment": truncated_fragments,
++        "generation_truncated": generation_truncated,
++        "N_invalid_provisional": provisional,
++        "C_status": "preliminary",
++    }
++
++
++def _n_invalid(steps: list[dict]) -> int:
++    return _n_invalid_components(steps)["N_invalid_provisional"]
+ 
+ 
+ def _rewards(task_success: bool, n_invalid: int) -> dict:
+@@ -155,8 +226,10 @@ def _rewards(task_success: bool, n_invalid: int) -> dict:
+     return {
+         "B": binary,
+         "C": binary - config.LAMBDA * n_invalid,
++        "C_status": "preliminary",
+         "lambda": config.LAMBDA,
+         "N_invalid": n_invalid,
++        "N_invalid_status": "preliminary",
+         "task_success": task_success,
+     }
+ 
+@@ -217,6 +290,7 @@ class _RecordingEngine:
+                 "prompt_len": (result.get("metadata") or {}).get("prompt_len"),
+                 "prompt_truncated": any("Truncat" in str(item.message) for item in caught),
+                 "warnings": [str(item.message) for item in caught],
++                "saved_at": "generate_return",
+             }
+         )
+         return result
+@@ -267,41 +341,34 @@ def _probe(tokenizer, schemas: list[dict]) -> dict:
+     }
+ 
+ 
+-def _call_records_from_loop(parsed, schemas, loop_results, episode, event_cursor: list[int]) -> list[dict]:
+-    from contract.classify import validate_call
+-
+-    tool_names = set(schemas)
++def _consume_guard_records(parsed, tool_names: set[str], episode, cursor: list[int]) -> list[dict]:
++    """Read records the guard already stored. This does not call a tool."""
+     records = []
+-    results = list(loop_results or [])
+-    for index, call in enumerate(parsed or []):
+-        verdict = validate_call(call, schemas, tool_names)
+-        loop_result = results[index][1] if index < len(results) else None
+-        record = {
+-            "call": call,
+-            "validation": verdict["validation"],
+-            "name": verdict["name"],
+-            "arguments": verdict["arguments"],
+-            "problems": verdict["problems"],
+-            "execution": "not_run",
+-            "order_or_token": False,
+-            "result": None,
+-            "loop_result": loop_result,
+-        }
+-        if verdict["validation"] != "valid":
+-            if isinstance(loop_result, dict) and "error" in loop_result:
+-                record["execution"] = "exception"
+-                record["result"] = loop_result
+-            records.append(record)
++    for call in parsed or []:
++        fn = call.get("function") if isinstance(call.get("function"), dict) else {}
++        name = fn.get("name") or call.get("name") or ""
++        if name not in tool_names:
++            validation = "missing_name" if not name else "unknown_tool"
++            records.append(
++                string_after_structure(
++                    {
++                        "path": PATH,
++                        "tool": name,
++                        "validation": validation,
++                        "arguments": None,
++                        "problems": [validation],
++                        "execution": "not_run",
++                        "order_or_token": False,
++                        "function_entered": False,
++                        "structured_result": None,
++                        "call": call,
++                    }
++                )
++            )
+             continue
+-        if event_cursor[0] < len(episode.events):
+-            event = episode.events[event_cursor[0]]
+-            event_cursor[0] += 1
+-            record["execution"] = event.get("execution", "success")
+-            record["order_or_token"] = bool(event.get("order_or_token"))
+-            record["result"] = loop_result
+-        elif isinstance(loop_result, dict) and "error" in loop_result:
+-            record["execution"] = "exception"
+-            record["result"] = loop_result
++        record = string_after_structure(episode.structured_results[cursor[0]])
++        cursor[0] += 1
++        record["call"] = call
+         records.append(record)
+     return records
+ 
+@@ -327,8 +394,13 @@ def _base_step(source: str, episode: RefundEpisode, step_id: int) -> dict:
+         "loop_step_thought": None,
+         "parser_invoked_by_loop": False,
+         "parser_result": None,
++        "diagnostic": None,
++        "diagnostic_executed": False,
++        "function_entries": [],
+         "parse_status": None,
+-        "malformed_fragments": [],
++        "malformed_syntax": [],
++        "omitted_by_native_parser": [],
++        "truncated_fragments": [],
+         "calls": [],
+         "generation_truncated": False,
+         "prompt_truncated": False,
+@@ -380,7 +452,7 @@ def _summarize(steps: list[dict], label: str) -> dict:
+     for episode_id, ep_steps in episodes.items():
+         calls = [call for step in ep_steps for call in step.get("calls") or []]
+         parsed_calls += len(calls)
+-        malformed += sum(len(step.get("malformed_fragments") or []) for step in ep_steps)
++        malformed += sum(len(_diagnostic(step).get("malformed_syntax") or []) for step in ep_steps)
+         schema_invalid += sum(call.get("validation") == "schema_invalid" for call in calls)
+         unknown_tool += sum(call.get("validation") == "unknown_tool" for call in calls)
+         missing_name += sum(call.get("validation") == "missing_name" for call in calls)
+@@ -399,7 +471,12 @@ def _summarize(steps: list[dict], label: str) -> dict:
+             both_ok += 1
+         if not calls:
+             no_parsed_call += 1
+-        attempts = sum(len(step.get("malformed_fragments") or []) for step in ep_steps)
++        attempts = sum(
++            len(_diagnostic(step).get("malformed_syntax") or [])
++            + len(_diagnostic(step).get("omitted_by_native_parser") or [])
++            + len(_diagnostic(step).get("truncated_fragments") or [])
++            for step in ep_steps
++        )
+         if not calls and attempts == 0 and all(
+             step.get("parse_status") == "no_tool_call" for step in ep_steps
+         ):
+@@ -419,7 +496,17 @@ def _summarize(steps: list[dict], label: str) -> dict:
+         "task_success_answer": _rate(answer_ok, n_episodes),
+         "task_success": _rate(both_ok, n_episodes),
+         "parsed_calls": parsed_calls,
+-        "malformed_attempts": malformed,
++        "malformed_syntax": malformed,
++        "omitted_by_native_parser": sum(
++            sum(
++                len(item.get("dropped_by_full_parse") or [])
++                for item in _diagnostic(step).get("omitted_by_native_parser") or []
++            )
++            for step in steps
++        ),
++        "truncated_fragments": sum(
++            len(_diagnostic(step).get("truncated_fragments") or []) for step in steps
++        ),
+         "schema_invalid_calls": schema_invalid,
+         "unknown_tool_calls": unknown_tool,
+         "missing_name_calls": missing_name,
+@@ -436,12 +523,9 @@ def _summarize(steps: list[dict], label: str) -> dict:
+         "generation_truncated_steps": _rate(truncated_steps, n_steps),
+         "timeout_episodes": _rate(timeout_episodes, n_episodes),
+         "rewards": rewards,
+-        "N_invalid_definition": (
+-            "malformed attempt fragments + parsed calls whose validation is "
+-            "missing_name, unknown_tool, or schema_invalid. "
+-            "no_tool_call, tool_error, exception, order_or_token, timeout, "
+-            "and generation_truncated are excluded and reported separately."
+-        ),
++        "N_invalid_components": _n_invalid_components(steps),
++        "N_invalid_definition": N_INVALID_DEFINITION,
++        "C_status": "preliminary",
+     }
+ 
+ 
+@@ -508,6 +592,17 @@ def _fixture_specs(seed: int) -> list[dict]:
+         correct
+         + "\n<function=get_customer>{not json}</function>"
+     )
++    single_object = json.dumps(
++        {"tool_name": "lookup_order", "parameters": {"order_id": primary.order_id}},
++        ensure_ascii=False,
++    )
++    two_calls = [
++        {"tool_name": "lookup_order", "parameters": {"order_id": primary.order_id}},
++        {"tool_name": "get_customer", "parameters": {"customer_id": primary.customer_id}},
++    ]
++    two_call_list = json.dumps(two_calls, indent=2, ensure_ascii=False)
++    cut_at = two_call_list.rfind(primary.customer_id)
++    truncated_list = two_call_list[: cut_at + 3]
+     return [
+         {"episode_id": "f-correct", "case": "correct_call", "raw": correct},
+         {"episode_id": "f-silence", "case": "silence", "raw": "I don't know the refund amount."},
+@@ -527,94 +622,385 @@ def _fixture_specs(seed: int) -> list[dict]:
+         {"episode_id": "f-order", "case": "order_bypass", "raw": order_bypass},
+         {"episode_id": "f-foreign", "case": "foreign_token", "raw": foreign_call},
+         {"episode_id": "f-mixed", "case": "mixed_valid_and_broken", "raw": mixed},
++        {"episode_id": "f-parser-object", "case": "parser_single_object", "raw": single_object},
++        {"episode_id": "f-parser-list", "case": "parser_two_call_list", "raw": two_call_list},
++        {
++            "episode_id": "f-parser-truncated",
++            "case": "parser_truncated_list",
++            "raw": truncated_list,
++        },
+     ]
+ 
+ 
+-def run_fixtures(factory, schemas: dict, schema_list: list[dict]) -> list[dict]:
+-    rows = []
++def _diagnose(raw: str, parsed, original, episode: RefundEpisode) -> dict:
++    before = list(episode.function_entries)
++    diagnosed = classify_parse(raw, parsed, original)
++    if episode.function_entries != before:
++        raise RuntimeError("diagnostic classification called a tool")
++    return {
++        "parse_status": diagnosed["parse_status"],
++        "native_parse_status": diagnosed["native_parse_status"],
++        "malformed_syntax": diagnosed["malformed_syntax"],
++        "omitted_by_native_parser": diagnosed["omitted_by_native_parser"],
++        "truncated_fragments": diagnosed["truncated_fragments"],
++        "parsed_calls": diagnosed["parsed_calls"],
++        "attempt_span_count": diagnosed["attempt_span_count"],
++        "executed": False,
++    }
++
++
++def _direct_fixture_row(episode: RefundEpisode, spec: dict, original) -> dict:
++    guards, _schemas = make_guarded_tools(episode)
++    raw = spec["raw"]
++    message = {"role": "assistant", "content": raw}
++    parsed = original(message, raw)
++    diagnostic = _diagnose(raw, parsed, original, episode)
++    calls = validation_then_execution(parsed, guards)
++    step = _base_step("fixture", episode, 0)
++    step.update(
++        {
++            "case": spec["case"],
++            "raw_output": raw,
++            "raw_output_source": "fixture_string_passed_to_parser",
++            "parser_invoked_by_loop": False,
++            "parser_result": parsed,
++            "diagnostic": diagnostic,
++            "diagnostic_executed": False,
++            "parse_status": diagnostic["parse_status"],
++            "malformed_syntax": diagnostic["malformed_syntax"],
++            "omitted_by_native_parser": diagnostic["omitted_by_native_parser"],
++            "truncated_fragments": diagnostic["truncated_fragments"],
++            "attempt_span_count": diagnostic["attempt_span_count"],
++            "calls": calls,
++            "function_entries": list(episode.function_entries),
++            "execution_path": PATH,
++        }
++    )
++    _finish(steps=[step], episode=episode, final_answer=spec.get("final_answer"), elapsed=None)
++    return step
++
++
++class _ScriptedEngine:
++    """Returns fixed completions and stores each one at generate() return."""
++
++    def __init__(self, outputs: list[str]):
++        self._outputs = list(outputs)
++        self.records: list[dict] = []
++
++    def _get_tokenizer(self):
++        return None
++
++    def generate(self, prompts, tools, gen_cfg):
++        if not self._outputs:
++            raise RuntimeError(
++                f"extra generation after {len(self.records)} completions; "
++                "the max_steps budget did not leave room for the scripted trajectory"
++            )
++        raw = self._outputs.pop(0)
++        self.records.append(
++            {
++                "raw_output": raw,
++                "messages": copy.deepcopy(prompts),
++                "saved_at": "generate_return",
++            }
++        )
++        return {
++            "completions": [raw],
++            "completions_raw": [raw],
++            "completions_structured": [{"role": "assistant", "content": raw}],
++            "logprobs": [None],
++            "metadata": {"completion_ids": [[0]], "prompt_len": 0},
++        }
++
++
++def _call_json(name: str, parameters: dict) -> str:
++    return json.dumps(
++        [{"tool_name": name, "parameters": parameters}],
++        ensure_ascii=False,
++    )
++
++
++def _scripted_outputs(episode: RefundEpisode, final_text: str) -> list[str]:
++    return [
++        _call_json("lookup_order", {"order_id": episode.order_id}),
++        _call_json("get_customer", {"customer_id": episode.customer_id}),
++        _call_json(
++            "calculate_refund",
++            {
++                "order_context_token": episode.order_token,
++                "customer_validation_token": episode.customer_token,
++            },
++        ),
++        _call_json(
++            "submit_refund",
++            {
++                "quote_token": episode.quote_token,
++                "order_id": episode.order_id,
++                "customer_id": episode.customer_id,
++                "amount_cents": episode.amount_cents,
++            },
++        ),
++        final_text,
++    ]
++
++
++def _run_scripted(factory, episode: RefundEpisode, outputs: list[str], case: str) -> list[dict]:
++    from agenttune.agentic.rollout_engines.rollout_factory import (
++        DEFAULT_TOOLS_FALLBACK_PROMPT,
++        create_rollout_fn,
++    )
++
++    guards, _schemas = make_guarded_tools(episode)
++    tool_names = {guard.__name__ for guard in guards}
++    engine = _ScriptedEngine(outputs)
++    extract_log: list[dict] = []
+     original = factory._extract_tool_calls
+-    for spec in _fixture_specs(config.SEED):
+-        episode = RefundEpisode(
+-            episode_id=spec["episode_id"],
+-            order_id="ORD-1001",
+-            customer_id="CUS-501",
+-            amount_cents=1840,
+-            seed=config.SEED,
++    factory._extract_tool_calls = original
++    _install_extract_hook(factory, extract_log)
++    rollout = create_rollout_fn(
++        rollout_engine=engine,
++        tools=guards,
++        max_steps=config.MAX_STEPS,
++        system_prompt=SYSTEM_PROMPT,
++        enable_thinking=config.ENABLE_THINKING,
++        force_final_answer=config.FORCE_FINAL_ANSWER,
++        force_action_on_stall=config.FORCE_ACTION_ON_STALL,
++        context_length=config.CONTEXT_LENGTH,
++        tools_fallback_prompt=DEFAULT_TOOLS_FALLBACK_PROMPT,
++    )
++    try:
++        result = rollout(
++            [user_prompt(episode.order_id, episode.customer_id)],
++            max_new_tokens=config.MAX_NEW_TOKENS,
++            temperature=config.TEMPERATURE,
++            do_sample=config.DO_SAMPLE,
++            max_length=config.CONTEXT_LENGTH,
++        )
++    finally:
++        factory._extract_tool_calls = original
++    final_answer = result["trajectories"][0].final_response
++    cursor = [0]
++    used = 0
++    rows = []
++    for step_id, generated in enumerate(engine.records):
++        raw = generated["raw_output"]
++        extract = None
++        if used < len(extract_log) and extract_log[used]["raw_output"] == raw:
++            extract = extract_log[used]
++            used += 1
++        if extract is not None:
++            parsed = extract["parser_result"]
++            parser_invoked = True
++        else:
++            parsed = None
++            parser_invoked = False
++        diagnosed_parsed = parsed if parser_invoked else original(
++            {"role": "assistant", "content": raw}, raw
++        )
++        diagnostic = _diagnose(raw, diagnosed_parsed, original, episode)
++        calls = (
++            _consume_guard_records(parsed, tool_names, episode, cursor)
++            if parser_invoked
++            else []
+         )
+-        raw = spec["raw"]
+-        message = {"role": "assistant", "content": raw}
+-        parsed = original(message, raw)
+-        parsed_view = classify_parse(raw, parsed, original)
+-        calls = assess_calls(parsed_view["parsed_calls"], episode, schemas, execute=True)
+-        step = _base_step("fixture", episode, 0)
++        messages = generated["messages"]
++        visible_text = json.dumps(messages, ensure_ascii=False, default=str)
++        step = _base_step("fixture", episode, step_id)
+         step.update(
+             {
+-                "case": spec["case"],
++                "case": case,
++                "messages": messages,
+                 "raw_output": raw,
+-                "raw_output_source": "fixture_string_passed_to_parser",
+-                "parser_invoked_by_loop": False,
++                "raw_output_source": "generation_engine",
++                "parser_invoked_by_loop": parser_invoked,
+                 "parser_result": parsed,
+-                "parse_status": parsed_view["parse_status"],
+-                "malformed_fragments": parsed_view["malformed_fragments"],
+-                "attempt_span_count": parsed_view["attempt_span_count"],
++                "diagnostic": diagnostic,
++                "diagnostic_executed": False,
++                "parse_status": diagnostic["parse_status"],
++                "malformed_syntax": diagnostic["malformed_syntax"],
++                "omitted_by_native_parser": diagnostic["omitted_by_native_parser"],
++                "truncated_fragments": diagnostic["truncated_fragments"],
++                "attempt_span_count": diagnostic["attempt_span_count"],
+                 "calls": calls,
+-                "tool_schema_names": [name for name in schemas],
++                "hidden_strings_in_rendered_prompt": _hidden_hits(visible_text, episode),
++                "execution_path": PATH,
++                "max_steps": config.MAX_STEPS,
+             }
+         )
+-        _finish(steps=[step], episode=episode, final_answer=None, elapsed=None)
+         rows.append(step)
++    if engine._outputs:
++        raise RuntimeError(f"{case} left unused scripted generations: {len(engine._outputs)}")
++    if cursor[0] != len(episode.structured_results):
++        raise RuntimeError(
++            f"{case} consumed {cursor[0]} guard records of {len(episode.structured_results)}"
++        )
++    for step in rows:
++        step["function_entries"] = list(episode.function_entries)
++    _finish(rows, episode, final_answer, elapsed=None)
+     return rows
+ 
+ 
+-def _expected_fixture_status(case: str) -> str:
+-    return {
++def run_fixtures(factory) -> list[dict]:
++    original = factory._extract_tool_calls
++    rows = [
++        _direct_fixture_row(
++            RefundEpisode(spec["episode_id"], "ORD-1001", "CUS-501", 1840, config.SEED),
++            spec,
++            original,
++        )
++        for spec in _fixture_specs(config.SEED)
++    ]
++    success = RefundEpisode("f-scripted-success", "ORD-1001", "CUS-501", 1840, config.SEED)
++    wrong = RefundEpisode("f-scripted-wrong-answer", "ORD-1001", "CUS-501", 1840, config.SEED)
++    schema_loop = RefundEpisode("f-schema-loop", "ORD-1001", "CUS-501", 1840, config.SEED)
++    rows.extend(
++        _run_scripted(
++            factory,
++            success,
++            _scripted_outputs(success, f"The refund amount is {success.amount_cents} cents."),
++            "scripted_success",
++        )
++    )
++    rows.extend(
++        _run_scripted(
++            factory,
++            wrong,
++            _scripted_outputs(wrong, "The refund was submitted."),
++            "scripted_wrong_answer",
++        )
++    )
++    rows.extend(
++        _run_scripted(
++            factory,
++            schema_loop,
++            [
++                '[{"tool_name": "lookup_order", "parameters": {}}]',
++                "I cannot complete that call.",
++            ],
++            "schema_invalid_through_loop",
++        )
++    )
++    return rows
++
++
++def _check_fixtures(rows: list[dict]) -> list[str]:
++    problems = []
++    grouped: dict[str, list[dict]] = {}
++    for row in rows:
++        grouped.setdefault(row["episode_id"], []).append(row)
++    by_case = {steps[0]["case"]: steps for steps in grouped.values()}
++    single_expected = {
+         "correct_call": "parsed",
+         "silence": "no_tool_call",
+         "non_call_json": "no_tool_call",
+-        "broken_json": "malformed_tool_call",
++        "broken_json": "malformed_syntax",
+         "unknown_tool": "parsed",
+         "schema_invalid": "parsed",
+         "tool_error": "parsed",
+         "order_bypass": "parsed",
+         "foreign_token": "parsed",
+         "mixed_valid_and_broken": "parsed",
+-    }[case]
+-
+-
+-def _check_fixtures(rows: list[dict]) -> list[str]:
+-    problems = []
+-    by_case = {row["case"]: row for row in rows}
+-    for case, row in by_case.items():
+-        expected = _expected_fixture_status(case)
++        "parser_single_object": "parsed",
++        "parser_two_call_list": "parsed",
++        "parser_truncated_list": "parsed",
++    }
++    for case, expected in single_expected.items():
++        row = by_case[case][0]
+         if row["parse_status"] != expected:
+             problems.append(f"{case}: parse_status {row['parse_status']} != {expected}")
+-    if by_case["broken_json"]["malformed_fragments"] == []:
+-        problems.append("broken_json produced no malformed fragment")
+-    mixed = by_case["mixed_valid_and_broken"]
+-    if not mixed["calls"] or not mixed["malformed_fragments"]:
++        if row["diagnostic"]["executed"]:
++            problems.append(f"{case}: diagnostic executed a call")
++        if row["calls"] and row["calls"][0].get("path") != PATH:
++            problems.append(f"{case}: execution did not use {PATH}")
++    if not by_case["broken_json"][0]["malformed_syntax"]:
++        problems.append("broken_json produced no malformed_syntax fragment")
++    if by_case["broken_json"][0]["omitted_by_native_parser"] or by_case["broken_json"][0]["truncated_fragments"]:
++        problems.append("broken_json was classified as omitted or truncated")
++    mixed = by_case["mixed_valid_and_broken"][0]
++    if not mixed["calls"] or not mixed["malformed_syntax"]:
+         problems.append("mixed fixture hid either the valid call or the broken fragment")
+-    if by_case["silence"]["parse_status"] != "no_tool_call":
+-        problems.append("silence was counted as malformed")
+-    if by_case["non_call_json"]["parse_status"] != "no_tool_call":
+-        problems.append("non-object JSON was counted as malformed")
+-    schema = by_case["schema_invalid"]["calls"]
+-    if not schema or schema[0]["validation"] != "schema_invalid" or schema[0]["execution"] != "not_run":
+-        problems.append("schema_invalid fixture was executed or not labelled")
+-    unknown = by_case["unknown_tool"]["calls"]
+-    if not unknown or unknown[0]["validation"] != "unknown_tool":
+-        problems.append("unknown tool was not labelled unknown_tool")
+-    tool_err = by_case["tool_error"]["calls"]
+-    if not tool_err or tool_err[0]["execution"] != "tool_error":
+-        problems.append("tool_error fixture was not a tool_error")
++    single = by_case["parser_single_object"][0]
++    if len(single["parser_result"] or []) != 1 or single["omitted_by_native_parser"] or single["truncated_fragments"] or single["malformed_syntax"]:
++        problems.append("single-object fixture was not accepted as one native call")
++    if not single["calls"] or single["calls"][0]["execution"] != "success":
++        problems.append("single-object fixture did not execute the parsed call")
++    listed = by_case["parser_two_call_list"][0]
++    if len(listed["parser_result"] or []) != 2 or listed["omitted_by_native_parser"] or listed["truncated_fragments"]:
++        problems.append("complete two-call list was not returned in full")
++    if [call["tool"] for call in listed["calls"]] != ["lookup_order", "get_customer"]:
++        problems.append(f"complete two-call list executed {[call.get('tool') for call in listed['calls']]}")
++    truncated = by_case["parser_truncated_list"][0]
++    if len(truncated["parser_result"] or []) != 1:
++        problems.append("truncated list native parser did not return only the first complete call")
++    if truncated["malformed_syntax"]:
++        problems.append("truncated list was labelled malformed_syntax")
++    if not truncated["truncated_fragments"]:
++        problems.append("truncated list produced no truncated_fragment")
++    if truncated["generation_truncated"]:
++        problems.append("fixture truncation was stored as generation_truncated")
++    if truncated["calls"] and truncated["calls"][0].get("tool") != "lookup_order":
++        problems.append("truncated list executed a call other than the native parser result")
++    schema = by_case["schema_invalid"][0]
++    schema_call = schema["calls"][0]
++    if schema_call["validation"] != "schema_invalid" or schema_call["function_entered"]:
++        problems.append("direct schema_invalid reached the tool function")
++    if schema["function_entries"]:
++        problems.append(f"direct schema_invalid entries: {schema['function_entries']}")
++    loop_schema = by_case["schema_invalid_through_loop"]
++    loop_calls = [call for step in loop_schema for call in step["calls"]]
++    if (
++        not loop_calls
++        or loop_calls[0]["validation"] != "schema_invalid"
++        or loop_calls[0]["function_entered"]
++        or loop_calls[0]["path"] != PATH
++        or loop_schema[-1]["function_entries"]
++    ):
++        problems.append("loop schema_invalid reached the tool function")
++    if loop_schema[0]["raw_output_source"] != "generation_engine":
++        problems.append("loop schema fixture did not save engine raw output")
++    unknown = by_case["unknown_tool"][0]["calls"]
++    if not unknown or unknown[0]["validation"] != "unknown_tool" or unknown[0]["function_entered"]:
++        problems.append("unknown tool was called or mislabelled")
++    tool_err = by_case["tool_error"][0]["calls"][0]
++    if tool_err["execution"] != "tool_error" or not isinstance(tool_err["structured_result"], dict):
++        problems.append("tool_error was not stored as a structured result")
++    if not isinstance(tool_err["string_result"], str):
++        problems.append("tool_error string form was not produced after the structured result")
+     for case in ("order_bypass", "foreign_token"):
+-        calls = by_case[case]["calls"]
++        calls = by_case[case][0]["calls"]
+         if not calls or not calls[0]["order_or_token"]:
+             problems.append(f"{case} was not labelled order_or_token")
+-    correct = by_case["correct_call"]["calls"]
+-    if not correct or correct[0]["execution"] != "success":
++    correct = by_case["correct_call"][0]
++    if not correct["calls"] or correct["calls"][0]["execution"] != "success":
+         problems.append("correct call did not execute")
+-    if by_case["correct_call"]["task_success"]:
++    if correct["task_success"]:
+         problems.append("a single valid fixture call was counted as task success")
++    success = by_case["scripted_success"]
++    if len(success) != 5:
++        problems.append(f"scripted success generated {len(success)} times, expected 5")
++    if success[-1]["function_entries"] != [
++        "lookup_order",
++        "get_customer",
++        "calculate_refund",
++        "submit_refund",
++    ]:
++        problems.append(f"scripted success entries: {success[-1]['function_entries']}")
++    if not success[-1]["task_success"]:
++        problems.append("scripted success did not reach task_success")
++    if success[-1]["parser_invoked_by_loop"]:
++        problems.append("scripted final generation was parsed by the loop instead of only saved")
++    if any(not step["parser_invoked_by_loop"] for step in success[:-1]):
++        problems.append("a scripted tool generation was missing the loop parser result")
++    if success[-1]["raw_output_source"] != "generation_engine":
++        problems.append("scripted final answer was not taken from the generation engine")
++    if success[0]["hidden_strings_in_rendered_prompt"]:
++        problems.append("scripted prompt contained hidden state")
++    success_reward = _rewards(True if success[-1]["task_success"] else False, _n_invalid(success))
++    if success_reward["B"] != 1 or success_reward["C"] != 1:
++        problems.append(f"scripted success reward was {success_reward}")
++    wrong = by_case["scripted_wrong_answer"]
++    if not wrong[-1]["task_success_harness"] or wrong[-1]["task_success_answer"] or wrong[-1]["task_success"]:
++        problems.append("wrong-answer control did not keep harness success separate from task success")
+     return problems
+ 
+ 
+@@ -634,37 +1020,77 @@ def _arithmetic_pair(rows: list[dict]) -> dict:
+     }
+ 
+ 
++def _redact(text: str) -> str:
++    text = re.sub(r"hf_[A-Za-z0-9]{8,}", "[redacted]", text)
++    text = re.sub(r"(?i)bearer\s+\S+", "Bearer [redacted]", text)
++    text = re.sub(r"(?i)(token=)[^&\s]+", r"\1[redacted]", text)
++    return text
++
++
++def _local_token_configured() -> bool:
++    from huggingface_hub import get_token
++
++    return bool(get_token())
++
++
++def _snapshot_revision(path: str) -> str | None:
++    parts = Path(path).parts
++    if "snapshots" not in parts:
++        return None
++    return parts[parts.index("snapshots") + 1]
++
++
+ def _load_model():
+     import torch
++    from huggingface_hub import hf_hub_download
+     from transformers import AutoModelForCausalLM, AutoTokenizer
+ 
+     from agenttune.agentic.rollout_engines.transformers_engine import TransformersRolloutEngine
+ 
++    config_path = hf_hub_download(
++        config.MODEL_ID, "config.json", revision=config.MODEL_REVISION
++    )
++    tokenizer_path = hf_hub_download(
++        config.MODEL_ID, "tokenizer.json", revision=config.MODEL_REVISION
++    )
++    config_revision = _snapshot_revision(config_path)
++    tokenizer_revision = _snapshot_revision(tokenizer_path)
++    if config_revision != config.MODEL_REVISION or tokenizer_revision != config.MODEL_REVISION:
++        raise RuntimeError(
++            "cached config.json or tokenizer.json is not the pinned revision "
++            f"{config.MODEL_REVISION}; refusing to continue"
++        )
+     random.seed(config.SEED)
+     torch.manual_seed(config.SEED)
+     if torch.backends.mps.is_available():
+         torch.mps.manual_seed(config.SEED)
+     device = "mps" if torch.backends.mps.is_available() else "cpu"
+     dtype = torch.float16 if config.DTYPE == "float16" else None
+-    tokenizer = AutoTokenizer.from_pretrained(config.MODEL_ID)
+-    model = AutoModelForCausalLM.from_pretrained(config.MODEL_ID, torch_dtype=dtype)
++    tokenizer = AutoTokenizer.from_pretrained(config.MODEL_ID, revision=config.MODEL_REVISION)
++    model = AutoModelForCausalLM.from_pretrained(
++        config.MODEL_ID,
++        revision=config.MODEL_REVISION,
++        torch_dtype=dtype,
++    )
+     model.eval()
+     if device != "cpu":
+         model.to(device)
+     engine = TransformersRolloutEngine(model, tokenizer)
+     revision = {
+         "model_id": config.MODEL_ID,
+-        "model_commit": getattr(getattr(model, "config", None), "_commit_hash", None),
+-        "tokenizer_commit": getattr(tokenizer, "init_kwargs", {}).get("revision")
+-        or getattr(getattr(tokenizer, "init_kwargs", {}), "get", lambda *_: None)("commit_hash"),
++        "requested_revision": config.MODEL_REVISION,
++        "config_json_revision": config_revision,
++        "tokenizer_json_revision": tokenizer_revision,
+         "tokenizer_class": type(tokenizer).__name__,
+         "vocab_size": getattr(tokenizer, "vocab_size", None),
+-        "device": device,
++        "device": str(device),
+         "dtype": config.DTYPE,
+         "quantization": config.QUANTIZATION,
++        "distribution": "public_gated",
++        "local_token_configured": _local_token_configured(),
++        "config_json": "loaded",
++        "tokenizer": "loaded",
+     }
+-    init = getattr(tokenizer, "init_kwargs", {}) or {}
+-    revision["tokenizer_commit"] = init.get("commit_hash") or init.get("revision") or revision["tokenizer_commit"]
+     return engine, tokenizer, revision
+ 
+ 
+@@ -698,7 +1124,10 @@ def run_model_episodes(factory, engine, tokenizer, schema_list, schemas) -> tupl
+             amount_cents=amount,
+             seed=config.SEED,
+         )
+-        tools = make_tools(episode)
++        print(f"model_episode {episode_id}", flush=True)
++        guards, _episode_schemas = make_guarded_tools(episode)
++        tool_names = {guard.__name__ for guard in guards}
++        tools = guards
+         gen_log: list[dict] = []
+         extract_log: list[dict] = []
+         wrapped = _RecordingEngine(engine, gen_log, tokenizer)
+@@ -728,30 +1157,32 @@ def run_model_episodes(factory, engine, tokenizer, schema_list, schemas) -> tupl
+         trajectory = result["trajectories"][0]
+         final_answer = trajectory.final_response
+         loop_steps = list(trajectory.steps or [])
+-        event_cursor = [0]
++        cursor = [0]
+         used_extract = 0
+         ep_rows = []
+         for step_id, generated in enumerate(gen_log):
++            raw = generated["completions_raw"]
+             extract = None
+-            if used_extract < len(extract_log) and extract_log[used_extract]["raw_output"] == generated["completions_raw"]:
++            if (
++                used_extract < len(extract_log)
++                and extract_log[used_extract]["raw_output"] == raw
++            ):
+                 extract = extract_log[used_extract]
+                 used_extract += 1
+-            raw = extract["raw_output"] if extract else generated["completions_raw"]
+-            parsed = extract["parser_result"] if extract else original(
++            parser_invoked = extract is not None
++            parser_result = extract["parser_result"] if parser_invoked else None
++            diagnosed_parsed = parser_result if parser_invoked else original(
+                 {"role": "assistant", "content": raw}, raw
+             )
+-            viewed = classify_parse(raw, parsed, original)
+-            loop_step = None
+-            if viewed["parsed_calls"] and loop_steps:
+-                loop_step = loop_steps.pop(0)
+-            loop_results = []
+-            thought = None
+-            if loop_step is not None:
+-                thought = loop_step.thought
+-                loop_results = (loop_step.metadata or {}).get("tool_results") or []
+-            calls = _call_records_from_loop(
+-                viewed["parsed_calls"], schemas, loop_results, episode, event_cursor
++            diagnostic = _diagnose(raw, diagnosed_parsed, original, episode)
++            calls = (
++                _consume_guard_records(parser_result, tool_names, episode, cursor)
++                if parser_invoked
++                else []
+             )
++            thought = None
++            if diagnostic["parse_status"] == "parsed" and loop_steps:
++                thought = loop_steps.pop(0).thought
+             visible = _tool_names_visible(generated["rendered_prompt"], schema_list)
+             row = _base_step("model", episode, step_id)
+             row.update(
+@@ -759,7 +1190,8 @@ def run_model_episodes(factory, engine, tokenizer, schema_list, schemas) -> tupl
+                     "messages": generated["messages"],
+                     "rendered_prompt": generated["rendered_prompt"],
+                     "tools_passed_to_generate": [
+-                        ((item.get("function") or item).get("name")) for item in (generated["tools_passed"] or [])
++                        ((item.get("function") or item).get("name"))
++                        for item in (generated["tools_passed"] or [])
+                     ],
+                     "template_renders_tools": probe["template_renders_tools"],
+                     "probe_with_tools_kw": probe["probe_with_tools_kw"],
+@@ -770,13 +1202,19 @@ def run_model_episodes(factory, engine, tokenizer, schema_list, schemas) -> tupl
+                         generated["rendered_prompt"], episode
+                     ),
+                     "raw_output": raw,
+-                    "raw_output_source": "extract_hook_argument" if extract else "generate_completions_raw",
++                    "raw_output_source": "generation_engine",
+                     "loop_step_thought": thought,
+-                    "parser_invoked_by_loop": extract is not None,
+-                    "parser_result": parsed,
+-                    "parse_status": viewed["parse_status"],
+-                    "malformed_fragments": viewed["malformed_fragments"],
++                    "parser_invoked_by_loop": parser_invoked,
++                    "parser_result": parser_result,
++                    "diagnostic": diagnostic,
++                    "diagnostic_executed": False,
++                    "parse_status": diagnostic["parse_status"],
++                    "malformed_syntax": diagnostic["malformed_syntax"],
++                    "omitted_by_native_parser": diagnostic["omitted_by_native_parser"],
++                    "truncated_fragments": diagnostic["truncated_fragments"],
+                     "calls": calls,
++                    "function_entries": list(episode.function_entries),
++                    "execution_path": PATH,
+                     "generation_truncated": generated["generation_truncated"],
+                     "prompt_truncated": generated["prompt_truncated"],
+                     "new_token_count": generated["new_token_count"],
+@@ -805,6 +1243,150 @@ def run_model_episodes(factory, engine, tokenizer, schema_list, schemas) -> tupl
+     return rows, limitations, probe
+ 
+ 
++def _bind_output(out: Path) -> None:
++    global ARTIFACTS, FIXTURE_PATH, MODEL_PATH, SUMMARY_PATH, MANIFEST_PATH, ERROR_PATH
++    ARTIFACTS = out
++    FIXTURE_PATH = out / "fixtures.jsonl"
++    MODEL_PATH = out / "model_episodes.jsonl"
++    SUMMARY_PATH = out / "summary.json"
++    MANIFEST_PATH = out / "manifest.json"
++    ERROR_PATH = out / "model_error.txt"
++
++
++def _call_names(parsed) -> list[str]:
++    names = []
++    for call in parsed or []:
++        if not isinstance(call, dict):
++            continue
++        function = call.get("function") if isinstance(call.get("function"), dict) else {}
++        names.append(function.get("name") or call.get("tool") or call.get("name"))
++    return names
++
++
++def _stored_episode_views(rows: list[dict]) -> dict:
++    grouped: dict[str, list[dict]] = {}
++    for row in rows:
++        if row.get("source") != "model":
++            continue
++        grouped.setdefault(row["episode_id"], []).append(row)
++    views = {}
++    for episode_id, steps in grouped.items():
++        last = steps[-1]
++        views[episode_id] = {
++            "steps": len(steps),
++            "generation_truncated": [bool(step.get("generation_truncated")) for step in steps],
++            "new_token_count": [step.get("new_token_count") for step in steps],
++            "parser_result": [_call_names(step.get("parser_result")) for step in steps],
++            "executed_calls": last.get("function_entries"),
++            "task_success": bool(last.get("task_success")),
++        }
++    return views
++
++
++def _episode_views(rows: list[dict]) -> dict:
++    views = _stored_episode_views(rows)
++    grouped: dict[str, list[dict]] = {}
++    for row in rows:
++        if row.get("source") != "model":
++            continue
++        grouped.setdefault(row["episode_id"], []).append(row)
++    for episode_id, steps in grouped.items():
++        last = steps[-1]
++        views[episode_id]["components"] = _n_invalid_components(steps)
++        omitted_calls = []
++        for step in steps:
++            for item in _diagnostic(step).get("omitted_by_native_parser") or []:
++                omitted_calls.extend(_call_names(item.get("dropped_by_full_parse")))
++        views[episode_id]["omitted_calls"] = omitted_calls
++        views[episode_id]["reward"] = _rewards(
++            bool(last.get("task_success")), _n_invalid(steps)
++        )
++    return views
++
++
++def _reclassify_frozen(factory) -> dict:
++    """Classify the frozen 128-token raw strings again. Do not rewrite that run."""
++    source = FROZEN_128 / "model_episodes.jsonl"
++    rows = [
++        json.loads(line)
++        for line in source.read_text(encoding="utf-8").splitlines()
++        if line.strip()
++    ]
++    original = factory._extract_tool_calls
++    reclassified = []
++    for row in rows:
++        raw = row.get("raw_output") or ""
++        parsed = original({"role": "assistant", "content": raw}, raw)
++        episode = RefundEpisode(
++            row["episode_id"], row["order_id"], row["customer_id"], 0, config.SEED
++        )
++        diagnostic = _diagnose(raw, parsed, original, episode)
++        if episode.function_entries:
++            raise RuntimeError("reclassification of a saved string called a tool")
++        copied = dict(row)
++        copied["parser_result"] = parsed
++        copied["diagnostic"] = diagnostic
++        copied["malformed_syntax"] = diagnostic["malformed_syntax"]
++        copied["omitted_by_native_parser"] = diagnostic["omitted_by_native_parser"]
++        copied["truncated_fragments"] = diagnostic["truncated_fragments"]
++        copied["parser_result_matches_frozen"] = _call_names(parsed) == _call_names(
++            row.get("parser_result")
++        )
++        reclassified.append(copied)
++    prompt = next(
++        row.get("rendered_prompt")
++        for row in rows
++        if row.get("episode_id") == "m0" and row.get("step_id") == 0
++    )
++    TASK_DIR.mkdir(parents=True, exist_ok=True)
++    (TASK_DIR / "rendered_prompt_m0_128.txt").write_text(prompt, encoding="utf-8")
++    frozen_summary = json.loads((FROZEN_128 / "summary.json").read_text(encoding="utf-8"))
++    report = {
++        "source": str(source),
++        "source_unchanged": True,
++        "C_status": "preliminary",
++        "definition": N_INVALID_DEFINITION,
++        "note": (
++            "The frozen summary counted complete calls omitted by the native parser "
++            "as malformed fragments. That is not a model syntax error, and those "
++            "frozen C values are not the provisional penalty."
++        ),
++        "frozen_summary_rewards": frozen_summary["model"]["rewards"],
++        "episodes": _episode_views(reclassified),
++        "totals": _n_invalid_components(reclassified),
++        "prompt_instruction_in_rendered_prompt": {
++            "json_list": "reply with only a JSON list" in prompt,
++            "list_even_for_one_call": "Use a list even for one call." in prompt,
++        },
++    }
++    _write_json(TASK_DIR / "n_invalid_128.json", report)
++    return report
++
++
++def _parser_fixture_trace(rows: list[dict]) -> list[dict]:
++    wanted = ("parser_single_object", "parser_two_call_list", "parser_truncated_list")
++    by_case = {row["case"]: row for row in rows if row.get("case") in wanted}
++    trace = []
++    for case in wanted:
++        row = by_case[case]
++        trace.append(
++            {
++                "case": case,
++                "raw_output": row["raw_output"],
++                "parser_result": row["parser_result"],
++                "diagnostic": {
++                    "parse_status": row["parse_status"],
++                    "malformed_syntax": row["malformed_syntax"],
++                    "omitted_by_native_parser": row["omitted_by_native_parser"],
++                    "truncated_fragments": row["truncated_fragments"],
++                },
++                "executed": [call.get("tool") for call in row.get("calls") or []],
++                "generation_truncated": row["generation_truncated"],
++            }
++        )
++    return trace
++
++
+ def _model_revision_from_hub() -> dict:
+     try:
+         from huggingface_hub import model_info
+@@ -812,10 +1394,27 @@ def _model_revision_from_hub() -> dict:
+         info = model_info(config.MODEL_ID)
+         return {"hub_sha": info.sha, "hub_id": info.id}
+     except Exception as exc:
+-        return {"hub_sha": None, "hub_error": f"{type(exc).__name__}: {exc}"}
+-
+-
+-def main() -> int:
++        return {"hub_sha": None, "hub_error": _redact(f"{type(exc).__name__}: {exc}")}
++
++
++def main(argv: list[str] | None = None) -> int:
++    parser = argparse.ArgumentParser()
++    parser.add_argument("--out", default=str(ROOT / "artifacts" / "contract"))
++    parser.add_argument("--max-new-tokens", type=int, default=PINNED_MAX_NEW_TOKENS)
++    args = parser.parse_args(argv)
++    out = Path(args.out)
++    if not out.is_absolute():
++        out = ROOT / out
++    frozen = FROZEN_128.resolve()
++    if out.resolve() == frozen:
++        raise SystemExit("refusing to overwrite artifacts/contract-128")
++    if (
++        args.max_new_tokens != PINNED_MAX_NEW_TOKENS
++        and out.resolve() == (ROOT / "artifacts" / "contract").resolve()
++    ):
++        raise SystemExit("refusing to overwrite artifacts/contract; pass --out")
++    config.MAX_NEW_TOKENS = args.max_new_tokens
++    _bind_output(out)
+     ARTIFACTS.mkdir(parents=True, exist_ok=True)
+     if config.FORCE_FINAL_ANSWER or config.FORCE_ACTION_ON_STALL:
+         raise RuntimeError("automatic output repair flags must stay off")
+@@ -825,22 +1424,27 @@ def main() -> int:
+     import agenttune.agentic.rollout_engines.rollout_factory as factory
+     from agenttune.agentic.rollout_engines.rollout_factory import (
+         DEFAULT_TOOLS_FALLBACK_PROMPT,
+-        _build_tool_schema,
+     )
+ 
+-    sample = make_tools(
+-        RefundEpisode("schema", "ORD-1001", "CUS-501", 1840, config.SEED)
++    _probe_guards, schema_list = make_guarded_tools(
++        RefundEpisode("schema-probe", "ORD-1001", "CUS-501", 1840, config.SEED)
+     )
+-    schema_list = [_build_tool_schema(fn) for fn in sample]
+     schemas = schema_map(schema_list)
+ 
+-    fixture_rows = run_fixtures(factory, schemas, schema_list)
++    fixture_rows = run_fixtures(factory)
+     fixture_problems = _check_fixtures(fixture_rows)
+     pair = _arithmetic_pair(fixture_rows)
+     _dump(FIXTURE_PATH, fixture_rows)
++    frozen_report = _reclassify_frozen(factory)
++    parser_trace = _parser_fixture_trace(fixture_rows)
++    _write_json(TASK_DIR / "parser_fixtures.json", parser_trace)
+ 
++    launch = (
++        f".venv/bin/python run_contract.py --out {out.relative_to(ROOT)} "
++        f"--max-new-tokens {config.MAX_NEW_TOKENS}"
++    )
+     manifest = {
+-        "launch_command": LAUNCH_COMMAND,
++        "launch_command": launch,
+         "agenttune_commit": _git_sha(),
+         "agenttune_path": str(ROOT / "vendor" / "AgentTune"),
+         "model_id": config.MODEL_ID,
+@@ -849,9 +1453,13 @@ def main() -> int:
+         "seed": config.SEED,
+         "generation": {
+             "max_new_tokens": config.MAX_NEW_TOKENS,
++            "pinned_max_new_tokens": PINNED_MAX_NEW_TOKENS,
+             "temperature": config.TEMPERATURE,
+             "do_sample": config.DO_SAMPLE,
+             "enable_thinking": config.ENABLE_THINKING,
++            "only_setting_changed_from_frozen_run": (
++                ["max_new_tokens"] if config.MAX_NEW_TOKENS != PINNED_MAX_NEW_TOKENS else []
++            ),
+         },
+         "episode_limits": {
+             "max_steps": config.MAX_STEPS,
+@@ -866,20 +1474,28 @@ def main() -> int:
+         "lambda": config.LAMBDA,
+         "reward_definitions": {
+             "B": "I(task_success)",
+-            "C": "I(task_success) - lambda * N_invalid",
++            "C": "preliminary: I(task_success) - lambda * N_invalid",
++            "C_status": "preliminary",
+             "task_success": "harness submitted the refund AND the final answer contains the hidden amount in cents",
+-            "N_invalid": (
+-                "malformed attempt fragments + calls with validation "
+-                "missing_name, unknown_tool, or schema_invalid"
+-            ),
++            "N_invalid": N_INVALID_DEFINITION,
+         },
+         "parse_rule": PARSE_RULE,
++        "parser_format": {
++            "source": "vendor/AgentTune/src/agenttune/agentic/rollout_engines/tool_call_parse.py:_parse_cohere_json",
++            "prompt_source": "vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:DEFAULT_TOOLS_FALLBACK_PROMPT",
++            "supported_format": PARSER_FORMAT,
++            "parser_changed": False,
++            "prompt_changed": False,
++            "fixtures": parser_trace,
++            "rendered_prompt_check": frozen_report["prompt_instruction_in_rendered_prompt"],
++        },
+         "loop": {
+             "generation": "agenttune.agentic.rollout_engines.rollout_factory._execute_trajectory._gen -> TransformersRolloutEngine.generate",
+             "parse": "agenttune.agentic.rollout_engines.rollout_factory._extract_tool_calls",
+-            "execute": "agenttune.agentic.rollout_engines.rollout_factory._execute_trajectory -> _run_tools_parallel -> harness functions",
+-            "schema": "agenttune.agentic.rollout_engines.rollout_factory._build_tool_schema",
+-            "raw_output": "module-level _extract_tool_calls wrapper records its raw_text argument before the original parser runs",
++            "execute": "contract.execute.reject_or_run, called by the guarded tools the loop passes to _run_tools_parallel",
++            "schema": "agenttune.agentic.rollout_engines.rollout_factory._build_tool_schema on the guarded tool",
++            "raw_output": "TransformersRolloutEngine.generate return value, including the final generation; the parser result is stored separately",
++            "max_steps_counts": MAX_STEPS_COUNTS,
+         },
+         "tools_fallback_prompt": DEFAULT_TOOLS_FALLBACK_PROMPT,
+         "tool_schemas": schema_list,
+@@ -890,13 +1506,25 @@ def main() -> int:
+             "PYTORCH_MPS_HIGH_WATERMARK_RATIO": os.environ.get("PYTORCH_MPS_HIGH_WATERMARK_RATIO"),
+         },
+         "hub": _model_revision_from_hub(),
++        "access": {
++            "distribution": "public_gated",
++            "requested_revision": config.MODEL_REVISION,
++            "local_token_configured": _local_token_configured(),
++        },
++        "max_steps_counts": MAX_STEPS_COUNTS,
++    }
++    success_steps = [row for row in fixture_rows if row["episode_id"] == "f-scripted-success"]
++    manifest["max_steps_observed"] = {
++        "limit": config.MAX_STEPS,
++        "limit_changed": False,
++        "generations": len(success_steps),
++        "function_entries": success_steps[-1]["function_entries"] if success_steps else [],
+     }
+     limitations = [
+         "No LoRA and no GRPO. This run does not train.",
+-        "AgentTune's loop stringifies plain-function results, so its tool_failure_count does not see a string result. The contract log uses the harness event, not that counter.",
+-        "AgentTune does not schema-check before execution. Fixtures do not execute a schema-invalid call. On a model episode the loop can still enter the function and record an exception.",
+-        "The final generation after a tool result is not passed through _extract_tool_calls by the loop. That raw completion is taken from generate()'s completions_raw and then parsed with the same function for the log.",
+-        "Step.thought is stored only as loop_step_thought. raw_output is not rebuilt from it.",
++        "The loop stringifies the guard's return value after the structured result is stored. Its tool_failure_count only sees a dict that still contains an 'error' key, so the contract log uses the structured result.",
++        "The loop does not parse the final generation after a tool result. That raw completion is saved from generate(), and the diagnostic classification does not execute it.",
++        "Step.thought is stored only as loop_step_thought. raw_output is the generation-engine string.",
+     ]
+     model_rows: list[dict] = []
+     model_error = None
+@@ -909,13 +1537,42 @@ def main() -> int:
+         )
+         limitations.extend(model_limits)
+         _dump(MODEL_PATH, model_rows)
++        ERROR_PATH.write_text(
++            "\n".join(
++                [
++                    "status: no_error",
++                    f"model_id: {config.MODEL_ID}",
++                    f"revision: {config.MODEL_REVISION}",
++                    "distribution: public_gated",
++                    "config_json: loaded",
++                    "tokenizer: loaded",
++                    f"local_token_configured: {str(_local_token_configured()).lower()}",
++                ]
++            )
++            + "\n",
++            encoding="utf-8",
++        )
+     except Exception as exc:
+-        model_error = traceback.format_exc()
+-        ERROR_PATH.write_text(model_error, encoding="utf-8")
++        model_error = _redact(traceback.format_exc())
++        ERROR_PATH.write_text(
++            "\n".join(
++                [
++                    "status: error",
++                    f"model_id: {config.MODEL_ID}",
++                    f"revision: {config.MODEL_REVISION}",
++                    "distribution: public_gated",
++                    f"local_token_configured: {str(_local_token_configured()).lower()}",
++                    f"exception: {type(exc).__name__}",
++                    "",
++                    model_error,
++                ]
++            ),
++            encoding="utf-8",
++        )
+         limitations.append(
+-            "CohereLabs/tiny-aya-global did not load "
++            "CohereLabs/tiny-aya-global did not finish "
+             f"({type(exc).__name__}). No other model was loaded. "
+-            "The traceback is in artifacts/contract/model_error.txt."
++            "The redacted traceback is in " + str(ERROR_PATH) + "."
+         )
+         _dump(
+             MODEL_PATH,
+@@ -926,7 +1583,7 @@ def main() -> int:
+                     "status": "not_run",
+                     "model_id": config.MODEL_ID,
+                     "revision": (manifest.get("hub") or {}).get("hub_sha"),
+-                    "error_file": "artifacts/contract/model_error.txt",
++                    "error_file": str(ERROR_PATH),
+                 }
+             ],
+         )
+@@ -936,6 +1593,46 @@ def main() -> int:
+         manifest["probe_with_tools_kw"] = probe["probe_with_tools_kw"]
+         manifest["probe_without_tools_kw"] = probe["probe_without_tools_kw"]
+ 
++    rendered_512 = None
++    if any(row.get("source") == "model" and row.get("rendered_prompt") for row in model_rows):
++        rendered_512 = next(
++            row["rendered_prompt"]
++            for row in model_rows
++            if row.get("episode_id") == "m0" and row.get("step_id") == 0
++        )
++        (ARTIFACTS / "rendered_prompt_m0.txt").write_text(rendered_512, encoding="utf-8")
++    frozen_rows = [
++        json.loads(line)
++        for line in (FROZEN_128 / "model_episodes.jsonl").read_text(encoding="utf-8").splitlines()
++        if line.strip()
++    ]
++    frozen_prompt = (TASK_DIR / "rendered_prompt_m0_128.txt").read_text(encoding="utf-8")
++    rerun_truncated = sum(bool(row.get("generation_truncated")) for row in model_rows)
++    comparison = {
++        "frozen_dir": str(FROZEN_128),
++        "rerun_dir": str(ARTIFACTS),
++        "max_new_tokens": {"frozen": PINNED_MAX_NEW_TOKENS, "rerun": config.MAX_NEW_TOKENS},
++        "prompt_changed": False,
++        "parser_changed": False,
++        "repair_added": False,
++        "limit_raised_past_rerun": False,
++        "rendered_prompt_identical": rendered_512 == frozen_prompt if rendered_512 is not None else None,
++        "frozen": _stored_episode_views(frozen_rows),
++        "frozen_reclassified": frozen_report["episodes"],
++        "rerun": _episode_views(model_rows),
++        "generation_truncated_steps": {
++            "frozen": sum(bool(row.get("generation_truncated")) for row in frozen_rows),
++            "rerun": rerun_truncated,
++        },
++    }
++    if rerun_truncated:
++        limitations.append(
++            f"max_new_tokens={config.MAX_NEW_TOKENS} still truncated "
++            f"{rerun_truncated} generation(s). The limit was not increased again."
++        )
++    _write_json(ARTIFACTS / "comparison.json", comparison)
++    _write_json(TASK_DIR / "comparison.json", comparison)
++
+     model_summary = _summarize(model_rows, "model")
+     if model_error is not None:
+         model_summary["note"] = "no model episode was produced"
+@@ -962,6 +1659,11 @@ def main() -> int:
+             "fixtures": str(FIXTURE_PATH),
+             "model_episodes": str(MODEL_PATH),
+             "manifest": str(MANIFEST_PATH),
++            "rendered_prompt_m0": str(ARTIFACTS / "rendered_prompt_m0.txt"),
++            "frozen_128": str(FROZEN_128),
++            "n_invalid_128": str(TASK_DIR / "n_invalid_128.json"),
++            "rendered_prompt_m0_128": str(TASK_DIR / "rendered_prompt_m0_128.txt"),
++            "comparison": str(ARTIFACTS / "comparison.json"),
+         },
+     }
+     manifest["limitations"] = limitations
+diff --git a/contract/execute.py b/contract/execute.py
+new file mode 100644
+index 0000000..45c7de7
+--- /dev/null
++++ b/contract/execute.py
+@@ -0,0 +1,151 @@
++"""One validation-then-execution path for fixtures and the AgentTune loop.
++
++The loop calls the guarded tool. A missing or mistyped argument is rejected
++inside the guard, and the implementation is not called. The structured result
++is stored before the caller converts it to a string.
++"""
++
++from __future__ import annotations
++
++import inspect
++
++from contract.classify import validate_call
++from contract.harness import make_tools
++
++PATH = "validation_then_execution"
++
++
++def _record(
++    name: str,
++    validation: str,
++    arguments,
++    problems: list,
++    execution: str,
++    order_or_token: bool,
++    function_entered: bool,
++    structured_result,
++) -> dict:
++    return {
++        "path": PATH,
++        "tool": name,
++        "validation": validation,
++        "arguments": arguments,
++        "problems": problems,
++        "execution": execution,
++        "order_or_token": order_or_token,
++        "function_entered": function_entered,
++        "structured_result": structured_result,
++    }
++
++
++def reject_or_run(episode, name: str, impl, schema: dict, arguments: dict) -> dict:
++    verdict = validate_call(
++        {"type": "function", "function": {"name": name, "arguments": arguments}},
++        {name: schema},
++        {name},
++    )
++    if verdict["validation"] != "valid":
++        record = _record(
++            name,
++            verdict["validation"],
++            arguments,
++            verdict["problems"],
++            "not_run",
++            False,
++            False,
++            None,
++        )
++        episode.structured_results.append(record)
++        return record
++    before = len(episode.function_entries)
++    try:
++        structured = impl(**arguments)
++    except Exception as exc:
++        record = _record(
++            name,
++            "valid",
++            arguments,
++            [],
++            "exception",
++            False,
++            len(episode.function_entries) > before,
++            {"exception": type(exc).__name__, "message": str(exc)},
++        )
++        episode.structured_results.append(record)
++        return record
++    record = _record(
++        name,
++        "valid",
++        arguments,
++        [],
++        structured.get("execution", "success"),
++        bool(structured.get("order_or_token")),
++        True,
++        structured,
++    )
++    episode.structured_results.append(record)
++    return record
++
++
++def make_guarded_tools(episode) -> tuple[list, list[dict]]:
++    """Tools whose schema is the one AgentTune builds, and whose body is the guard."""
++    from agenttune.agentic.rollout_engines.rollout_factory import _build_tool_schema
++
++    impls = make_tools(episode)
++    guards = []
++    cells = []
++    for impl in impls:
++        cell: dict = {"schema": None}
++
++        def guard(_impl=impl, _cell=cell, _episode=episode, **kwargs):
++            return reject_or_run(
++                _episode, _impl.__name__, _impl, _cell["schema"], kwargs
++            )
++
++        guard.__name__ = impl.__name__
++        guard.__doc__ = impl.__doc__
++        guard.__signature__ = inspect.signature(impl)
++        guard.__annotations__ = dict(getattr(impl, "__annotations__", {}))
++        guards.append(guard)
++        cells.append(cell)
++    schemas = [_build_tool_schema(guard) for guard in guards]
++    for cell, schema in zip(cells, schemas, strict=True):
++        cell["schema"] = schema
++    return guards, schemas
++
++
++def string_after_structure(record: dict) -> dict:
++    """Attach the string form after the structured result is already stored."""
++    payload = record.get("structured_result")
++    copied = dict(record)
++    copied["string_result"] = str(payload if payload is not None else record)
++    return copied
++
++
++def validation_then_execution(parsed_calls, guards: list) -> list[dict]:
++    """Same decisions the loop makes: unknown names are not called; known names enter the guard."""
++    by_name = {guard.__name__: guard for guard in guards}
++    records = []
++    for call in parsed_calls or []:
++        fn = call.get("function") if isinstance(call.get("function"), dict) else {}
++        name = fn.get("name") or call.get("name") or ""
++        if name not in by_name:
++            validation = "missing_name" if not name else "unknown_tool"
++            records.append(
++                string_after_structure(
++                    _record(name, validation, None, [validation], "not_run", False, False, None)
++                )
++            )
++            continue
++        raw_args = fn.get("arguments", fn.get("parameters", {}))
++        if isinstance(raw_args, str):
++            try:
++                import json
++
++                raw_args = json.loads(raw_args) if raw_args.strip() else {}
++            except json.JSONDecodeError:
++                raw_args = {}
++        if not isinstance(raw_args, dict):
++            raw_args = {}
++        records.append(string_after_structure(by_name[name](**raw_args)))
++    return records

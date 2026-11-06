@@ -1,0 +1,506 @@
+{
+  "kind": "integration_diagnostic",
+  "same_prompt": false,
+  "same_answer_predicate": false,
+  "same_reward_formula": true,
+  "reward_formula_expanded": false,
+  "parser_changed": false,
+  "repair_added": false,
+  "note": "The 512-token run used the previous prompt and a substring check for the amount. This run uses the new prompt and the exact final-answer line. Its task_success and B/C are measurements of this contract, not a rescore of that run.",
+  "previous_dir": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512",
+  "this_dir": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512-v13",
+  "previous_512": {
+    "m0": {
+      "steps": 2,
+      "generation_truncated": [
+        false,
+        false
+      ],
+      "new_token_count": [
+        181,
+        27
+      ],
+      "parser_result": [
+        [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "task_success": false
+    },
+    "m1": {
+      "steps": 2,
+      "generation_truncated": [
+        false,
+        false
+      ],
+      "new_token_count": [
+        181,
+        27
+      ],
+      "parser_result": [
+        [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "task_success": false
+    },
+    "m2": {
+      "steps": 2,
+      "generation_truncated": [
+        false,
+        false
+      ],
+      "new_token_count": [
+        181,
+        27
+      ],
+      "parser_result": [
+        [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "task_success": false
+    },
+    "m3": {
+      "steps": 2,
+      "generation_truncated": [
+        false,
+        false
+      ],
+      "new_token_count": [
+        181,
+        12
+      ],
+      "parser_result": [
+        [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "task_success": false
+    },
+    "m4": {
+      "steps": 2,
+      "generation_truncated": [
+        false,
+        false
+      ],
+      "new_token_count": [
+        181,
+        27
+      ],
+      "parser_result": [
+        [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "task_success": false
+    }
+  },
+  "this_run": {
+    "m0": {
+      "steps": 5,
+      "generation_truncated": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "new_token_count": [
+        147,
+        157,
+        133,
+        118,
+        76
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        [
+          "lookup_order"
+        ],
+        [
+          "get_customer"
+        ],
+        [
+          "calculate_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "lookup_order",
+        "get_customer",
+        "calculate_refund"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 9,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 0,
+        "generation_truncated": 0,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund",
+        "submit_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m1": {
+      "steps": 5,
+      "generation_truncated": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "new_token_count": [
+        147,
+        158,
+        134,
+        117,
+        77
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        [
+          "lookup_order"
+        ],
+        [
+          "get_customer"
+        ],
+        [
+          "calculate_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "lookup_order",
+        "get_customer",
+        "calculate_refund"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 9,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 0,
+        "generation_truncated": 0,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund",
+        "submit_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m2": {
+      "steps": 5,
+      "generation_truncated": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "new_token_count": [
+        145,
+        162,
+        138,
+        124,
+        89
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        [
+          "lookup_order"
+        ],
+        [
+          "get_customer"
+        ],
+        [
+          "calculate_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "lookup_order",
+        "get_customer"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 10,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 0,
+        "generation_truncated": 0,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund",
+        "submit_refund",
+        "submit_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m3": {
+      "steps": 5,
+      "generation_truncated": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "new_token_count": [
+        147,
+        166,
+        142,
+        125,
+        151
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        [
+          "lookup_order"
+        ],
+        [
+          "get_customer"
+        ],
+        [
+          "calculate_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "lookup_order",
+        "get_customer"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 11,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 0,
+        "generation_truncated": 0,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    },
+    "m4": {
+      "steps": 5,
+      "generation_truncated": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ],
+      "new_token_count": [
+        147,
+        157,
+        133,
+        119,
+        72
+      ],
+      "parser_result": [
+        [
+          "lookup_order"
+        ],
+        [
+          "lookup_order"
+        ],
+        [
+          "get_customer"
+        ],
+        [
+          "calculate_refund"
+        ],
+        []
+      ],
+      "executed_calls": [
+        "lookup_order",
+        "lookup_order",
+        "get_customer",
+        "calculate_refund"
+      ],
+      "task_success": false,
+      "components": {
+        "malformed_syntax": 0,
+        "omitted_by_native_parser": 9,
+        "schema_invalid": 0,
+        "unknown_tool": 0,
+        "missing_name": 0,
+        "truncated_fragment": 0,
+        "generation_truncated": 0,
+        "N_invalid_provisional": 0,
+        "C_status": "preliminary"
+      },
+      "omitted_calls": [
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund",
+        "calculate_refund",
+        "submit_refund",
+        "submit_refund"
+      ],
+      "reward": {
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    }
+  },
+  "generation_truncated_steps": {
+    "previous_512": 0,
+    "this_run": 0
+  }
+}

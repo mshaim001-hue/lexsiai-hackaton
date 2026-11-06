@@ -1,0 +1,312 @@
+{
+  "parse_rule": "no_tool_call if the AgentTune parser returns no call and the text has no attempt span. An attempt span is a tool_call/toolcall tag, a <function=...> block, a START_ACTION block, an Action fence or Action/Action Input pair, or a JSON object/list of objects carrying tool_name or name+arguments. Prose and a non-object JSON list such as [2, 3] are not attempts. malformed_tool_call if an attempt span is not represented by a parsed call. parsed if the parser returned one or more calls. Every parsed call is kept, and every unparsed attempt span is kept beside it.",
+  "fixture_problems": [],
+  "fixtures": {
+    "split": "fixture",
+    "n_episodes": 13,
+    "n_steps": 22,
+    "task_success_harness": {
+      "numerator": 2,
+      "denominator": 13,
+      "value": 0.15384615384615385
+    },
+    "task_success_answer": {
+      "numerator": 1,
+      "denominator": 13,
+      "value": 0.07692307692307693
+    },
+    "task_success": {
+      "numerator": 1,
+      "denominator": 13,
+      "value": 0.07692307692307693
+    },
+    "parsed_calls": 16,
+    "malformed_attempts": 2,
+    "schema_invalid_calls": 2,
+    "unknown_tool_calls": 1,
+    "missing_name_calls": 0,
+    "execution_errors": {
+      "tool_error": 1,
+      "exception": 0,
+      "total": 1
+    },
+    "order_or_token": 2,
+    "calls_per_task": {
+      "numerator": 16,
+      "denominator": 13,
+      "value": 1.2307692307692308
+    },
+    "episodes_with_no_parsed_call": {
+      "numerator": 3,
+      "denominator": 13,
+      "value": 0.23076923076923078
+    },
+    "episodes_with_no_attempt": {
+      "numerator": 2,
+      "denominator": 13,
+      "value": 0.15384615384615385
+    },
+    "schema_invalid_per_parsed_call": {
+      "numerator": 2,
+      "denominator": 16,
+      "value": 0.125
+    },
+    "generation_truncated_steps": {
+      "numerator": 0,
+      "denominator": 22,
+      "value": 0.0
+    },
+    "timeout_episodes": {
+      "numerator": 0,
+      "denominator": 13,
+      "value": 0.0
+    },
+    "rewards": [
+      {
+        "episode_id": "f-correct",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-silence",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-prose-json",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-broken",
+        "B": 0,
+        "C": -0.5,
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-unknown",
+        "B": 0,
+        "C": -0.5,
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-schema",
+        "B": 0,
+        "C": -0.5,
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-tool-error",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-order",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-foreign",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-mixed",
+        "B": 0,
+        "C": -0.5,
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-scripted-success",
+        "B": 1,
+        "C": 1.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": true
+      },
+      {
+        "episode_id": "f-scripted-wrong-answer",
+        "B": 0,
+        "C": 0.0,
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "task_success": false
+      },
+      {
+        "episode_id": "f-schema-loop",
+        "B": 0,
+        "C": -0.5,
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "task_success": false
+      }
+    ],
+    "N_invalid_definition": "malformed attempt fragments + parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. no_tool_call, tool_error, exception, order_or_token, timeout, and generation_truncated are excluded and reported separately."
+  },
+  "model": {
+    "split": "model",
+    "n_episodes": 5,
+    "n_steps": 10,
+    "task_success_harness": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "task_success_answer": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "task_success": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "parsed_calls": 5,
+    "malformed_attempts": 10,
+    "schema_invalid_calls": 0,
+    "unknown_tool_calls": 0,
+    "missing_name_calls": 0,
+    "execution_errors": {
+      "tool_error": 0,
+      "exception": 0,
+      "total": 0
+    },
+    "order_or_token": 0,
+    "calls_per_task": {
+      "numerator": 5,
+      "denominator": 5,
+      "value": 1.0
+    },
+    "episodes_with_no_parsed_call": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "episodes_with_no_attempt": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "schema_invalid_per_parsed_call": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "generation_truncated_steps": {
+      "numerator": 5,
+      "denominator": 10,
+      "value": 0.5
+    },
+    "timeout_episodes": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "rewards": [
+      {
+        "episode_id": "m0",
+        "B": 0,
+        "C": -1.0,
+        "lambda": 0.5,
+        "N_invalid": 2,
+        "task_success": false
+      },
+      {
+        "episode_id": "m1",
+        "B": 0,
+        "C": -1.0,
+        "lambda": 0.5,
+        "N_invalid": 2,
+        "task_success": false
+      },
+      {
+        "episode_id": "m2",
+        "B": 0,
+        "C": -1.0,
+        "lambda": 0.5,
+        "N_invalid": 2,
+        "task_success": false
+      },
+      {
+        "episode_id": "m3",
+        "B": 0,
+        "C": -1.0,
+        "lambda": 0.5,
+        "N_invalid": 2,
+        "task_success": false
+      },
+      {
+        "episode_id": "m4",
+        "B": 0,
+        "C": -1.0,
+        "lambda": 0.5,
+        "N_invalid": 2,
+        "task_success": false
+      }
+    ],
+    "N_invalid_definition": "malformed attempt fragments + parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. no_tool_call, tool_error, exception, order_or_token, timeout, and generation_truncated are excluded and reported separately."
+  },
+  "arithmetic_pair": {
+    "pair": [
+      "f-silence",
+      "f-broken"
+    ],
+    "silence": {
+      "B": 0,
+      "C": 0.0,
+      "lambda": 0.5,
+      "N_invalid": 0,
+      "task_success": false
+    },
+    "malformed": {
+      "B": 0,
+      "C": -0.5,
+      "lambda": 0.5,
+      "N_invalid": 1,
+      "task_success": false
+    },
+    "B_equal": true,
+    "C_differ": true,
+    "passed": true
+  },
+  "model_error": false,
+  "limitations": [
+    "No LoRA and no GRPO. This run does not train.",
+    "The loop stringifies the guard's return value after the structured result is stored. Its tool_failure_count only sees a dict that still contains an 'error' key, so the contract log uses the structured result.",
+    "The loop does not parse the final generation after a tool result. That raw completion is saved from generate(), and the diagnostic classification does not execute it.",
+    "Step.thought is stored only as loop_step_thought. raw_output is the generation-engine string.",
+    "The tokenizer chat template ignores tools=. Schemas reach the model only through tools_fallback_prompt text appended to the system message."
+  ],
+  "files": {
+    "fixtures": "/Users/Guest/lexsiai-hackaton/artifacts/contract/fixtures.jsonl",
+    "model_episodes": "/Users/Guest/lexsiai-hackaton/artifacts/contract/model_episodes.jsonl",
+    "manifest": "/Users/Guest/lexsiai-hackaton/artifacts/contract/manifest.json"
+  }
+}

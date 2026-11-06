@@ -1,0 +1,7 @@
+status: no_error
+model_id: CohereLabs/tiny-aya-global
+revision: af89d219b53ed9b13b8a4645f9c8028973510324
+distribution: public_gated
+config_json: loaded
+tokenizer: loaded
+local_token_configured: true

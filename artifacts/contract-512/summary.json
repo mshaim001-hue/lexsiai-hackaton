@@ -1,0 +1,415 @@
+{
+  "parse_rule": "The native parser is unchanged. parsed means it returned one or more calls; no_tool_call means it returned none. Diagnostic categories are separate: malformed_syntax is a finished attempt that does not parse into a call; omitted_by_native_parser is a syntactically complete call the native parser did not return and is not a syntax error; truncated_fragment is an unfinished attempt. schema_invalid is a validation result. generation_truncated is an independent generation flag and may occur together with any category.",
+  "fixture_problems": [],
+  "fixtures": {
+    "split": "fixture",
+    "n_episodes": 16,
+    "n_steps": 25,
+    "task_success_harness": {
+      "numerator": 2,
+      "denominator": 16,
+      "value": 0.125
+    },
+    "task_success_answer": {
+      "numerator": 1,
+      "denominator": 16,
+      "value": 0.0625
+    },
+    "task_success": {
+      "numerator": 1,
+      "denominator": 16,
+      "value": 0.0625
+    },
+    "parsed_calls": 20,
+    "malformed_syntax": 2,
+    "omitted_by_native_parser": 0,
+    "truncated_fragments": 1,
+    "schema_invalid_calls": 2,
+    "unknown_tool_calls": 1,
+    "missing_name_calls": 0,
+    "execution_errors": {
+      "tool_error": 1,
+      "exception": 0,
+      "total": 1
+    },
+    "order_or_token": 2,
+    "calls_per_task": {
+      "numerator": 20,
+      "denominator": 16,
+      "value": 1.25
+    },
+    "episodes_with_no_parsed_call": {
+      "numerator": 3,
+      "denominator": 16,
+      "value": 0.1875
+    },
+    "episodes_with_no_attempt": {
+      "numerator": 2,
+      "denominator": 16,
+      "value": 0.125
+    },
+    "schema_invalid_per_parsed_call": {
+      "numerator": 2,
+      "denominator": 20,
+      "value": 0.1
+    },
+    "generation_truncated_steps": {
+      "numerator": 0,
+      "denominator": 25,
+      "value": 0.0
+    },
+    "timeout_episodes": {
+      "numerator": 0,
+      "denominator": 16,
+      "value": 0.0
+    },
+    "rewards": [
+      {
+        "episode_id": "f-correct",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-silence",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-prose-json",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-broken",
+        "B": 0,
+        "C": -0.5,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-unknown",
+        "B": 0,
+        "C": -0.5,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-schema",
+        "B": 0,
+        "C": -0.5,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-tool-error",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-order",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-foreign",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-mixed",
+        "B": 0,
+        "C": -0.5,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-parser-object",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-parser-list",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-parser-truncated",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-scripted-success",
+        "B": 1,
+        "C": 1.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": true
+      },
+      {
+        "episode_id": "f-scripted-wrong-answer",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "f-schema-loop",
+        "B": 0,
+        "C": -0.5,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 1,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    ],
+    "N_invalid_components": {
+      "malformed_syntax": 2,
+      "omitted_by_native_parser": 0,
+      "schema_invalid": 2,
+      "unknown_tool": 1,
+      "missing_name": 0,
+      "truncated_fragment": 1,
+      "generation_truncated": 0,
+      "N_invalid_provisional": 5,
+      "C_status": "preliminary"
+    },
+    "N_invalid_definition": "Preliminary, pending an agreed penalty definition. N_invalid counts malformed_syntax fragments plus parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. A complete call omitted by the native parser is not a model syntax error and is not counted. truncated_fragment, generation_truncated, no_tool_call, tool_error, exception, order_or_token, and timeout are reported separately and are not counted. C is preliminary.",
+    "C_status": "preliminary"
+  },
+  "model": {
+    "split": "model",
+    "n_episodes": 5,
+    "n_steps": 10,
+    "task_success_harness": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "task_success_answer": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "task_success": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "parsed_calls": 20,
+    "malformed_syntax": 0,
+    "omitted_by_native_parser": 0,
+    "truncated_fragments": 0,
+    "schema_invalid_calls": 0,
+    "unknown_tool_calls": 0,
+    "missing_name_calls": 0,
+    "execution_errors": {
+      "tool_error": 0,
+      "exception": 0,
+      "total": 0
+    },
+    "order_or_token": 10,
+    "calls_per_task": {
+      "numerator": 20,
+      "denominator": 5,
+      "value": 4.0
+    },
+    "episodes_with_no_parsed_call": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "episodes_with_no_attempt": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "schema_invalid_per_parsed_call": {
+      "numerator": 0,
+      "denominator": 20,
+      "value": 0.0
+    },
+    "generation_truncated_steps": {
+      "numerator": 0,
+      "denominator": 10,
+      "value": 0.0
+    },
+    "timeout_episodes": {
+      "numerator": 0,
+      "denominator": 5,
+      "value": 0.0
+    },
+    "rewards": [
+      {
+        "episode_id": "m0",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "m1",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "m2",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "m3",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      },
+      {
+        "episode_id": "m4",
+        "B": 0,
+        "C": 0.0,
+        "C_status": "preliminary",
+        "lambda": 0.5,
+        "N_invalid": 0,
+        "N_invalid_status": "preliminary",
+        "task_success": false
+      }
+    ],
+    "N_invalid_components": {
+      "malformed_syntax": 0,
+      "omitted_by_native_parser": 0,
+      "schema_invalid": 0,
+      "unknown_tool": 0,
+      "missing_name": 0,
+      "truncated_fragment": 0,
+      "generation_truncated": 0,
+      "N_invalid_provisional": 0,
+      "C_status": "preliminary"
+    },
+    "N_invalid_definition": "Preliminary, pending an agreed penalty definition. N_invalid counts malformed_syntax fragments plus parsed calls whose validation is missing_name, unknown_tool, or schema_invalid. A complete call omitted by the native parser is not a model syntax error and is not counted. truncated_fragment, generation_truncated, no_tool_call, tool_error, exception, order_or_token, and timeout are reported separately and are not counted. C is preliminary.",
+    "C_status": "preliminary"
+  },
+  "arithmetic_pair": {
+    "pair": [
+      "f-silence",
+      "f-broken"
+    ],
+    "silence": {
+      "B": 0,
+      "C": 0.0,
+      "C_status": "preliminary",
+      "lambda": 0.5,
+      "N_invalid": 0,
+      "N_invalid_status": "preliminary",
+      "task_success": false
+    },
+    "malformed": {
+      "B": 0,
+      "C": -0.5,
+      "C_status": "preliminary",
+      "lambda": 0.5,
+      "N_invalid": 1,
+      "N_invalid_status": "preliminary",
+      "task_success": false
+    },
+    "B_equal": true,
+    "C_differ": true,
+    "passed": true
+  },
+  "model_error": false,
+  "limitations": [
+    "No LoRA and no GRPO. This run does not train.",
+    "The loop stringifies the guard's return value after the structured result is stored. Its tool_failure_count only sees a dict that still contains an 'error' key, so the contract log uses the structured result.",
+    "The loop does not parse the final generation after a tool result. That raw completion is saved from generate(), and the diagnostic classification does not execute it.",
+    "Step.thought is stored only as loop_step_thought. raw_output is the generation-engine string.",
+    "The tokenizer chat template ignores tools=. Schemas reach the model only through tools_fallback_prompt text appended to the system message."
+  ],
+  "files": {
+    "fixtures": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512/fixtures.jsonl",
+    "model_episodes": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512/model_episodes.jsonl",
+    "manifest": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512/manifest.json",
+    "rendered_prompt_m0": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512/rendered_prompt_m0.txt",
+    "frozen_128": "/Users/Guest/lexsiai-hackaton/artifacts/contract-128",
+    "n_invalid_128": "/Users/Guest/lexsiai-hackaton/artifacts/task-1-2/n_invalid_128.json",
+    "rendered_prompt_m0_128": "/Users/Guest/lexsiai-hackaton/artifacts/task-1-2/rendered_prompt_m0_128.txt",
+    "comparison": "/Users/Guest/lexsiai-hackaton/artifacts/contract-512/comparison.json"
+  }
+}
