@@ -1,0 +1,831 @@
+{
+  "kind": "scripted_replay",
+  "note": "Rewards below are from the shared reward callback on saved trajectories. They are not trainer optimizer logs.",
+  "trainer_ran": false,
+  "optimizer_step": false,
+  "comparison": {
+    "m0": {
+      "expected_B": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "actual_B": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "match_B": true,
+      "expected_C": [
+        1.0,
+        0.0,
+        -0.5,
+        1.0
+      ],
+      "actual_C": [
+        1.0,
+        0.0,
+        -0.5,
+        1.0
+      ],
+      "match_C": true,
+      "rollouts": [
+        {
+          "rollout_id": "m0-g100",
+          "source": "artifacts/task-3/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-501\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_90ca9f4130c83847\", \"customer_validation_token\": \"customer_2f38b27470e4a094\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_0ac056831b6ab2d1\", \"order_id\": \"ORD-1001\", \"customer_id\": \"CUS-501\", \"amount_cents\": 1840}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=1840<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=1840"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "m0-g101",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-501\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_90ca9f4130c83847\", \"customer_validation_token\": \"customer_2f38b27470e4a094\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_0ac056831b6ab2d1\", \"order_id\": \"ORD-1001\", \"customer_id\": \"CUS-501\", \"amount_cents\": 1840}}]\nREFUND_SUBMITTED amount_cents=1840<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": false
+            },
+            "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": false,
+          "B": 0.0,
+          "C": 0.0
+        },
+        {
+          "rollout_id": "m0-g102",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"lookup_customer\", \"parameters\": {\"customer_id\": \"CUS-501\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_90ca9f4130c83847\", \"customer_validation_token\": \"customer_abc123\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_token_xyz\", \"order_id\": \"ORD-1001\", \"customer_id\": \"CUS-501\", \"amount_cents\": 1000}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=0<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "lookup_customer",
+                "validation": "unknown_tool",
+                "execution": "not_run",
+                "function_entered": false,
+                "problems": [
+                  "unknown_tool"
+                ],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "order_or_token",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": true
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "order_or_token",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": true
+              }
+            ],
+            "harness_state": {
+              "submitted": false,
+              "function_entries": [
+                "lookup_order",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": false,
+              "task_success_answer": false
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=0"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 1,
+          "task_success": false,
+          "B": 0.0,
+          "C": -0.5
+        },
+        {
+          "rollout_id": "m0-g103",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-501\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_90ca9f4130c83847\", \"customer_validation_token\": \"customer_2f38b27470e4a094\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_0ac056831b6ab2d1\", \"order_id\": \"ORD-1001\", \"customer_id\": \"CUS-501\", \"amount_cents\": 1840}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=1840<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=1840"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        }
+      ]
+    },
+    "m2": {
+      "expected_B": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "actual_B": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "match_B": true,
+      "expected_C": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "actual_C": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "match_C": true,
+      "rollouts": [
+        {
+          "rollout_id": "m2-g100",
+          "source": "artifacts/task-3/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1003\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-503\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_d609650961c32b0a\", \"customer_validation_token\": \"customer_2d9722278a6df7e3\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_ec1377036462130c\", \"order_id\": \"ORD-1003\", \"customer_id\": \"CUS-503\", \"amount_cents\": 930}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=930<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=930"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "m2-g101",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1003\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-503\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_d609650961c32b0a\", \"customer_validation_token\": \"customer_2d9722278a6df7e3\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_ec1377036462130c\", \"order_id\": \"ORD-1003\", \"customer_id\": \"CUS-503\", \"amount_cents\": 930}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=930<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=930"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "m2-g102",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1003\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-503\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_d609650961c32b0a\", \"customer_validation_token\": \"customer_2d9722278a6df7e3\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_ec1377036462130c\", \"order_id\": \"ORD-1003\", \"customer_id\": \"CUS-503\", \"amount_cents\": 930}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=930<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=930"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "m2-g103",
+          "source": "artifacts/task-4/model_episodes.jsonl",
+          "callback_received": {
+            "raw_outputs": [
+              "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1003\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-503\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_d609650961c32b0a\", \"customer_validation_token\": \"customer_2d9722278a6df7e3\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_ec1377036462130c\", \"order_id\": \"ORD-1003\", \"customer_id\": \"CUS-503\", \"amount_cents\": 930}}]<|END_RESPONSE|><EOS_TOKEN>",
+              "REFUND_SUBMITTED amount_cents=930<|END_RESPONSE|><EOS_TOKEN>"
+            ],
+            "validation_results": [
+              {
+                "step_id": 0,
+                "tool": "lookup_order",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 1,
+                "tool": "get_customer",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 2,
+                "tool": "calculate_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              },
+              {
+                "step_id": 3,
+                "tool": "submit_refund",
+                "validation": "valid",
+                "execution": "success",
+                "function_entered": true,
+                "problems": [],
+                "order_or_token": false
+              }
+            ],
+            "harness_state": {
+              "submitted": true,
+              "function_entries": [
+                "lookup_order",
+                "get_customer",
+                "calculate_refund",
+                "submit_refund"
+              ],
+              "task_success_harness": true,
+              "task_success_answer": true
+            },
+            "final_answer": "REFUND_SUBMITTED amount_cents=930"
+          },
+          "fields_present": {
+            "raw_output": true,
+            "validation_results": true,
+            "harness_state": true,
+            "final_answer": true
+          },
+          "n_invalid": 0,
+          "task_success": true,
+          "B": 1.0,
+          "C": 1.0
+        }
+      ]
+    }
+  },
+  "callback_proof": {
+    "m0-g100": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m0-g101": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": false
+      },
+      "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m0-g102": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": false,
+        "function_entries": [
+          "lookup_order",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": false,
+        "task_success_answer": false
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=0",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m0-g103": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m2-g100": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=930",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m2-g101": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=930",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m2-g102": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=930",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    },
+    "m2-g103": {
+      "raw_output_n": 5,
+      "validation_n": 4,
+      "harness_state": {
+        "submitted": true,
+        "function_entries": [
+          "lookup_order",
+          "get_customer",
+          "calculate_refund",
+          "submit_refund"
+        ],
+        "task_success_harness": true,
+        "task_success_answer": true
+      },
+      "final_answer": "REFUND_SUBMITTED amount_cents=930",
+      "fields_present": {
+        "raw_output": true,
+        "validation_results": true,
+        "harness_state": true,
+        "final_answer": true
+      }
+    }
+  },
+  "all_match": true
+}

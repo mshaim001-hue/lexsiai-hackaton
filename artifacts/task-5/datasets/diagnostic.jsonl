@@ -1,0 +1,2 @@
+{"episode_id": "m0", "order_id": "ORD-1001", "customer_id": "CUS-501", "amount_cents": 1840, "split": "diagnostic", "note": "task-3/task-4 variability; excluded from train and held-out"}
+{"episode_id": "m2", "order_id": "ORD-1003", "customer_id": "CUS-503", "amount_cents": 930, "split": "diagnostic", "note": "task-3/task-4 variability; excluded from train and held-out"}

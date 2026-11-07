@@ -1,0 +1,45 @@
+{
+  "train": {
+    "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/train.jsonl",
+    "n": 4,
+    "episode_ids": [
+      "t0",
+      "t1",
+      "t2",
+      "t3"
+    ],
+    "order_ids": [
+      "ORD-2001",
+      "ORD-2002",
+      "ORD-2003",
+      "ORD-2004"
+    ]
+  },
+  "held_out": {
+    "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/held_out.jsonl",
+    "n": 4,
+    "episode_ids": [
+      "h0",
+      "h1",
+      "h2",
+      "h3"
+    ],
+    "order_ids": [
+      "ORD-3001",
+      "ORD-3002",
+      "ORD-3003",
+      "ORD-3004"
+    ]
+  },
+  "diagnostic": {
+    "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/diagnostic.jsonl",
+    "n": 2,
+    "episode_ids": [
+      "m0",
+      "m2"
+    ],
+    "note": "m0/m2 remain diagnostic only"
+  },
+  "overlap": [],
+  "prompt_protocol": "one_action_per_turn"
+}

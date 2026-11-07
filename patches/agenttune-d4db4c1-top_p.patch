@@ -1,0 +1,32 @@
+diff --git a/src/agenttune/agentic/rollout_engines/transformers_engine.py b/src/agenttune/agentic/rollout_engines/transformers_engine.py
+index 2a02d6f..3fc6788 100644
+--- a/src/agenttune/agentic/rollout_engines/transformers_engine.py
++++ b/src/agenttune/agentic/rollout_engines/transformers_engine.py
+@@ -512,16 +512,19 @@ class TransformersRolloutEngine(RolloutEngine):
+         # repeating the same tool call over and over.
+         eos_token_id = self.model.generation_config.eos_token_id or self.tokenizer.eos_token_id
+ 
++        generate_kwargs = {
++            "max_new_tokens": max_new_tokens,
++            "temperature": gen_cfg.get("temperature", 0.7),
++            "do_sample": gen_cfg.get("do_sample", True),
++            "pad_token_id": self.tokenizer.pad_token_id,
++            "eos_token_id": eos_token_id,
++        }
++        if gen_cfg.get("top_p") is not None:
++            generate_kwargs["top_p"] = gen_cfg["top_p"]
++
+         # ── Generate ──────────────────────────────────────────────────────────
+         with torch.no_grad():
+-            output_ids = self.model.generate(
+-                **encoded,
+-                max_new_tokens=max_new_tokens,
+-                temperature=gen_cfg.get("temperature", 0.7),
+-                do_sample=gen_cfg.get("do_sample", True),
+-                pad_token_id=self.tokenizer.pad_token_id,
+-                eos_token_id=eos_token_id,
+-            )
++            output_ids = self.model.generate(**encoded, **generate_kwargs)
+ 
+         new_tokens = output_ids[:, input_len:]
+         completion_ids_list = [ids.tolist() for ids in new_tokens]

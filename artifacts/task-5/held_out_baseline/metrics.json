@@ -1,0 +1,87 @@
+{
+  "n_tasks": 4,
+  "task_success": {
+    "numerator": 4,
+    "denominator": 4,
+    "rate": 1.0
+  },
+  "invalid_attempts": {
+    "numerator": 0,
+    "denominator": 16,
+    "rate": 0.0,
+    "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+  },
+  "tasks_without_calls": {
+    "numerator": 0,
+    "denominator": 4,
+    "rate": 0.0
+  },
+  "calls_per_task": {
+    "values": [
+      4,
+      4,
+      4,
+      4
+    ],
+    "mean": 4.0
+  },
+  "per_task": [
+    {
+      "rollout_id": "h0-g100",
+      "episode_id": "h0",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h1-g100",
+      "episode_id": "h1",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h2-g100",
+      "episode_id": "h2",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h3-g100",
+      "episode_id": "h3",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    }
+  ],
+  "model_weights_updated": false,
+  "loaded_model": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "requested_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "config_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_class": "TokenizersBackend",
+    "vocab_size": 261000,
+    "device": "mps",
+    "dtype": "float16",
+    "quantization": null,
+    "distribution": "public_gated",
+    "local_token_configured": true,
+    "config_json": "loaded",
+    "tokenizer": "loaded"
+  },
+  "sampling": {
+    "generation_seed": 100,
+    "do_sample": true,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_steps": 4,
+    "max_new_tokens": 512,
+    "prompt_protocol": "one_action_per_turn"
+  }
+}

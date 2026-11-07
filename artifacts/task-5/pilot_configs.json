@@ -1,0 +1,90 @@
+{
+  "B": {
+    "model": "CohereLabs/tiny-aya-global",
+    "model_init_kwargs": {
+      "revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "torch_dtype": "float16"
+    },
+    "reward_funcs": "reward_B_I_task_success",
+    "peft_config": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "bias": "none",
+      "task_type": "CAUSAL_LM",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "num_generations": 4,
+    "beta": 0.0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_completion_length": 512,
+    "max_steps_per_turn": 4,
+    "per_device_train_batch_size": 4,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 1e-06,
+    "max_steps": 1,
+    "logging_steps": 1,
+    "save_steps": 10000,
+    "report_to": [],
+    "use_vllm": false,
+    "bf16": false,
+    "fp16": false,
+    "remove_unused_columns": false,
+    "output_dir": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/pilot-b-scratch",
+    "system_prompt": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.",
+    "tools_fallback_prompt": "You can call these tools:\n{tools}\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{{\"tool_name\": \"<name>\", \"parameters\": {{\"<argument>\": <value>}}}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+    "tool_result_format": "Tool result for {name}: {content}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+    "seed": 0,
+    "prompt_protocol": "one_action_per_turn"
+  },
+  "C": {
+    "model": "CohereLabs/tiny-aya-global",
+    "model_init_kwargs": {
+      "revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "torch_dtype": "float16"
+    },
+    "reward_funcs": "reward_C_I_success_minus_lambda_N_invalid",
+    "peft_config": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "bias": "none",
+      "task_type": "CAUSAL_LM",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "num_generations": 4,
+    "beta": 0.0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_completion_length": 512,
+    "max_steps_per_turn": 4,
+    "per_device_train_batch_size": 4,
+    "gradient_accumulation_steps": 1,
+    "learning_rate": 1e-06,
+    "max_steps": 1,
+    "logging_steps": 1,
+    "save_steps": 10000,
+    "report_to": [],
+    "use_vllm": false,
+    "bf16": false,
+    "fp16": false,
+    "remove_unused_columns": false,
+    "output_dir": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/pilot-c-scratch",
+    "system_prompt": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.",
+    "tools_fallback_prompt": "You can call these tools:\n{tools}\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{{\"tool_name\": \"<name>\", \"parameters\": {{\"<argument>\": <value>}}}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+    "tool_result_format": "Tool result for {name}: {content}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+    "seed": 0,
+    "prompt_protocol": "one_action_per_turn"
+  }
+}

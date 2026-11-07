@@ -1,0 +1,40 @@
+{
+  "reward_name": "C",
+  "reward_func_passed": "reward_C_I_success_minus_lambda_N_invalid",
+  "reward_func_after_combine_rewards": "combined_reward(reward_C_I_success_minus_lambda_N_invalid)",
+  "beta_requested": 0.0,
+  "beta_on_GRPOConfig": 0.0,
+  "num_generations": 4,
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "max_completion_length": 512,
+  "learning_rate": 1e-06,
+  "max_steps": 0,
+  "per_device_train_batch_size": 4,
+  "use_vllm": false,
+  "peft_config": {
+    "r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "target_modules": [
+      "k_proj",
+      "o_proj",
+      "q_proj",
+      "v_proj"
+    ],
+    "task_type": "CAUSAL_LM"
+  },
+  "model": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "prompt_protocol": "one_action_per_turn",
+  "max_steps_per_turn": 4,
+  "trainer_built": true,
+  "train_called": false,
+  "optimizer_step": false,
+  "note": "GRPOConfig and peft_config are the objects the trainer receives. GRPOTrainer is constructed with max_steps=0 and a StopBeforeOptimizer callback; train() is not called.",
+  "trainer_class": "GRPOTrainer",
+  "trainer_args_beta": 0.0,
+  "trainer_args_num_generations": 4,
+  "trainer_has_peft": true,
+  "stop_callback": "StopBeforeOptimizer"
+}

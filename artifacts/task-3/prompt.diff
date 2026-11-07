@@ -1,0 +1,20 @@
+--- v1.4/tools_fallback_prompt
++++ one_action/tools_fallback_prompt
+@@ -1,4 +1,4 @@
+ You can call these tools:
+ {tools}
+ 
+-To call tools, reply with only a JSON list, one object per call, and no other text: [{{"tool_name": "<name>", "parameters": {{"<argument>": <value>}}}}]. Use a list even for one call. A user turn that starts with "Tool result" is an observation, not a new message from the user. After an observation you may continue with more tool calls. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.+If you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{{"tool_name": "<name>", "parameters": {{"<argument>": <value>}}}}]. Then end the turn. A user turn that starts with "Tool result" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.
+--- v1.4/tool_result_format
++++ one_action/tool_result_format
+@@ -1,2 +1,2 @@
+ Tool result for {name}: {content}
+-This is an observation. You may continue with more tool calls. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.+This is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.
+--- v1.4/system_prompt
++++ one_action/system_prompt
+@@ -1 +1 @@
+-You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. Tool results are observations, and you may continue calling tools after one. Take arguments of a dependent call only from observations you have already received. Do not put a dependent call in the same response as the call whose result it needs. After submit_refund is confirmed, the final answer must be exactly REFUND_SUBMITTED amount_cents=<integer>.+You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.
+--- v1.4/user_prompt
++++ one_action/user_prompt
+@@ -1 +1 @@
+-Refund order ORD-1001 for customer CUS-501. Look up the order, look up the customer, calculate the refund, then submit it. After submit_refund is confirmed, finish with exactly REFUND_SUBMITTED amount_cents=<integer>.+Refund order ORD-1001 for customer CUS-501. Look up the order, look up the customer, calculate the refund, then submit it. Use exactly one tool call per turn: one JSON list with one object, then end the turn. Wait for each observation before the next call. After submit_refund is confirmed, finish with only REFUND_SUBMITTED amount_cents=<integer>.

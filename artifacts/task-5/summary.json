@@ -1,0 +1,575 @@
+{
+  "kind": "grpo_path_prep",
+  "versions": {
+    "agenttune": "1.1.3",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.16"
+  },
+  "datasets": {
+    "train": {
+      "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/train.jsonl",
+      "n": 4,
+      "episode_ids": [
+        "t0",
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "order_ids": [
+        "ORD-2001",
+        "ORD-2002",
+        "ORD-2003",
+        "ORD-2004"
+      ]
+    },
+    "held_out": {
+      "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/held_out.jsonl",
+      "n": 4,
+      "episode_ids": [
+        "h0",
+        "h1",
+        "h2",
+        "h3"
+      ],
+      "order_ids": [
+        "ORD-3001",
+        "ORD-3002",
+        "ORD-3003",
+        "ORD-3004"
+      ]
+    },
+    "diagnostic": {
+      "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/datasets/diagnostic.jsonl",
+      "n": 2,
+      "episode_ids": [
+        "m0",
+        "m2"
+      ],
+      "note": "m0/m2 remain diagnostic only"
+    },
+    "overlap": [],
+    "prompt_protocol": "one_action_per_turn"
+  },
+  "scripted_replay": {
+    "all_match": true,
+    "comparison": {
+      "m0": {
+        "expected_B": [
+          1.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "actual_B": [
+          1.0,
+          0.0,
+          0.0,
+          1.0
+        ],
+        "match_B": true,
+        "expected_C": [
+          1.0,
+          0.0,
+          -0.5,
+          1.0
+        ],
+        "actual_C": [
+          1.0,
+          0.0,
+          -0.5,
+          1.0
+        ],
+        "match_C": true
+      },
+      "m2": {
+        "expected_B": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "actual_B": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "match_B": true,
+        "expected_C": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "actual_C": [
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ],
+        "match_C": true
+      }
+    },
+    "callback_proof": {
+      "m0-g100": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m0-g101": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": false
+        },
+        "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m0-g102": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": false,
+          "function_entries": [
+            "lookup_order",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": false,
+          "task_success_answer": false
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=0",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m0-g103": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m2-g100": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=930",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m2-g101": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=930",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m2-g102": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=930",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      },
+      "m2-g103": {
+        "raw_output_n": 5,
+        "validation_n": 4,
+        "harness_state": {
+          "submitted": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "task_success_harness": true,
+          "task_success_answer": true
+        },
+        "final_answer": "REFUND_SUBMITTED amount_cents=930",
+        "fields_present": {
+          "raw_output": true,
+          "validation_results": true,
+          "harness_state": true,
+          "final_answer": true
+        }
+      }
+    },
+    "log_kind": "scripted_replay"
+  },
+  "trainer_logs": {
+    "log_kind": "trainer_settings_only",
+    "train_called": false,
+    "optimizer_step": false,
+    "settings": {
+      "B": {
+        "reward_name": "B",
+        "reward_func_passed": "reward_B_I_task_success",
+        "reward_func_after_combine_rewards": "combined_reward(reward_B_I_task_success)",
+        "beta_requested": 0.0,
+        "beta_on_GRPOConfig": 0.0,
+        "num_generations": 4,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "max_completion_length": 512,
+        "learning_rate": 1e-06,
+        "max_steps": 0,
+        "per_device_train_batch_size": 4,
+        "use_vllm": false,
+        "peft_config": {
+          "r": 8,
+          "lora_alpha": 16,
+          "lora_dropout": 0.05,
+          "target_modules": [
+            "k_proj",
+            "o_proj",
+            "q_proj",
+            "v_proj"
+          ],
+          "task_type": "CAUSAL_LM"
+        },
+        "model": "CohereLabs/tiny-aya-global",
+        "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+        "prompt_protocol": "one_action_per_turn",
+        "max_steps_per_turn": 4,
+        "trainer_built": true,
+        "train_called": false,
+        "optimizer_step": false,
+        "note": "GRPOConfig and peft_config are the objects the trainer receives. GRPOTrainer is constructed with max_steps=0 and a StopBeforeOptimizer callback; train() is not called.",
+        "trainer_class": "GRPOTrainer",
+        "trainer_args_beta": 0.0,
+        "trainer_args_num_generations": 4,
+        "trainer_has_peft": true,
+        "stop_callback": "StopBeforeOptimizer"
+      },
+      "C": {
+        "reward_name": "C",
+        "reward_func_passed": "reward_C_I_success_minus_lambda_N_invalid",
+        "reward_func_after_combine_rewards": "combined_reward(reward_C_I_success_minus_lambda_N_invalid)",
+        "beta_requested": 0.0,
+        "beta_on_GRPOConfig": 0.0,
+        "num_generations": 4,
+        "temperature": 0.7,
+        "top_p": 0.9,
+        "max_completion_length": 512,
+        "learning_rate": 1e-06,
+        "max_steps": 0,
+        "per_device_train_batch_size": 4,
+        "use_vllm": false,
+        "peft_config": {
+          "r": 8,
+          "lora_alpha": 16,
+          "lora_dropout": 0.05,
+          "target_modules": [
+            "k_proj",
+            "o_proj",
+            "q_proj",
+            "v_proj"
+          ],
+          "task_type": "CAUSAL_LM"
+        },
+        "model": "CohereLabs/tiny-aya-global",
+        "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+        "prompt_protocol": "one_action_per_turn",
+        "max_steps_per_turn": 4,
+        "trainer_built": true,
+        "train_called": false,
+        "optimizer_step": false,
+        "note": "GRPOConfig and peft_config are the objects the trainer receives. GRPOTrainer is constructed with max_steps=0 and a StopBeforeOptimizer callback; train() is not called.",
+        "trainer_class": "GRPOTrainer",
+        "trainer_args_beta": 0.0,
+        "trainer_args_num_generations": 4,
+        "trainer_has_peft": true,
+        "stop_callback": "StopBeforeOptimizer"
+      }
+    },
+    "error": null
+  },
+  "pilot_configs": {
+    "B": {
+      "model": "CohereLabs/tiny-aya-global",
+      "model_init_kwargs": {
+        "revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+        "torch_dtype": "float16"
+      },
+      "reward_funcs": "reward_B_I_task_success",
+      "peft_config": {
+        "r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj"
+        ]
+      },
+      "num_generations": 4,
+      "beta": 0.0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_completion_length": 512,
+      "max_steps_per_turn": 4,
+      "per_device_train_batch_size": 4,
+      "gradient_accumulation_steps": 1,
+      "learning_rate": 1e-06,
+      "max_steps": 1,
+      "logging_steps": 1,
+      "save_steps": 10000,
+      "report_to": [],
+      "use_vllm": false,
+      "bf16": false,
+      "fp16": false,
+      "remove_unused_columns": false,
+      "output_dir": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/pilot-b-scratch",
+      "system_prompt": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.",
+      "tools_fallback_prompt": "You can call these tools:\n{tools}\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{{\"tool_name\": \"<name>\", \"parameters\": {{\"<argument>\": <value>}}}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+      "tool_result_format": "Tool result for {name}: {content}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+      "seed": 0,
+      "prompt_protocol": "one_action_per_turn"
+    },
+    "C": {
+      "model": "CohereLabs/tiny-aya-global",
+      "model_init_kwargs": {
+        "revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+        "torch_dtype": "float16"
+      },
+      "reward_funcs": "reward_C_I_success_minus_lambda_N_invalid",
+      "peft_config": {
+        "r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj"
+        ]
+      },
+      "num_generations": 4,
+      "beta": 0.0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_completion_length": 512,
+      "max_steps_per_turn": 4,
+      "per_device_train_batch_size": 4,
+      "gradient_accumulation_steps": 1,
+      "learning_rate": 1e-06,
+      "max_steps": 1,
+      "logging_steps": 1,
+      "save_steps": 10000,
+      "report_to": [],
+      "use_vllm": false,
+      "bf16": false,
+      "fp16": false,
+      "remove_unused_columns": false,
+      "output_dir": "/Users/Guest/lexsiai-hackaton/artifacts/task-5/pilot-c-scratch",
+      "system_prompt": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.",
+      "tools_fallback_prompt": "You can call these tools:\n{tools}\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{{\"tool_name\": \"<name>\", \"parameters\": {{\"<argument>\": <value>}}}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+      "tool_result_format": "Tool result for {name}: {content}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call.",
+      "seed": 0,
+      "prompt_protocol": "one_action_per_turn"
+    }
+  },
+  "path_notes": {
+    "completions_only": "disabled; reward_B/reward_C raise without contract_events",
+    "trajectories_metadata": "contract_events must sit on Trajectory.metadata['contract_events']",
+    "extra_fields_column": "wrap_rollout_with_contract_events copies events to a top-level contract_events list so TRL merges them into reward kwargs",
+    "combine_rewards": "C passes a single callable into TrlAgenticGrpo; combine_rewards may wrap it but must not sum a separate B term into C"
+  },
+  "held_out_baseline": {
+    "n_tasks": 4,
+    "task_success": {
+      "numerator": 4,
+      "denominator": 4,
+      "rate": 1.0
+    },
+    "invalid_attempts": {
+      "numerator": 0,
+      "denominator": 16,
+      "rate": 0.0,
+      "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+    },
+    "tasks_without_calls": {
+      "numerator": 0,
+      "denominator": 4,
+      "rate": 0.0
+    },
+    "calls_per_task": {
+      "values": [
+        4,
+        4,
+        4,
+        4
+      ],
+      "mean": 4.0
+    },
+    "per_task": [
+      {
+        "rollout_id": "h0-g100",
+        "episode_id": "h0",
+        "task_success": true,
+        "N_invalid": 0,
+        "attempt_count": 4,
+        "parsed_calls": 4
+      },
+      {
+        "rollout_id": "h1-g100",
+        "episode_id": "h1",
+        "task_success": true,
+        "N_invalid": 0,
+        "attempt_count": 4,
+        "parsed_calls": 4
+      },
+      {
+        "rollout_id": "h2-g100",
+        "episode_id": "h2",
+        "task_success": true,
+        "N_invalid": 0,
+        "attempt_count": 4,
+        "parsed_calls": 4
+      },
+      {
+        "rollout_id": "h3-g100",
+        "episode_id": "h3",
+        "task_success": true,
+        "N_invalid": 0,
+        "attempt_count": 4,
+        "parsed_calls": 4
+      }
+    ],
+    "model_weights_updated": false,
+    "loaded_model": {
+      "model_id": "CohereLabs/tiny-aya-global",
+      "requested_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "config_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "tokenizer_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "tokenizer_class": "TokenizersBackend",
+      "vocab_size": 261000,
+      "device": "mps",
+      "dtype": "float16",
+      "quantization": null,
+      "distribution": "public_gated",
+      "local_token_configured": true,
+      "config_json": "loaded",
+      "tokenizer": "loaded"
+    },
+    "sampling": {
+      "generation_seed": 100,
+      "do_sample": true,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_steps": 4,
+      "max_new_tokens": 512,
+      "prompt_protocol": "one_action_per_turn"
+    }
+  },
+  "stopped_before_optimizer": true,
+  "grpo_training_started": false,
+  "path_fix": {
+    "issue": "completions-only reward kwargs drop raw_output, validation, harness, final_answer",
+    "guard": "reward_B/reward_C raise ValueError without contract_events",
+    "fix": "contract_events on Trajectory.metadata + wrap_rollout_with_contract_events top-level column",
+    "verified_by": "scripted_replay with contract_events; loss_guard on completions-only"
+  }
+}

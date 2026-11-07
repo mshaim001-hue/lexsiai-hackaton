@@ -239,12 +239,64 @@ SYSTEM_PROMPT = (
     "REFUND_SUBMITTED amount_cents=<integer>."
 )
 
+# Task 3: one tool call per turn. Used only by the --one-action path.
+# Keep the same schema slot and final-answer contract as v1.4; change only the
+# turn protocol so system, tools_fallback, and tool_result text agree.
+ONE_ACTION_TOOLS_FALLBACK_PROMPT = (
+    "You can call these tools:\n{tools}\n\n"
+    "If you need a tool, reply with exactly one JSON list that contains exactly one "
+    "call object, and no other text: "
+    '[{{"tool_name": "<name>", "parameters": {{"<argument>": <value>}}}}]. '
+    "Then end the turn. "
+    'A user turn that starts with "Tool result" is an observation, not a new message from the user. '
+    "Put the next tool call only after you have received that observation. "
+    "Never put more than one tool call in the same response. "
+    "Take arguments of a dependent call only from observations you have already received. "
+    "After submit_refund is confirmed, reply with only the final answer line "
+    "REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+)
+
+ONE_ACTION_TOOL_RESULT_FORMAT = (
+    "Tool result for {name}: {content}\n"
+    "This is an observation. "
+    "If another tool is needed, reply with exactly one JSON list that contains exactly "
+    "one call object, and no other text, then end the turn. "
+    "Put that next call only after this observation. "
+    "Never put more than one tool call in the same response. "
+    "Take arguments of a dependent call only from observations you have already received. "
+    "After submit_refund is confirmed, reply with only the final answer line "
+    "REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+)
+
+ONE_ACTION_SYSTEM_PROMPT = (
+    "You are a refund agent. Use the tools. "
+    "Do not invent tokens or amounts. "
+    "The refund amount is unknown until a tool returns it. "
+    "If you need a tool, emit exactly one JSON list with exactly one call and end the turn. "
+    "The next call comes only after the observation for the previous call. "
+    "Never put more than one tool call in the same response. "
+    "Take arguments of a dependent call only from observations you have already received. "
+    "After submit_refund is confirmed, reply with only "
+    "REFUND_SUBMITTED amount_cents=<integer>."
+)
+
 
 def user_prompt(order_id: str, customer_id: str) -> str:
     return (
         f"Refund order {order_id} for customer {customer_id}. "
         "Look up the order, look up the customer, calculate the refund, "
         "then submit it. After submit_refund is confirmed, finish with exactly "
+        "REFUND_SUBMITTED amount_cents=<integer>."
+    )
+
+
+def one_action_user_prompt(order_id: str, customer_id: str) -> str:
+    return (
+        f"Refund order {order_id} for customer {customer_id}. "
+        "Look up the order, look up the customer, calculate the refund, then submit it. "
+        "Use exactly one tool call per turn: one JSON list with one object, then end the turn. "
+        "Wait for each observation before the next call. "
+        "After submit_refund is confirmed, finish with only "
         "REFUND_SUBMITTED amount_cents=<integer>."
     )
 

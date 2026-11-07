@@ -38,12 +38,16 @@ from contract.execute import (
     validation_then_execution,
 )
 from contract.harness import (
+    ONE_ACTION_SYSTEM_PROMPT,
+    ONE_ACTION_TOOL_RESULT_FORMAT,
+    ONE_ACTION_TOOLS_FALLBACK_PROMPT,
     SYSTEM_PROMPT,
     TOOL_RESULT_FORMAT,
     TOOLS_FALLBACK_PROMPT,
     RefundEpisode,
     answer_matches,
     final_answer_text,
+    one_action_user_prompt,
     user_prompt,
 )
 
@@ -1772,6 +1776,11 @@ def _one_model_rollout(
     temperature: float,
     do_sample: bool,
     top_p: float | None,
+    system_prompt: str = SYSTEM_PROMPT,
+    tools_fallback_prompt: str = TOOLS_FALLBACK_PROMPT,
+    tool_result_format: str = TOOL_RESULT_FORMAT,
+    prompt_text: str | None = None,
+    prompt_protocol: str = "v1.4",
 ) -> tuple[list[dict], list[str]]:
     from agenttune.agentic.rollout_engines.rollout_factory import create_rollout_fn
 
@@ -1789,13 +1798,13 @@ def _one_model_rollout(
         rollout_engine=wrapped,
         tools=guards,
         max_steps=config.MAX_STEPS,
-        system_prompt=SYSTEM_PROMPT,
+        system_prompt=system_prompt,
         enable_thinking=config.ENABLE_THINKING,
         force_final_answer=config.FORCE_FINAL_ANSWER,
         force_action_on_stall=config.FORCE_ACTION_ON_STALL,
         context_length=config.CONTEXT_LENGTH,
-        tools_fallback_prompt=TOOLS_FALLBACK_PROMPT,
-        tool_result_format=TOOL_RESULT_FORMAT,
+        tools_fallback_prompt=tools_fallback_prompt,
+        tool_result_format=tool_result_format,
     )
     started = time.monotonic()
     try:
@@ -1807,7 +1816,8 @@ def _one_model_rollout(
         }
         if top_p is not None:
             kwargs["top_p"] = top_p
-        result = rollout([user_prompt(episode.order_id, episode.customer_id)], **kwargs)
+        text = prompt_text or user_prompt(episode.order_id, episode.customer_id)
+        result = rollout([text], **kwargs)
     finally:
         factory._extract_tool_calls = original
     elapsed = time.monotonic() - started
@@ -1848,6 +1858,7 @@ def _one_model_rollout(
                 "temperature": temperature,
                 "do_sample": do_sample,
                 "top_p": top_p,
+                "prompt_protocol": prompt_protocol,
                 "messages": generated["messages"],
                 "rendered_prompt": generated["rendered_prompt"],
                 "tools_passed_to_generate": [
@@ -2079,28 +2090,693 @@ def run_variability(out: Path) -> int:
     return 0
 
 
-def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--out", default=str(ROOT / "artifacts" / "contract"))
-    parser.add_argument("--max-new-tokens", type=int, default=PINNED_MAX_NEW_TOKENS)
-    parser.add_argument("--variability", action="store_true")
-    args = parser.parse_args(argv)
-    out = Path(args.out)
-    if not out.is_absolute():
-        out = ROOT / out
-    if args.variability:
-        if out.resolve() in {
-            (ROOT / "artifacts" / "contract").resolve(),
-            (ROOT / "artifacts" / "contract-128").resolve(),
-            (ROOT / "artifacts" / "contract-512").resolve(),
-            (ROOT / "artifacts" / "contract-512-v13").resolve(),
-            (ROOT / "artifacts" / "contract-512-v14").resolve(),
-            (ROOT / "artifacts" / "task-1-2").resolve(),
-            (ROOT / "artifacts" / "task-1-3").resolve(),
-        }:
-            raise SystemExit(f"refusing to overwrite {out}")
-        return run_variability(out)
-    protected = {
+def _strip_ending_tokens(text: str) -> str:
+    from contract.harness import ENDING_TOKENS
+
+    cleaned = (text or "").strip()
+    changed = True
+    while changed and cleaned:
+        changed = False
+        for token in ENDING_TOKENS:
+            if cleaned.endswith(token):
+                cleaned = cleaned[: -len(token)].rstrip()
+                changed = True
+    return cleaned
+
+
+def _exactly_one_call_no_extra(raw: str) -> dict:
+    """Whether the generation is exactly one JSON list with one call and no other text."""
+    cleaned = _strip_ending_tokens(raw)
+    out = {
+        "exactly_one_call_no_extra_text": False,
+        "list_len": None,
+        "parse_error": None,
+        "leading_or_trailing_text": False,
+    }
+    if not cleaned:
+        out["parse_error"] = "empty"
+        return out
+    try:
+        value = json.loads(cleaned)
+    except json.JSONDecodeError as exc:
+        out["parse_error"] = f"{type(exc).__name__}: {exc}"
+        # Still detect whether a call object sits inside non-JSON wrapper text.
+        out["leading_or_trailing_text"] = True
+        return out
+    if not isinstance(value, list):
+        out["parse_error"] = "not_a_list"
+        return out
+    out["list_len"] = len(value)
+    if len(value) != 1 or not isinstance(value[0], dict):
+        out["parse_error"] = "list_not_one_object"
+        return out
+    if "tool_name" not in value[0] and "tool_names" not in value[0]:
+        out["parse_error"] = "missing_tool_name"
+        return out
+    out["exactly_one_call_no_extra_text"] = True
+    return out
+
+
+def _format_rollout_view(rows: list[dict]) -> dict:
+    last = rows[-1]
+    base = _rollout_view(rows)
+    executed = []
+    for step in rows:
+        for call in step.get("calls") or []:
+            if call.get("execution") == "success" or call.get("function_entered"):
+                name = call.get("name") or (call.get("parsed") or {}).get("tool_name")
+                if name:
+                    executed.append(name)
+    # Prefer the episode's function_entries when present: that is the real impl path.
+    if last.get("function_entries"):
+        executed = list(last["function_entries"])
+    repeats = sorted({name for name in executed if executed.count(name) > 1})
+    schema_invalid = []
+    for step in rows:
+        for call in step.get("calls") or []:
+            if call.get("validation") == "schema_invalid":
+                schema_invalid.append(
+                    {
+                        "step_id": step.get("step_id"),
+                        "name": call.get("tool") or call.get("name"),
+                        "problems": call.get("problems"),
+                    }
+                )
+    turn_flags = []
+    for step in rows:
+        flag = _exactly_one_call_no_extra(step.get("raw_output") or "")
+        flag["step_id"] = step.get("step_id")
+        flag["parser_invoked_by_loop"] = bool(step.get("parser_invoked_by_loop"))
+        flag["parse_status"] = step.get("parse_status")
+        flag["n_parsed_calls"] = len(step.get("calls") or [])
+        flag["n_omitted"] = len(step.get("omitted_by_native_parser") or [])
+        flag["pending"] = _call_names(step.get("pending_unexecuted_calls"))
+        turn_flags.append(flag)
+    n_turns = len(rows)
+    n_exact = sum(1 for item in turn_flags if item["exactly_one_call_no_extra_text"])
+    return {
+        **base,
+        "n_turns": n_turns,
+        "turns_exactly_one_call_no_extra_text": n_exact,
+        "turn_format": turn_flags,
+        "tools_executed": executed,
+        "repeated_tools": repeats,
+        "schema_invalid": schema_invalid,
+        "submit_executed": "submit_refund" in executed,
+        "task_success_harness": bool(last.get("task_success_harness")),
+        "task_success_answer": bool(last.get("task_success_answer")),
+        "final_answer": last.get("final_answer"),
+    }
+
+
+def _load_rollout_rows(path: Path, rollout_id: str) -> list[dict]:
+    rows = []
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        if row.get("rollout_id") == rollout_id:
+            rows.append(row)
+    return rows
+
+
+def _prompt_text_diff(before: str, after: str, label: str) -> str:
+    import difflib
+
+    return "".join(
+        difflib.unified_diff(
+            before.splitlines(keepends=True),
+            after.splitlines(keepends=True),
+            fromfile=f"v1.4/{label}",
+            tofile=f"one_action/{label}",
+        )
+    )
+
+
+def run_one_action(out: Path) -> int:
+    """Two paired rollouts: m0 and m2 at seed 100 with the one-action prompt."""
+    _bind_output(out)
+    ARTIFACTS.mkdir(parents=True, exist_ok=True)
+    if config.FORCE_FINAL_ANSWER or config.FORCE_ACTION_ON_STALL:
+        raise RuntimeError("automatic output repair flags must stay off")
+
+    prompt_diff = "\n".join(
+        [
+            _prompt_text_diff(TOOLS_FALLBACK_PROMPT, ONE_ACTION_TOOLS_FALLBACK_PROMPT, "tools_fallback_prompt"),
+            _prompt_text_diff(TOOL_RESULT_FORMAT, ONE_ACTION_TOOL_RESULT_FORMAT, "tool_result_format"),
+            _prompt_text_diff(SYSTEM_PROMPT, ONE_ACTION_SYSTEM_PROMPT, "system_prompt"),
+            _prompt_text_diff(
+                user_prompt("ORD-1001", "CUS-501"),
+                one_action_user_prompt("ORD-1001", "CUS-501"),
+                "user_prompt",
+            ),
+        ]
+    )
+    (ARTIFACTS / "prompt.diff").write_text(prompt_diff, encoding="utf-8")
+
+    pinned = {
+        "model_id": config.MODEL_ID,
+        "model_revision": config.MODEL_REVISION,
+        "dtype": config.DTYPE,
+        "quantization": config.QUANTIZATION,
+        "environment_seed": config.ONE_ACTION_ENVIRONMENT_SEED,
+        "generation_seed": config.ONE_ACTION_GENERATION_SEED,
+        "do_sample": config.ONE_ACTION_DO_SAMPLE,
+        "temperature": config.ONE_ACTION_TEMPERATURE,
+        "top_p": config.ONE_ACTION_TOP_P,
+        "max_steps": config.ONE_ACTION_MAX_STEPS,
+        "max_new_tokens": config.ONE_ACTION_MAX_NEW_TOKENS,
+        "tasks": [
+            {
+                "episode_id": episode_id,
+                "order_id": order_id,
+                "customer_id": customer_id,
+                "amount_cents": amount,
+            }
+            for episode_id, order_id, customer_id, amount in config.ONE_ACTION_TASKS
+        ],
+        "prompt_protocol": "one_action_per_turn",
+        "parser": "unchanged AgentTune _extract_tool_calls",
+        "validator": "unchanged validation_then_execution",
+        "harness": "unchanged RefundEpisode",
+        "reward": {
+            "B": "I(task_success)",
+            "C": "preliminary: I(task_success) - lambda * N_invalid",
+            "lambda": config.LAMBDA,
+            "N_invalid": N_INVALID_DEFINITION,
+            "changed_after_results": False,
+        },
+        "repair": False,
+        "omitted_calls_not_executed": True,
+        "lora": False,
+        "grpo": False,
+        "trainer": False,
+        "baseline_dir": config.ONE_ACTION_BASELINE_DIR,
+        "comparison": "paired format diagnostic against task-2 m0-g100 and m2-g100",
+        "agenttune_patch": "patches/agenttune-d4db4c1-top_p.patch",
+    }
+    manifest = {
+        "pinned_before_launch": pinned,
+        "launch_command": ".venv/bin/python run_contract.py --one-action --out artifacts/task-3",
+        "prompt_diff": str(ARTIFACTS / "prompt.diff"),
+    }
+    _write_json(MANIFEST_PATH, manifest)
+
+    import agenttune.agentic.rollout_engines.rollout_factory as factory
+
+    fixture_rows = run_fixtures(factory)
+    fixture_problems = _check_fixtures(fixture_rows)
+    _dump(FIXTURE_PATH, fixture_rows)
+    if fixture_problems:
+        _write_json(SUMMARY_PATH, {"fixture_problems": fixture_problems})
+        return 1
+
+    rows: list[dict] = []
+    errors = []
+    try:
+        engine, tokenizer, loaded = _load_model()
+        manifest["loaded_model"] = loaded
+        _write_json(MANIFEST_PATH, manifest)
+        _probe_guards, schema_list = make_guarded_tools(
+            RefundEpisode("schema-probe", "ORD-1001", "CUS-501", 1840, config.SEED)
+        )
+        probe = _probe(tokenizer, schema_list)
+        for episode_id, order_id, customer_id, amount in config.ONE_ACTION_TASKS:
+            generation_seed = config.ONE_ACTION_GENERATION_SEED
+            print(f"one_action {episode_id} g{generation_seed}", flush=True)
+            episode = RefundEpisode(
+                episode_id=episode_id,
+                order_id=order_id,
+                customer_id=customer_id,
+                amount_cents=amount,
+                seed=config.ONE_ACTION_ENVIRONMENT_SEED,
+            )
+            try:
+                ep_rows, limits = _one_model_rollout(
+                    factory,
+                    engine,
+                    tokenizer,
+                    schema_list,
+                    probe,
+                    episode,
+                    generation_seed=generation_seed,
+                    environment_seed=config.ONE_ACTION_ENVIRONMENT_SEED,
+                    max_new_tokens=config.ONE_ACTION_MAX_NEW_TOKENS,
+                    temperature=config.ONE_ACTION_TEMPERATURE,
+                    do_sample=config.ONE_ACTION_DO_SAMPLE,
+                    top_p=config.ONE_ACTION_TOP_P,
+                    system_prompt=ONE_ACTION_SYSTEM_PROMPT,
+                    tools_fallback_prompt=ONE_ACTION_TOOLS_FALLBACK_PROMPT,
+                    tool_result_format=ONE_ACTION_TOOL_RESULT_FORMAT,
+                    prompt_text=one_action_user_prompt(order_id, customer_id),
+                    prompt_protocol="one_action_per_turn",
+                )
+                errors.extend(limits)
+            except Exception as exc:
+                ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+                errors.append(f"{episode_id} g{generation_seed}: {type(exc).__name__}: {_redact(str(exc))}")
+                _dump(MODEL_PATH, rows)
+                _write_json(SUMMARY_PATH, {"partial": True, "errors": errors})
+                return 2
+            rows.extend(ep_rows)
+            _dump(MODEL_PATH, rows)
+    except Exception as exc:
+        ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+        _dump(MODEL_PATH, rows)
+        _write_json(SUMMARY_PATH, {"partial": True, "errors": [f"{type(exc).__name__}: {_redact(str(exc))}"]})
+        return 2
+
+    grouped: dict[str, list[dict]] = {}
+    for row in rows:
+        grouped.setdefault(row["rollout_id"], []).append(row)
+    current = {rid: _format_rollout_view(rrows) for rid, rrows in grouped.items()}
+
+    baseline_path = ROOT / config.ONE_ACTION_BASELINE_DIR / "model_episodes.jsonl"
+    comparison = {}
+    for episode_id, *_ in config.ONE_ACTION_TASKS:
+        rid = f"{episode_id}-g{config.ONE_ACTION_GENERATION_SEED}"
+        baseline_rows = _load_rollout_rows(baseline_path, rid)
+        comparison[rid] = {
+            "one_action": current[rid],
+            "task_2": _format_rollout_view(baseline_rows) if baseline_rows else None,
+        }
+
+    summary = {
+        "kind": "paired_one_action_format_diagnostic",
+        "not_a_variability_rerun": True,
+        "fixture_problems": fixture_problems,
+        "errors": errors,
+        "rollouts": current,
+        "comparison": comparison,
+        "stopped_after_two_rollouts": True,
+        "additional_rollouts_launched": False,
+        "parameters_changed_after_results": False,
+        "reward_changed_after_results": False,
+        "trainer_ran": False,
+    }
+    _write_json(SUMMARY_PATH, summary)
+    _write_json(ARTIFACTS / "comparison.json", comparison)
+    print(
+        json.dumps(
+            {
+                "rollouts": {
+                    rid: {
+                        "exact_one_call_turns": view["turns_exactly_one_call_no_extra_text"],
+                        "n_turns": view["n_turns"],
+                        "tools_executed": view["tools_executed"],
+                        "repeats": view["repeated_tools"],
+                        "schema_invalid": len(view["schema_invalid"]),
+                        "pending": view["pending_unexecuted_calls"],
+                        "submit": view["submit_executed"],
+                        "task_success": view["task_success"],
+                    }
+                    for rid, view in current.items()
+                }
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
+def _failure_reasons(view: dict) -> list[str]:
+    reasons = []
+    if view.get("task_success"):
+        return reasons
+    if not view.get("submit_executed"):
+        reasons.append("submit_refund_not_executed")
+    if view.get("pending_unexecuted_calls"):
+        reasons.append(
+            "pending_unexecuted:" + ",".join(view["pending_unexecuted_calls"])
+        )
+    if view.get("schema_invalid"):
+        reasons.append(f"schema_invalid_n={len(view['schema_invalid'])}")
+    if view.get("repeated_tools"):
+        reasons.append("repeated_tools:" + ",".join(view["repeated_tools"]))
+    n_turns = view.get("n_turns") or 0
+    exact = view.get("turns_exactly_one_call_no_extra_text") or 0
+    # Final answer turn is not required to be a tool-call JSON list.
+    tool_turns = max(n_turns - 1, 0)
+    if tool_turns and exact < tool_turns:
+        reasons.append(
+            f"format_not_one_action_on_{tool_turns - exact}_of_{tool_turns}_tool_turns"
+        )
+    if view.get("task_success_harness") and not view.get("task_success_answer"):
+        reasons.append("final_answer_not_accepted")
+    if not view.get("task_success_harness") and view.get("submit_executed"):
+        reasons.append("harness_not_submitted")
+    n_invalid = (view.get("N_invalid") or {}).get("N_invalid_provisional")
+    if n_invalid:
+        reasons.append(f"N_invalid={n_invalid}")
+    if not reasons:
+        reasons.append("task_success_false")
+    return reasons
+
+
+def _verify_task3_reuse(task3_dir: Path) -> tuple[dict, dict[str, list[dict]], list[str]]:
+    """Confirm task-3 pins and load seed-100 trajectories for reuse."""
+    problems = []
+    manifest = json.loads((task3_dir / "manifest.json").read_text(encoding="utf-8"))
+    pinned = manifest.get("pinned_before_launch") or {}
+    expected = {
+        "model_id": config.MODEL_ID,
+        "model_revision": config.MODEL_REVISION,
+        "environment_seed": config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED,
+        "generation_seed": config.ONE_ACTION_VARIABILITY_REUSED_SEED,
+        "do_sample": config.ONE_ACTION_VARIABILITY_DO_SAMPLE,
+        "temperature": config.ONE_ACTION_VARIABILITY_TEMPERATURE,
+        "top_p": config.ONE_ACTION_VARIABILITY_TOP_P,
+        "max_steps": config.ONE_ACTION_VARIABILITY_MAX_STEPS,
+        "max_new_tokens": config.ONE_ACTION_VARIABILITY_MAX_NEW_TOKENS,
+        "prompt_protocol": "one_action_per_turn",
+    }
+    for key, value in expected.items():
+        if pinned.get(key) != value:
+            problems.append(f"task-3 manifest {key}={pinned.get(key)!r} != {value!r}")
+    expected_tasks = [
+        {
+            "episode_id": episode_id,
+            "order_id": order_id,
+            "customer_id": customer_id,
+            "amount_cents": amount,
+        }
+        for episode_id, order_id, customer_id, amount in config.ONE_ACTION_VARIABILITY_TASKS
+    ]
+    if pinned.get("tasks") != expected_tasks:
+        problems.append("task-3 manifest tasks do not match the pinned one-action tasks")
+
+    jsonl = task3_dir / "model_episodes.jsonl"
+    reused: dict[str, list[dict]] = {}
+    for episode_id, order_id, customer_id, amount in config.ONE_ACTION_VARIABILITY_TASKS:
+        rid = f"{episode_id}-g{config.ONE_ACTION_VARIABILITY_REUSED_SEED}"
+        rows = _load_rollout_rows(jsonl, rid)
+        if not rows:
+            problems.append(f"missing reused trajectory {rid} in {jsonl}")
+            continue
+        head = rows[0]
+        episode = RefundEpisode(
+            episode_id=episode_id,
+            order_id=order_id,
+            customer_id=customer_id,
+            amount_cents=amount,
+            seed=config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED,
+        )
+        expected_fp = _environment_fingerprint(episode)
+        if head.get("environment_fingerprint") != expected_fp:
+            problems.append(
+                f"{rid}: environment_fingerprint mismatch with current harness"
+            )
+        if head.get("environment_seed") != config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED:
+            problems.append(f"{rid}: environment_seed mismatch")
+        if head.get("generation_seed") != config.ONE_ACTION_VARIABILITY_REUSED_SEED:
+            problems.append(f"{rid}: generation_seed mismatch")
+        if head.get("prompt_protocol") != "one_action_per_turn":
+            problems.append(f"{rid}: prompt_protocol is not one_action_per_turn")
+        if head.get("temperature") != config.ONE_ACTION_VARIABILITY_TEMPERATURE:
+            problems.append(f"{rid}: temperature mismatch")
+        if head.get("top_p") != config.ONE_ACTION_VARIABILITY_TOP_P:
+            problems.append(f"{rid}: top_p mismatch")
+        if head.get("do_sample") != config.ONE_ACTION_VARIABILITY_DO_SAMPLE:
+            problems.append(f"{rid}: do_sample mismatch")
+        reused[rid] = rows
+    return pinned, reused, problems
+
+
+def run_one_action_variability(out: Path) -> int:
+    """Six new one-action rollouts; reuse verified task-3 seed 100 in each group."""
+    _bind_output(out)
+    ARTIFACTS.mkdir(parents=True, exist_ok=True)
+    if config.FORCE_FINAL_ANSWER or config.FORCE_ACTION_ON_STALL:
+        raise RuntimeError("automatic output repair flags must stay off")
+
+    task3_dir = ROOT / config.ONE_ACTION_VARIABILITY_TASK3_DIR
+    task3_pinned, reused, reuse_problems = _verify_task3_reuse(task3_dir)
+    if reuse_problems:
+        _write_json(
+            SUMMARY_PATH,
+            {"reuse_verification_failed": True, "problems": reuse_problems},
+        )
+        print(json.dumps({"reuse_problems": reuse_problems}, indent=2), file=sys.stderr)
+        return 1
+
+    pinned = {
+        "model_id": config.MODEL_ID,
+        "model_revision": config.MODEL_REVISION,
+        "dtype": config.DTYPE,
+        "quantization": config.QUANTIZATION,
+        "environment_seed": config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED,
+        "reused_generation_seed": config.ONE_ACTION_VARIABILITY_REUSED_SEED,
+        "new_generation_seeds": list(config.ONE_ACTION_VARIABILITY_NEW_SEEDS),
+        "do_sample": config.ONE_ACTION_VARIABILITY_DO_SAMPLE,
+        "temperature": config.ONE_ACTION_VARIABILITY_TEMPERATURE,
+        "top_p": config.ONE_ACTION_VARIABILITY_TOP_P,
+        "max_steps": config.ONE_ACTION_VARIABILITY_MAX_STEPS,
+        "max_new_tokens": config.ONE_ACTION_VARIABILITY_MAX_NEW_TOKENS,
+        "tasks": [
+            {
+                "episode_id": episode_id,
+                "order_id": order_id,
+                "customer_id": customer_id,
+                "amount_cents": amount,
+            }
+            for episode_id, order_id, customer_id, amount in config.ONE_ACTION_VARIABILITY_TASKS
+        ],
+        "prompt_protocol": "one_action_per_turn",
+        "prompt_source": "contract/harness.py ONE_ACTION_* (task 3)",
+        "parser": "unchanged AgentTune _extract_tool_calls",
+        "validator": "unchanged validation_then_execution",
+        "harness": "unchanged RefundEpisode",
+        "reward": {
+            "B": "I(task_success)",
+            "C": "preliminary: I(task_success) - lambda * N_invalid",
+            "lambda": config.LAMBDA,
+            "N_invalid": N_INVALID_DEFINITION,
+            "changed_after_results": False,
+        },
+        "repair": False,
+        "lora": False,
+        "grpo": False,
+        "trainer": False,
+        "task3_dir": config.ONE_ACTION_VARIABILITY_TASK3_DIR,
+        "task3_config_verified": True,
+        "new_rollouts_planned": len(config.ONE_ACTION_VARIABILITY_TASKS)
+        * len(config.ONE_ACTION_VARIABILITY_NEW_SEEDS),
+        "agenttune_patch": "patches/agenttune-d4db4c1-top_p.patch",
+    }
+    manifest = {
+        "pinned_before_launch": pinned,
+        "task3_pinned_verified": {
+            key: task3_pinned.get(key)
+            for key in (
+                "model_id",
+                "model_revision",
+                "environment_seed",
+                "generation_seed",
+                "do_sample",
+                "temperature",
+                "top_p",
+                "max_steps",
+                "max_new_tokens",
+                "prompt_protocol",
+                "tasks",
+            )
+        },
+        "reused_rollouts": {
+            rid: {
+                "source": str(task3_dir / "model_episodes.jsonl"),
+                "environment_fingerprint": rows[0].get("environment_fingerprint"),
+                "n_steps": len(rows),
+            }
+            for rid, rows in reused.items()
+        },
+        "launch_command": (
+            ".venv/bin/python run_contract.py --one-action-variability --out artifacts/task-4"
+        ),
+    }
+    _write_json(MANIFEST_PATH, manifest)
+
+    import agenttune.agentic.rollout_engines.rollout_factory as factory
+
+    fixture_rows = run_fixtures(factory)
+    fixture_problems = _check_fixtures(fixture_rows)
+    _dump(FIXTURE_PATH, fixture_rows)
+    if fixture_problems:
+        _write_json(SUMMARY_PATH, {"fixture_problems": fixture_problems})
+        return 1
+
+    new_rows: list[dict] = []
+    errors = []
+    sources: dict[str, dict] = {
+        rid: {
+            "source": "artifacts/task-3/model_episodes.jsonl",
+            "kind": "reused_task3",
+            "generation_seed": config.ONE_ACTION_VARIABILITY_REUSED_SEED,
+        }
+        for rid in reused
+    }
+    try:
+        engine, tokenizer, loaded = _load_model()
+        manifest["loaded_model"] = loaded
+        _write_json(MANIFEST_PATH, manifest)
+        _probe_guards, schema_list = make_guarded_tools(
+            RefundEpisode("schema-probe", "ORD-1001", "CUS-501", 1840, config.SEED)
+        )
+        probe = _probe(tokenizer, schema_list)
+        new_count = 0
+        for episode_id, order_id, customer_id, amount in config.ONE_ACTION_VARIABILITY_TASKS:
+            for generation_seed in config.ONE_ACTION_VARIABILITY_NEW_SEEDS:
+                print(f"one_action_variability {episode_id} g{generation_seed}", flush=True)
+                episode = RefundEpisode(
+                    episode_id=episode_id,
+                    order_id=order_id,
+                    customer_id=customer_id,
+                    amount_cents=amount,
+                    seed=config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED,
+                )
+                try:
+                    ep_rows, limits = _one_model_rollout(
+                        factory,
+                        engine,
+                        tokenizer,
+                        schema_list,
+                        probe,
+                        episode,
+                        generation_seed=generation_seed,
+                        environment_seed=config.ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED,
+                        max_new_tokens=config.ONE_ACTION_VARIABILITY_MAX_NEW_TOKENS,
+                        temperature=config.ONE_ACTION_VARIABILITY_TEMPERATURE,
+                        do_sample=config.ONE_ACTION_VARIABILITY_DO_SAMPLE,
+                        top_p=config.ONE_ACTION_VARIABILITY_TOP_P,
+                        system_prompt=ONE_ACTION_SYSTEM_PROMPT,
+                        tools_fallback_prompt=ONE_ACTION_TOOLS_FALLBACK_PROMPT,
+                        tool_result_format=ONE_ACTION_TOOL_RESULT_FORMAT,
+                        prompt_text=one_action_user_prompt(order_id, customer_id),
+                        prompt_protocol="one_action_per_turn",
+                    )
+                    errors.extend(limits)
+                except Exception as exc:
+                    ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+                    errors.append(
+                        f"{episode_id} g{generation_seed}: {type(exc).__name__}: {_redact(str(exc))}"
+                    )
+                    _dump(MODEL_PATH, new_rows)
+                    _write_json(SUMMARY_PATH, {"partial": True, "errors": errors})
+                    return 2
+                rid = ep_rows[-1]["rollout_id"]
+                sources[rid] = {
+                    "source": "artifacts/task-4/model_episodes.jsonl",
+                    "kind": "new_task4",
+                    "generation_seed": generation_seed,
+                }
+                new_rows.extend(ep_rows)
+                new_count += 1
+                _dump(MODEL_PATH, new_rows)
+        if new_count != pinned["new_rollouts_planned"]:
+            errors.append(
+                f"expected {pinned['new_rollouts_planned']} new rollouts, got {new_count}"
+            )
+    except Exception as exc:
+        ERROR_PATH.write_text(_redact(traceback.format_exc()), encoding="utf-8")
+        _dump(MODEL_PATH, new_rows)
+        _write_json(
+            SUMMARY_PATH,
+            {"partial": True, "errors": [f"{type(exc).__name__}: {_redact(str(exc))}"]},
+        )
+        return 2
+
+    combined: dict[str, list[dict]] = {rid: list(rows) for rid, rows in reused.items()}
+    for row in new_rows:
+        combined.setdefault(row["rollout_id"], []).append(row)
+
+    groups: dict[str, dict] = {}
+    for episode_id, *_ in config.ONE_ACTION_VARIABILITY_TASKS:
+        views = []
+        for seed in (config.ONE_ACTION_VARIABILITY_REUSED_SEED, *config.ONE_ACTION_VARIABILITY_NEW_SEEDS):
+            rid = f"{episode_id}-g{seed}"
+            view = _format_rollout_view(combined[rid])
+            view["source"] = sources[rid]
+            view["failure_reasons"] = _failure_reasons(view)
+            n_turns = view["n_turns"]
+            tool_turns = max(n_turns - 1, 0)
+            view["one_action_format"] = {
+                "n_turns": n_turns,
+                "tool_turns": tool_turns,
+                "turns_exactly_one_call_no_extra_text": view[
+                    "turns_exactly_one_call_no_extra_text"
+                ],
+                "all_tool_turns_exact": view["turns_exactly_one_call_no_extra_text"]
+                >= tool_turns
+                and tool_turns > 0,
+            }
+            views.append(view)
+        fingerprints = {view["environment_fingerprint"] for view in views}
+        b_values = [view["B"] for view in views]
+        c_values = [view["C"] for view in views]
+        success_values = [view["task_success"] for view in views]
+        n_invalid_values = [
+            view["N_invalid"]["N_invalid_provisional"] for view in views
+        ]
+        groups[episode_id] = {
+            "rollouts": views,
+            "environment_fingerprints_identical": len(fingerprints) == 1,
+            "task_success": success_values,
+            "N_invalid": n_invalid_values,
+            "B": _reward_spread([float(v) for v in b_values]),
+            "C": _reward_spread([float(v) for v in c_values]),
+            "trajectory_sources": {
+                view["rollout_id"]: view["source"] for view in views
+            },
+        }
+
+    summary = {
+        "kind": "one_action_reward_variability",
+        "fixture_problems": fixture_problems,
+        "errors": errors,
+        "reused_from_task3": sorted(reused),
+        "new_rollouts": sorted(
+            rid for rid, meta in sources.items() if meta["kind"] == "new_task4"
+        ),
+        "new_rollouts_count": sum(
+            1 for meta in sources.values() if meta["kind"] == "new_task4"
+        ),
+        "stopped_after_six_new_rollouts": True,
+        "groups": groups,
+        "parameters_changed_after_results": False,
+        "reward_changed_after_results": False,
+        "centered_rewards_are_trl_advantages": False,
+        "trainer_ran": False,
+        "grpo": False,
+        "note": (
+            "Seed 100 trajectories are reused from task 3 after config and "
+            "environment fingerprint verification. Centered values are r - mean(r)."
+        ),
+    }
+    _write_json(SUMMARY_PATH, summary)
+    print(
+        json.dumps(
+            {
+                "new_rollouts": summary["new_rollouts_count"],
+                "groups": {
+                    task: {
+                        "task_success": data["task_success"],
+                        "N_invalid": data["N_invalid"],
+                        "B": data["B"]["values"],
+                        "C": data["C"]["values"],
+                        "B_std_ddof1": data["B"]["std"],
+                        "C_std_ddof1": data["C"]["std"],
+                        "sources": data["trajectory_sources"],
+                    }
+                    for task, data in groups.items()
+                },
+            },
+            indent=2,
+        )
+    )
+    return 0
+
+
+def _protected_dirs() -> set[Path]:
+    return {
         (ROOT / "artifacts" / "contract").resolve(),
         (ROOT / "artifacts" / "contract-128").resolve(),
         (ROOT / "artifacts" / "contract-512").resolve(),
@@ -2108,7 +2784,35 @@ def main(argv: list[str] | None = None) -> int:
         (ROOT / "artifacts" / "contract-512-v14").resolve(),
         (ROOT / "artifacts" / "task-1-2").resolve(),
         (ROOT / "artifacts" / "task-1-3").resolve(),
+        (ROOT / "artifacts" / "task-2").resolve(),
+        (ROOT / "artifacts" / "task-3").resolve(),
     }
+
+
+def main(argv: list[str] | None = None) -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--out", default=str(ROOT / "artifacts" / "contract"))
+    parser.add_argument("--max-new-tokens", type=int, default=PINNED_MAX_NEW_TOKENS)
+    parser.add_argument("--variability", action="store_true")
+    parser.add_argument("--one-action", action="store_true")
+    parser.add_argument("--one-action-variability", action="store_true")
+    args = parser.parse_args(argv)
+    out = Path(args.out)
+    if not out.is_absolute():
+        out = ROOT / out
+    if args.variability:
+        if out.resolve() in _protected_dirs() | {(ROOT / "artifacts" / "task-4").resolve()}:
+            raise SystemExit(f"refusing to overwrite {out}")
+        return run_variability(out)
+    if args.one_action:
+        if out.resolve() in _protected_dirs() | {(ROOT / "artifacts" / "task-4").resolve()}:
+            raise SystemExit(f"refusing to overwrite {out}")
+        return run_one_action(out)
+    if args.one_action_variability:
+        if out.resolve() in _protected_dirs():
+            raise SystemExit(f"refusing to overwrite {out}")
+        return run_one_action_variability(out)
+    protected = _protected_dirs() | {(ROOT / "artifacts" / "task-4").resolve()}
     if out.resolve() in protected:
         raise SystemExit(f"refusing to overwrite {out}")
     config.MAX_NEW_TOKENS = args.max_new_tokens

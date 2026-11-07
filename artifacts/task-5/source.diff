@@ -1,0 +1,1132 @@
+diff --git a/README.md b/README.md
+new file mode 100644
+index 0000000..50240f7
+--- /dev/null
++++ b/README.md
+@@ -0,0 +1,46 @@
++# Lexsi hackathon — refund contract
++
++Pinned AgentTune revision: `d4db4c12d52342227c4113a70183d0f64aa2f345`.
++
++## Apply the top_p forward patch
++
++AgentTune’s transformers engine does not pass `top_p` into `model.generate`. The
++project patch for the pinned revision is
++`patches/agenttune-d4db4c1-top_p.patch`.
++
++From a clean checkout of that AgentTune commit:
++
++```bash
++git clone https://github.com/Lexsi-Labs/AgentTune.git
++cd AgentTune
++git checkout d4db4c12d52342227c4113a70183d0f64aa2f345
++git apply --check /path/to/lexsiai-hackaton/patches/agenttune-d4db4c1-top_p.patch
++git apply /path/to/lexsiai-hackaton/patches/agenttune-d4db4c1-top_p.patch
++```
++
++When AgentTune lives under `vendor/AgentTune` in this repo:
++
++```bash
++git -C vendor/AgentTune apply --check ../../patches/agenttune-d4db4c1-top_p.patch
++git -C vendor/AgentTune apply ../../patches/agenttune-d4db4c1-top_p.patch
++```
++
++The parser is not changed by this patch.
++
++## Contract runs
++
++```bash
++.venv/bin/python run_contract.py --out artifacts/<new-dir> --max-new-tokens 512
++.venv/bin/python run_contract.py --variability --out artifacts/task-2
++.venv/bin/python run_contract.py --one-action --out artifacts/task-3
++.venv/bin/python run_contract.py --one-action-variability --out artifacts/task-4
++.venv/bin/python run_grpo_prep.py
++```
++
++`run_grpo_prep.py` builds the GRPO pilot configs (B and C, `beta=0.0`),
++replays the eight saved one-action trajectories through the shared reward
++callback, writes train/held-out manifests, and records untrained held-out
++metrics. It does not call `trainer.train()` and installs a stop callback that
++refuses the first optimizer step.
++
++Do not overwrite finished artifact directories.
+diff --git a/contract/config.py b/contract/config.py
+index 97588b0..e795d3d 100644
+--- a/contract/config.py
++++ b/contract/config.py
+@@ -39,3 +39,26 @@ VARIABILITY_TASKS = (
+     ("m0", "ORD-1001", "CUS-501", 1840),
+     ("m2", "ORD-1003", "CUS-503", 930),
+ )
++
++# Task 3: paired one-action format check against task-2 seeds 100.
++ONE_ACTION_ENVIRONMENT_SEED = VARIABILITY_ENVIRONMENT_SEED
++ONE_ACTION_GENERATION_SEED = 100
++ONE_ACTION_TEMPERATURE = VARIABILITY_TEMPERATURE
++ONE_ACTION_TOP_P = VARIABILITY_TOP_P
++ONE_ACTION_DO_SAMPLE = VARIABILITY_DO_SAMPLE
++ONE_ACTION_MAX_NEW_TOKENS = VARIABILITY_MAX_NEW_TOKENS
++ONE_ACTION_MAX_STEPS = VARIABILITY_MAX_STEPS
++ONE_ACTION_TASKS = VARIABILITY_TASKS
++ONE_ACTION_BASELINE_DIR = "artifacts/task-2"
++
++# Task 4: one-action reward variability. Reuses task-3 seed 100; adds 101–103.
++ONE_ACTION_VARIABILITY_ENVIRONMENT_SEED = ONE_ACTION_ENVIRONMENT_SEED
++ONE_ACTION_VARIABILITY_REUSED_SEED = ONE_ACTION_GENERATION_SEED
++ONE_ACTION_VARIABILITY_NEW_SEEDS = (101, 102, 103)
++ONE_ACTION_VARIABILITY_TEMPERATURE = ONE_ACTION_TEMPERATURE
++ONE_ACTION_VARIABILITY_TOP_P = ONE_ACTION_TOP_P
++ONE_ACTION_VARIABILITY_DO_SAMPLE = ONE_ACTION_DO_SAMPLE
++ONE_ACTION_VARIABILITY_MAX_NEW_TOKENS = ONE_ACTION_MAX_NEW_TOKENS
++ONE_ACTION_VARIABILITY_MAX_STEPS = ONE_ACTION_MAX_STEPS
++ONE_ACTION_VARIABILITY_TASKS = ONE_ACTION_TASKS
++ONE_ACTION_VARIABILITY_TASK3_DIR = "artifacts/task-3"
+diff --git a/contract/events.py b/contract/events.py
+new file mode 100644
+index 0000000..0fcd5ac
+--- /dev/null
++++ b/contract/events.py
+@@ -0,0 +1,147 @@
++"""Contract events for the GRPO reward path.
++
++The trainer reward callback must see raw generation text, per-call validation,
++harness state, and the final answer. Those fields are assembled here so scripted
++replay and live rollouts share one schema.
++"""
++
++from __future__ import annotations
++
++from typing import Any
++
++
++def n_invalid_components_from_steps(steps: list[dict]) -> dict[str, int | str]:
++    malformed_syntax = 0
++    omitted_calls = 0
++    truncated_fragments = 0
++    schema_invalid = 0
++    unknown_tool = 0
++    missing_name = 0
++    generation_truncated = 0
++    for step in steps:
++        diagnostic = step.get("diagnostic") or {}
++        malformed_syntax += len(diagnostic.get("malformed_syntax") or [])
++        omitted_calls += sum(
++            len(item.get("dropped_by_full_parse") or [])
++            for item in diagnostic.get("omitted_by_native_parser") or []
++        )
++        truncated_fragments += len(diagnostic.get("truncated_fragments") or [])
++        generation_truncated += int(bool(step.get("generation_truncated")))
++        for call in step.get("calls") or []:
++            validation = call.get("validation")
++            schema_invalid += validation == "schema_invalid"
++            unknown_tool += validation == "unknown_tool"
++            missing_name += validation == "missing_name"
++    provisional = malformed_syntax + schema_invalid + unknown_tool + missing_name
++    return {
++        "malformed_syntax": malformed_syntax,
++        "omitted_by_native_parser": omitted_calls,
++        "schema_invalid": schema_invalid,
++        "unknown_tool": unknown_tool,
++        "missing_name": missing_name,
++        "truncated_fragment": truncated_fragments,
++        "generation_truncated": generation_truncated,
++        "N_invalid_provisional": provisional,
++        "C_status": "preliminary",
++    }
++
++
++def events_from_steps(
++    steps: list[dict],
++    *,
++    rollout_id: str | None = None,
++    source: str | None = None,
++) -> dict[str, Any]:
++    """Build the event bundle the GRPO reward callback consumes."""
++    if not steps:
++        raise ValueError("events_from_steps requires at least one step")
++    last = steps[-1]
++    components = n_invalid_components_from_steps(steps)
++    validation_results = []
++    for step in steps:
++        for call in step.get("calls") or []:
++            validation_results.append(
++                {
++                    "step_id": step.get("step_id"),
++                    "tool": call.get("tool"),
++                    "validation": call.get("validation"),
++                    "execution": call.get("execution"),
++                    "function_entered": call.get("function_entered"),
++                    "problems": call.get("problems") or [],
++                    "order_or_token": call.get("order_or_token"),
++                }
++            )
++    return {
++        "rollout_id": rollout_id or last.get("rollout_id") or last.get("episode_id"),
++        "episode_id": last.get("episode_id"),
++        "generation_seed": last.get("generation_seed"),
++        "source": source,
++        "raw_outputs": [step.get("raw_output") for step in steps],
++        "validation_results": validation_results,
++        "harness_state": {
++            "submitted": bool(last.get("task_success_harness")),
++            "function_entries": list(last.get("function_entries") or []),
++            "task_success_harness": bool(last.get("task_success_harness")),
++            "task_success_answer": bool(last.get("task_success_answer")),
++        },
++        "final_answer": last.get("final_answer"),
++        "task_success": bool(last.get("task_success")),
++        "n_invalid_components": components,
++        "n_invalid": int(components["N_invalid_provisional"]),
++        "parsed_call_count": sum(len(step.get("calls") or []) for step in steps),
++        "no_tool_call": all(not (step.get("calls") or []) for step in steps),
++        "callback_fields_present": {
++            "raw_output": all(step.get("raw_output") is not None for step in steps),
++            "validation_results": True,
++            "harness_state": True,
++            "final_answer": "final_answer" in last,
++        },
++    }
++
++
++def attach_events_to_trajectory(trajectory, events: dict[str, Any]) -> None:
++    """Put contract events on Trajectory.metadata for the trainer reward path."""
++    metadata = dict(getattr(trajectory, "metadata", None) or {})
++    metadata["contract_events"] = events
++    trajectory.metadata = metadata
++
++
++def extract_events_from_reward_kwargs(
++    *,
++    contract_events=None,
++    trajectories=None,
++    n: int,
++) -> list[dict[str, Any]]:
++    """Resolve event bundles from the kwargs TRL forwards to reward_funcs."""
++    if contract_events is not None:
++        if len(contract_events) != n:
++            raise ValueError(
++                f"contract_events length {len(contract_events)} != completions {n}"
++            )
++        missing = [i for i, item in enumerate(contract_events) if not item]
++        if missing:
++            raise ValueError(
++                "trainer reward path lost contract_events at indices "
++                f"{missing}; refuse to score without raw/validation/harness/final"
++            )
++        return list(contract_events)
++
++    if trajectories is not None:
++        out = []
++        for i, traj in enumerate(trajectories):
++            meta = getattr(traj, "metadata", None) or {}
++            events = meta.get("contract_events")
++            if not events:
++                raise ValueError(
++                    f"trajectory[{i}] has no metadata['contract_events']; "
++                    "the rollout path dropped contract fields before the reward callback"
++                )
++            out.append(events)
++        if len(out) != n:
++            raise ValueError(f"trajectories length {len(out)} != completions {n}")
++        return out
++
++    raise ValueError(
++        "reward callback received neither contract_events nor trajectories with "
++        "contract_events; completions-only scoring is disabled for this contract"
++    )
+diff --git a/contract/grpo_prep.py b/contract/grpo_prep.py
+new file mode 100644
+index 0000000..2300006
+--- /dev/null
++++ b/contract/grpo_prep.py
+@@ -0,0 +1,805 @@
++"""Task 5: prepare the GRPO path and stop before the first optimizer step."""
++
++from __future__ import annotations
++
++import inspect
++import json
++import platform
++import sys
++import time
++import traceback
++from collections import defaultdict
++from pathlib import Path
++from typing import Any
++
++ROOT = Path(__file__).resolve().parents[1]
++if str(ROOT) not in sys.path:
++    sys.path.insert(0, str(ROOT))
++
++from contract import config
++from contract.events import events_from_steps
++from contract.harness import (
++    ONE_ACTION_SYSTEM_PROMPT,
++    ONE_ACTION_TOOL_RESULT_FORMAT,
++    ONE_ACTION_TOOLS_FALLBACK_PROMPT,
++    one_action_user_prompt,
++)
++from contract.rewards import reward_B, reward_C
++
++TASK5 = ROOT / "artifacts" / "task-5"
++DIAGNOSTIC_IDS = ("m0", "m2")
++
++# Fixed splits. No overlap with diagnostic m0/m2 or each other.
++TRAIN_TASKS = (
++    ("t0", "ORD-2001", "CUS-601", 1500),
++    ("t1", "ORD-2002", "CUS-602", 2200),
++    ("t2", "ORD-2003", "CUS-603", 875),
++    ("t3", "ORD-2004", "CUS-604", 3100),
++)
++HELD_OUT_TASKS = (
++    ("h0", "ORD-3001", "CUS-701", 1640),
++    ("h1", "ORD-3002", "CUS-702", 980),
++    ("h2", "ORD-3003", "CUS-703", 2450),
++    ("h3", "ORD-3004", "CUS-704", 1320),
++)
++
++EXPECTED_TASK4 = {
++    "m0": {"B": [1.0, 0.0, 0.0, 1.0], "C": [1.0, 0.0, -0.5, 1.0]},
++    "m2": {"B": [1.0, 1.0, 1.0, 1.0], "C": [1.0, 1.0, 1.0, 1.0]},
++}
++SEED_ORDER = (100, 101, 102, 103)
++
++
++def _write_json(path: Path, payload: Any) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    path.write_text(json.dumps(payload, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
++
++
++def _dump_jsonl(path: Path, rows: list[dict]) -> None:
++    path.parent.mkdir(parents=True, exist_ok=True)
++    with path.open("w", encoding="utf-8") as handle:
++        for row in rows:
++            handle.write(json.dumps(row, ensure_ascii=False) + "\n")
++
++
++def _package_versions() -> dict[str, str]:
++    import agenttune
++    import peft
++    import torch
++    import transformers
++    import trl
++
++    return {
++        "agenttune": getattr(agenttune, "__version__", "unknown"),
++        "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
++        "trl": trl.__version__,
++        "transformers": transformers.__version__,
++        "peft": peft.__version__,
++        "torch": torch.__version__,
++        "python": platform.python_version(),
++    }
++
++
++def _lora_dict() -> dict[str, Any]:
++    # Cohere2 is absent from peft's default target map; name modules explicitly.
++    return {
++        "r": 8,
++        "lora_alpha": 16,
++        "lora_dropout": 0.05,
++        "bias": "none",
++        "task_type": "CAUSAL_LM",
++        "target_modules": ["q_proj", "k_proj", "v_proj", "o_proj"],
++    }
++
++
++def pilot_kwargs(reward_name: str) -> dict[str, Any]:
++    """Minimal AgentTune/TRL GRPO kwargs. beta is explicit 0.0 for B and for C."""
++    if reward_name == "B":
++        reward_funcs = reward_B
++    elif reward_name == "C":
++        # One function, not a weighted sum of two.
++        reward_funcs = reward_C
++    else:
++        raise ValueError(reward_name)
++    return {
++        "model": config.MODEL_ID,
++        "model_init_kwargs": {
++            "revision": config.MODEL_REVISION,
++            "torch_dtype": "float16",
++        },
++        "reward_funcs": reward_funcs,
++        "peft_config": _lora_dict(),
++        "num_generations": 4,
++        "beta": 0.0,
++        "temperature": config.ONE_ACTION_TEMPERATURE,
++        "top_p": config.ONE_ACTION_TOP_P,
++        "max_completion_length": config.ONE_ACTION_MAX_NEW_TOKENS,
++        "max_steps_per_turn": config.ONE_ACTION_MAX_STEPS,
++        # TRL requires generation_batch_size divisible by num_generations.
++        "per_device_train_batch_size": 4,
++        "gradient_accumulation_steps": 1,
++        "learning_rate": 1e-6,
++        "max_steps": 1,
++        "logging_steps": 1,
++        "save_steps": 10_000,
++        "report_to": [],
++        "use_vllm": False,
++        "bf16": False,
++        "fp16": False,
++        "remove_unused_columns": False,
++        "output_dir": str(TASK5 / f"pilot-{reward_name.lower()}-scratch"),
++        "system_prompt": ONE_ACTION_SYSTEM_PROMPT,
++        "tools_fallback_prompt": ONE_ACTION_TOOLS_FALLBACK_PROMPT,
++        "tool_result_format": ONE_ACTION_TOOL_RESULT_FORMAT,
++        "seed": config.SEED,
++        "prompt_protocol": "one_action_per_turn",
++    }
++
++
++def _prompt_row(episode_id: str, order_id: str, customer_id: str, amount_cents: int, split: str) -> dict:
++    return {
++        "episode_id": episode_id,
++        "order_id": order_id,
++        "customer_id": customer_id,
++        "amount_cents": amount_cents,
++        "split": split,
++        "prompt": one_action_user_prompt(order_id, customer_id),
++        "environment_seed": config.ONE_ACTION_ENVIRONMENT_SEED,
++    }
++
++
++def write_datasets(out: Path) -> dict[str, Any]:
++    train_rows = [_prompt_row(*task, "train") for task in TRAIN_TASKS]
++    held_rows = [_prompt_row(*task, "held_out") for task in HELD_OUT_TASKS]
++    diagnostic = [
++        {
++            "episode_id": episode_id,
++            "order_id": order_id,
++            "customer_id": customer_id,
++            "amount_cents": amount,
++            "split": "diagnostic",
++            "note": "task-3/task-4 variability; excluded from train and held-out",
++        }
++        for episode_id, order_id, customer_id, amount in config.ONE_ACTION_TASKS
++    ]
++    train_ids = {row["episode_id"] for row in train_rows}
++    held_ids = {row["episode_id"] for row in held_rows}
++    diag_ids = {row["episode_id"] for row in diagnostic}
++    overlap = (train_ids & held_ids) | (train_ids & diag_ids) | (held_ids & diag_ids)
++    if overlap:
++        raise RuntimeError(f"dataset id overlap: {sorted(overlap)}")
++    order_ids = (
++        {row["order_id"] for row in train_rows}
++        | {row["order_id"] for row in held_rows}
++        | {row["order_id"] for row in diagnostic}
++    )
++    if len(order_ids) != len(train_rows) + len(held_rows) + len(diagnostic):
++        raise RuntimeError("order_id collision across splits")
++
++    _dump_jsonl(out / "train.jsonl", train_rows)
++    _dump_jsonl(out / "held_out.jsonl", held_rows)
++    _dump_jsonl(out / "diagnostic.jsonl", diagnostic)
++    manifest = {
++        "train": {
++            "path": str(out / "train.jsonl"),
++            "n": len(train_rows),
++            "episode_ids": sorted(train_ids),
++            "order_ids": sorted(row["order_id"] for row in train_rows),
++        },
++        "held_out": {
++            "path": str(out / "held_out.jsonl"),
++            "n": len(held_rows),
++            "episode_ids": sorted(held_ids),
++            "order_ids": sorted(row["order_id"] for row in held_rows),
++        },
++        "diagnostic": {
++            "path": str(out / "diagnostic.jsonl"),
++            "n": len(diagnostic),
++            "episode_ids": sorted(diag_ids),
++            "note": "m0/m2 remain diagnostic only",
++        },
++        "overlap": sorted(overlap),
++        "prompt_protocol": "one_action_per_turn",
++    }
++    _write_json(out / "manifest.json", manifest)
++    return manifest
++
++
++def _load_grouped_steps() -> dict[str, dict[str, list[dict]]]:
++    rows: list[dict] = []
++    for path in (
++        ROOT / "artifacts" / "task-3" / "model_episodes.jsonl",
++        ROOT / "artifacts" / "task-4" / "model_episodes.jsonl",
++    ):
++        for line in path.read_text(encoding="utf-8").splitlines():
++            if line.strip():
++                rows.append(json.loads(line))
++    by_rollout: dict[str, list[dict]] = defaultdict(list)
++    for row in rows:
++        by_rollout[row["rollout_id"]].append(row)
++    grouped: dict[str, dict[str, list[dict]]] = {"m0": {}, "m2": {}}
++    for episode_id in DIAGNOSTIC_IDS:
++        for seed in SEED_ORDER:
++            rid = f"{episode_id}-g{seed}"
++            steps = by_rollout.get(rid)
++            if not steps:
++                raise FileNotFoundError(f"missing saved trajectory {rid}")
++            source = (
++                "artifacts/task-3/model_episodes.jsonl"
++                if seed == 100
++                else "artifacts/task-4/model_episodes.jsonl"
++            )
++            for step in steps:
++                step = dict(step)
++            grouped[episode_id][rid] = {
++                "steps": steps,
++                "source": source,
++            }
++    return grouped
++
++
++def run_scripted_replay(out: Path) -> dict[str, Any]:
++    grouped = _load_grouped_steps()
++    replay_rows = []
++    comparison = {}
++    callback_proof = {}
++    for episode_id, expected in EXPECTED_TASK4.items():
++        actual_b = []
++        actual_c = []
++        per_rollout = []
++        for seed in SEED_ORDER:
++            rid = f"{episode_id}-g{seed}"
++            bundle = grouped[episode_id][rid]
++            steps = bundle["steps"]
++            events = events_from_steps(steps, rollout_id=rid, source=bundle["source"])
++            # Same kwargs shape the trainer reward path uses after extra_fields merge.
++            completions = [events["final_answer"]]
++            got_b = reward_B(completions=completions, contract_events=[events])[0]
++            got_c = reward_C(completions=completions, contract_events=[events])[0]
++            actual_b.append(got_b)
++            actual_c.append(got_c)
++            proof = {
++                "rollout_id": rid,
++                "source": bundle["source"],
++                "callback_received": {
++                    "raw_outputs": events["raw_outputs"],
++                    "validation_results": events["validation_results"],
++                    "harness_state": events["harness_state"],
++                    "final_answer": events["final_answer"],
++                },
++                "fields_present": events["callback_fields_present"],
++                "n_invalid": events["n_invalid"],
++                "task_success": events["task_success"],
++                "B": got_b,
++                "C": got_c,
++            }
++            callback_proof[rid] = {
++                "raw_output_n": len(events["raw_outputs"]),
++                "validation_n": len(events["validation_results"]),
++                "harness_state": events["harness_state"],
++                "final_answer": events["final_answer"],
++                "fields_present": events["callback_fields_present"],
++            }
++            per_rollout.append(proof)
++            replay_rows.append(
++                {
++                    "kind": "scripted_replay",
++                    "rollout_id": rid,
++                    "episode_id": episode_id,
++                    "generation_seed": seed,
++                    "source": bundle["source"],
++                    "events": events,
++                    "B": got_b,
++                    "C": got_c,
++                }
++            )
++        comparison[episode_id] = {
++            "expected_B": expected["B"],
++            "actual_B": actual_b,
++            "match_B": actual_b == expected["B"],
++            "expected_C": expected["C"],
++            "actual_C": actual_c,
++            "match_C": actual_c == expected["C"],
++            "rollouts": per_rollout,
++        }
++    payload = {
++        "kind": "scripted_replay",
++        "note": (
++            "Rewards below are from the shared reward callback on saved trajectories. "
++            "They are not trainer optimizer logs."
++        ),
++        "trainer_ran": False,
++        "optimizer_step": False,
++        "comparison": comparison,
++        "callback_proof": callback_proof,
++        "all_match": all(
++            item["match_B"] and item["match_C"] for item in comparison.values()
++        ),
++    }
++    _write_json(out / "scripted_replay.json", payload)
++    _dump_jsonl(out / "scripted_replay_events.jsonl", replay_rows)
++    return payload
++
++
++def _inspect_trainer_settings(reward_name: str, out: Path) -> dict[str, Any]:
++    """Build TrlAgenticGrpo + GRPOTrainer and record the settings it actually holds.
++
++    Does not call train(). A safety callback would abort if train() were invoked.
++    """
++    from datasets import Dataset
++    from peft import LoraConfig
++    from transformers import TrainerCallback
++
++    from agenttune.backends.trl.agentic.grpo.agentic_grpo import TrlAgenticGrpo, _split_kwargs
++
++    class StopBeforeOptimizer(TrainerCallback):
++        def on_optimizer_step(self, args, state, control, **kwargs):
++            raise RuntimeError(
++                "StopBeforeOptimizer: refusing the first optimizer step (task 5 stop gate)"
++            )
++
++        def on_step_begin(self, args, state, control, **kwargs):
++            # Belt-and-suspenders if an older transformers build hits this first.
++            if state.global_step >= 0 and getattr(state, "max_steps", None) == 0:
++                control.should_training_stop = True
++            return control
++
++    kwargs = pilot_kwargs(reward_name)
++    # Tiny dataset so setup_data/setup_trainer can bind without real optimization.
++    probe_prompt = one_action_user_prompt("ORD-2001", "CUS-601")
++    ds = Dataset.from_list(
++        [{"prompt": [{"role": "user", "content": probe_prompt}], "episode_id": "t0"}]
++    )
++    kwargs = {
++        **kwargs,
++        "train_dataset": ds,
++        "callbacks": [StopBeforeOptimizer()],
++        "max_steps": 0,
++    }
++    # Resolve config the same way TrlAgenticGrpo.setup_trainer does, then build trainer.
++    # model_init_kwargs is only for string-model construction; drop it when we
++    # instantiate the model ourselves below.
++    config_kw, trainer_kw = _split_kwargs(kwargs)
++    config_kw.pop("model_init_kwargs", None)
++    trainer_kw.pop("model_init_kwargs", None)
++    # Mirror the defaults block that setup_trainer applies.
++    from agenttune.backends.trl.agentic.grpo.agentic_grpo import _get
++    from trl import GRPOConfig, GRPOTrainer
++
++    from agenttune.agentic.rewards.composite import combine_rewards
++
++    output_dir = kwargs["output_dir"]
++    Path(output_dir).mkdir(parents=True, exist_ok=True)
++    config_defaults = {
++        "output_dir": output_dir,
++        "num_train_epochs": 1,
++        "per_device_train_batch_size": kwargs["per_device_train_batch_size"],
++        "gradient_accumulation_steps": kwargs["gradient_accumulation_steps"],
++        "learning_rate": kwargs["learning_rate"],
++        "max_steps": 0,
++        "logging_steps": 1,
++        "save_steps": 10_000,
++        "remove_unused_columns": False,
++        "num_generations": kwargs["num_generations"],
++        "max_completion_length": kwargs["max_completion_length"],
++        "temperature": kwargs["temperature"],
++        "top_p": kwargs["top_p"],
++        "beta": kwargs["beta"],
++        "report_to": [],
++        "bf16": False,
++        "fp16": False,
++        "seed": kwargs["seed"],
++        "use_vllm": False,
++    }
++    for key, value in config_defaults.items():
++        config_kw.setdefault(key, value)
++    grpo_config = GRPOConfig(**config_kw)
++
++    reward_funcs = combine_rewards(kwargs["reward_funcs"])
++    peft_config = LoraConfig(**kwargs["peft_config"])
++    from agenttune.agentic.rollout_engines.rollout_factory import ensure_lora_targets
++
++    peft_config = ensure_lora_targets(peft_config, kwargs["model"])
++
++    received = {
++        "reward_name": reward_name,
++        "reward_func_passed": getattr(kwargs["reward_funcs"], "__name__", str(kwargs["reward_funcs"])),
++        "reward_func_after_combine_rewards": getattr(reward_funcs, "__name__", str(reward_funcs)),
++        "beta_requested": 0.0,
++        "beta_on_GRPOConfig": grpo_config.beta,
++        "num_generations": grpo_config.num_generations,
++        "temperature": grpo_config.temperature,
++        "top_p": grpo_config.top_p,
++        "max_completion_length": grpo_config.max_completion_length,
++        "learning_rate": grpo_config.learning_rate,
++        "max_steps": grpo_config.max_steps,
++        "per_device_train_batch_size": grpo_config.per_device_train_batch_size,
++        "use_vllm": getattr(grpo_config, "use_vllm", None),
++        "peft_config": {
++            "r": peft_config.r,
++            "lora_alpha": peft_config.lora_alpha,
++            "lora_dropout": peft_config.lora_dropout,
++            "target_modules": sorted(peft_config.target_modules)
++            if isinstance(peft_config.target_modules, (list, set))
++            else peft_config.target_modules,
++            "task_type": str(peft_config.task_type),
++        },
++        "model": kwargs["model"],
++        "model_revision": kwargs["model_init_kwargs"]["revision"],
++        "prompt_protocol": kwargs["prompt_protocol"],
++        "max_steps_per_turn": kwargs["max_steps_per_turn"],
++        "trainer_built": False,
++        "train_called": False,
++        "optimizer_step": False,
++        "note": (
++            "GRPOConfig and peft_config are the objects the trainer receives. "
++            "GRPOTrainer is constructed with max_steps=0 and a StopBeforeOptimizer "
++            "callback; train() is not called."
++        ),
++    }
++
++    # Construct GRPOTrainer so peft/model wiring is real, then discard without train().
++    import torch
++    from transformers import AutoModelForCausalLM, AutoTokenizer
++
++    tokenizer = AutoTokenizer.from_pretrained(
++        kwargs["model"], revision=config.MODEL_REVISION
++    )
++    model = AutoModelForCausalLM.from_pretrained(
++        kwargs["model"],
++        revision=config.MODEL_REVISION,
++        torch_dtype=torch.float16,
++        device_map=None,
++    )
++    trainer = GRPOTrainer(
++        model=model,
++        reward_funcs=reward_funcs,
++        args=grpo_config,
++        train_dataset=ds,
++        processing_class=tokenizer,
++        peft_config=peft_config,
++        callbacks=[StopBeforeOptimizer()],
++    )
++    received["trainer_built"] = True
++    received["trainer_class"] = type(trainer).__name__
++    received["trainer_args_beta"] = trainer.args.beta
++    received["trainer_args_num_generations"] = trainer.args.num_generations
++    received["trainer_has_peft"] = bool(getattr(trainer, "model", None))
++    received["stop_callback"] = "StopBeforeOptimizer"
++    # Do not call trainer.train().
++    del trainer
++    del model
++    _write_json(out / f"trainer_settings_{reward_name}.json", received)
++    return received
++
++
++def wrap_rollout_with_contract_events(rollout_fn, events_by_index: list[dict] | None = None):
++    """Ensure contract_events survive into TRL reward kwargs.
++
++    AgentTune's _format_for_grpo forwards `trajectories` but not an explicit
++    `contract_events` column. This wrapper copies metadata['contract_events']
++    onto a top-level list so the reward callback cannot miss them.
++    """
++
++    def wrapped(prompts, *args, **kwargs):
++        result = rollout_fn(prompts, *args, **kwargs)
++        trajectories = result.get("trajectories") or []
++        events = []
++        for i, traj in enumerate(trajectories):
++            meta = getattr(traj, "metadata", None) or {}
++            item = meta.get("contract_events")
++            if item is None and events_by_index is not None and i < len(events_by_index):
++                item = events_by_index[i]
++                meta = dict(meta)
++                meta["contract_events"] = item
++                traj.metadata = meta
++            if item is None:
++                raise ValueError(
++                    f"rollout trajectory[{i}] missing contract_events; "
++                    "fix the instrumented path before training"
++                )
++            events.append(item)
++        result["contract_events"] = events
++        return result
++
++    wrapped.__name__ = getattr(rollout_fn, "__name__", "rollout") + "_with_contract_events"
++    return wrapped
++
++
++def held_out_metrics_from_rows(rows: list[dict]) -> dict[str, Any]:
++    by_rollout: dict[str, list[dict]] = defaultdict(list)
++    for row in rows:
++        by_rollout[row["rollout_id"]].append(row)
++    n_tasks = len(by_rollout)
++    successes = 0
++    invalid_attempts = 0
++    attempt_denominator = 0
++    no_call_tasks = 0
++    calls_per_task = []
++    per_task = []
++    for rid, steps in sorted(by_rollout.items()):
++        last = steps[-1]
++        success = bool(last.get("task_success"))
++        successes += int(success)
++        components = events_from_steps(steps)["n_invalid_components"]
++        # Denominator: every parsed call attempt plus every malformed_syntax fragment.
++        attempts = 0
++        for step in steps:
++            attempts += len(step.get("calls") or [])
++            attempts += len((step.get("diagnostic") or {}).get("malformed_syntax") or [])
++        attempt_denominator += attempts
++        invalid_attempts += int(components["N_invalid_provisional"])
++        n_calls = sum(len(step.get("calls") or []) for step in steps)
++        calls_per_task.append(n_calls)
++        if n_calls == 0:
++            no_call_tasks += 1
++        per_task.append(
++            {
++                "rollout_id": rid,
++                "episode_id": last.get("episode_id"),
++                "task_success": success,
++                "N_invalid": components["N_invalid_provisional"],
++                "attempt_count": attempts,
++                "parsed_calls": n_calls,
++            }
++        )
++    return {
++        "n_tasks": n_tasks,
++        "task_success": {
++            "numerator": successes,
++            "denominator": n_tasks,
++            "rate": (successes / n_tasks) if n_tasks else None,
++        },
++        "invalid_attempts": {
++            "numerator": invalid_attempts,
++            "denominator": attempt_denominator,
++            "rate": (invalid_attempts / attempt_denominator)
++            if attempt_denominator
++            else None,
++            "definition": (
++                "numerator = provisional N_invalid "
++                "(malformed_syntax + missing_name + unknown_tool + schema_invalid); "
++                "denominator = parsed call attempts + malformed_syntax fragments"
++            ),
++        },
++        "tasks_without_calls": {
++            "numerator": no_call_tasks,
++            "denominator": n_tasks,
++            "rate": (no_call_tasks / n_tasks) if n_tasks else None,
++        },
++        "calls_per_task": {
++            "values": calls_per_task,
++            "mean": (sum(calls_per_task) / len(calls_per_task)) if calls_per_task else None,
++        },
++        "per_task": per_task,
++        "model_weights_updated": False,
++    }
++
++
++def run_held_out_baseline(out: Path) -> dict[str, Any]:
++    """Untrained one-action rollouts on the held-out set. No optimizer."""
++    from contract.run import (
++        _bind_output,
++        _dump,
++        _format_rollout_view,
++        _load_model,
++        _one_model_rollout,
++        _probe,
++        make_guarded_tools,
++    )
++    from contract.harness import RefundEpisode
++    import agenttune.agentic.rollout_engines.rollout_factory as factory
++
++    held_dir = out / "held_out_baseline"
++    _bind_output(held_dir)
++    held_dir.mkdir(parents=True, exist_ok=True)
++    engine, tokenizer, loaded = _load_model()
++    _probe_guards, schema_list = make_guarded_tools(
++        RefundEpisode("schema-probe", "ORD-3001", "CUS-701", 1640, config.SEED)
++    )
++    probe = _probe(tokenizer, schema_list)
++    rows: list[dict] = []
++    for episode_id, order_id, customer_id, amount in HELD_OUT_TASKS:
++        print(f"held_out_baseline {episode_id} g100", flush=True)
++        episode = RefundEpisode(
++            episode_id=episode_id,
++            order_id=order_id,
++            customer_id=customer_id,
++            amount_cents=amount,
++            seed=config.ONE_ACTION_ENVIRONMENT_SEED,
++        )
++        ep_rows, limits = _one_model_rollout(
++            factory,
++            engine,
++            tokenizer,
++            schema_list,
++            probe,
++            episode,
++            generation_seed=100,
++            environment_seed=config.ONE_ACTION_ENVIRONMENT_SEED,
++            max_new_tokens=config.ONE_ACTION_MAX_NEW_TOKENS,
++            temperature=config.ONE_ACTION_TEMPERATURE,
++            do_sample=config.ONE_ACTION_DO_SAMPLE,
++            top_p=config.ONE_ACTION_TOP_P,
++            system_prompt=ONE_ACTION_SYSTEM_PROMPT,
++            tools_fallback_prompt=ONE_ACTION_TOOLS_FALLBACK_PROMPT,
++            tool_result_format=ONE_ACTION_TOOL_RESULT_FORMAT,
++            prompt_text=one_action_user_prompt(order_id, customer_id),
++            prompt_protocol="one_action_per_turn",
++        )
++        if limits:
++            print("limits", limits, flush=True)
++        rows.extend(ep_rows)
++        _dump(held_dir / "model_episodes.jsonl", rows)
++
++    metrics = held_out_metrics_from_rows(rows)
++    metrics["loaded_model"] = loaded
++    metrics["sampling"] = {
++        "generation_seed": 100,
++        "do_sample": config.ONE_ACTION_DO_SAMPLE,
++        "temperature": config.ONE_ACTION_TEMPERATURE,
++        "top_p": config.ONE_ACTION_TOP_P,
++        "max_steps": config.ONE_ACTION_MAX_STEPS,
++        "max_new_tokens": config.ONE_ACTION_MAX_NEW_TOKENS,
++        "prompt_protocol": "one_action_per_turn",
++    }
++    _write_json(held_dir / "metrics.json", metrics)
++    return metrics
++
++
++def main(argv: list[str] | None = None) -> int:
++    argv = list(sys.argv[1:] if argv is None else argv)
++    skip_held_out = "--skip-held-out" in argv
++    skip_trainer_build = "--skip-trainer-build" in argv
++
++    out = TASK5
++    out.mkdir(parents=True, exist_ok=True)
++    versions = _package_versions()
++    datasets = write_datasets(out / "datasets")
++    replay = run_scripted_replay(out)
++
++    pilots = {
++        "B": pilot_kwargs("B"),
++        "C": pilot_kwargs("C"),
++    }
++    # Serialize reward funcs by name for the manifest.
++    pilots_public = {}
++    for name, kwargs in pilots.items():
++        public = dict(kwargs)
++        public["reward_funcs"] = getattr(kwargs["reward_funcs"], "__name__", str(kwargs["reward_funcs"]))
++        public["beta"] = 0.0
++        pilots_public[name] = public
++    _write_json(out / "pilot_configs.json", pilots_public)
++
++    trainer_settings = {}
++    trainer_error = None
++    if not skip_trainer_build:
++        try:
++            for name in ("B", "C"):
++                print(f"inspect_trainer {name}", flush=True)
++                trainer_settings[name] = _inspect_trainer_settings(name, out)
++        except Exception as exc:
++            trainer_error = {
++                "error": f"{type(exc).__name__}: {exc}",
++                "traceback": traceback.format_exc(),
++            }
++            (out / "trainer_build_error.txt").write_text(
++                trainer_error["traceback"], encoding="utf-8"
++            )
++            # If the trainer path cannot be built, stop before claiming readiness.
++            _write_json(
++                out / "summary.json",
++                {
++                    "stopped": True,
++                    "reason": "trainer_build_failed",
++                    "trainer_error": trainer_error,
++                    "scripted_replay_all_match": replay["all_match"],
++                    "optimizer_step": False,
++                },
++            )
++            print(json.dumps({"stopped": "trainer_build_failed", "error": trainer_error["error"]}, indent=2))
++            return 2
++
++    held_metrics = None
++    if not skip_held_out:
++        try:
++            held_metrics = run_held_out_baseline(out)
++        except Exception as exc:
++            (out / "held_out_error.txt").write_text(traceback.format_exc(), encoding="utf-8")
++            _write_json(
++                out / "summary.json",
++                {
++                    "stopped": True,
++                    "reason": "held_out_baseline_failed",
++                    "error": f"{type(exc).__name__}: {exc}",
++                    "scripted_replay_all_match": replay["all_match"],
++                    "optimizer_step": False,
++                },
++            )
++            return 2
++
++    path_notes = {
++        "completions_only": "disabled; reward_B/reward_C raise without contract_events",
++        "trajectories_metadata": (
++            "contract_events must sit on Trajectory.metadata['contract_events']"
++        ),
++        "extra_fields_column": (
++            "wrap_rollout_with_contract_events copies events to a top-level "
++            "contract_events list so TRL merges them into reward kwargs"
++        ),
++        "combine_rewards": (
++            "C passes a single callable into TrlAgenticGrpo; combine_rewards may "
++            "wrap it but must not sum a separate B term into C"
++        ),
++    }
++
++    summary = {
++        "kind": "grpo_path_prep",
++        "versions": versions,
++        "datasets": datasets,
++        "scripted_replay": {
++            "all_match": replay["all_match"],
++            "comparison": {
++                episode_id: {
++                    "expected_B": item["expected_B"],
++                    "actual_B": item["actual_B"],
++                    "match_B": item["match_B"],
++                    "expected_C": item["expected_C"],
++                    "actual_C": item["actual_C"],
++                    "match_C": item["match_C"],
++                }
++                for episode_id, item in replay["comparison"].items()
++            },
++            "callback_proof": replay["callback_proof"],
++            "log_kind": "scripted_replay",
++        },
++        "trainer_logs": {
++            "log_kind": "trainer_settings_only",
++            "train_called": False,
++            "optimizer_step": False,
++            "settings": trainer_settings,
++            "error": trainer_error,
++        },
++        "pilot_configs": pilots_public,
++        "path_notes": path_notes,
++        "held_out_baseline": held_metrics,
++        "stopped_before_optimizer": True,
++        "grpo_training_started": False,
++    }
++    _write_json(out / "summary.json", summary)
++    _write_json(
++        out / "reward_table.json",
++        {
++            episode_id: {
++                "expected_B": item["expected_B"],
++                "actual_B": item["actual_B"],
++                "expected_C": item["expected_C"],
++                "actual_C": item["actual_C"],
++                "match": item["match_B"] and item["match_C"],
++            }
++            for episode_id, item in replay["comparison"].items()
++        },
++    )
++
++    print(
++        json.dumps(
++            {
++                "scripted_replay_all_match": replay["all_match"],
++                "reward_table": summary["scripted_replay"]["comparison"],
++                "trainer_built": {
++                    name: settings.get("trainer_built")
++                    for name, settings in trainer_settings.items()
++                },
++                "held_out_task_success": None
++                if held_metrics is None
++                else held_metrics["task_success"],
++                "optimizer_step": False,
++            },
++            indent=2,
++        )
++    )
++    return 0 if replay["all_match"] else 1
++
++
++if __name__ == "__main__":
++    raise SystemExit(main())
+diff --git a/contract/rewards.py b/contract/rewards.py
+new file mode 100644
+index 0000000..7ae6544
+--- /dev/null
++++ b/contract/rewards.py
+@@ -0,0 +1,45 @@
++"""GRPO reward callbacks for the refund contract.
++
++B and C are separate pilot reward functions. C is a single callable:
++I(task_success) - 0.5 * N_invalid. Both require contract_events (or trajectories
++that carry them). Completions text alone is not enough.
++"""
++
++from __future__ import annotations
++
++from contract import config
++from contract.events import extract_events_from_reward_kwargs
++
++
++LAMBDA = config.LAMBDA
++
++
++def reward_B(completions=None, contract_events=None, trajectories=None, **kwargs):
++    """B = I(task_success)."""
++    completions = list(completions or [])
++    events = extract_events_from_reward_kwargs(
++        contract_events=contract_events,
++        trajectories=trajectories,
++        n=len(completions),
++    )
++    return [1.0 if item.get("task_success") else 0.0 for item in events]
++
++
++def reward_C(completions=None, contract_events=None, trajectories=None, **kwargs):
++    """One function: I(task_success) - 0.5 * N_invalid."""
++    completions = list(completions or [])
++    events = extract_events_from_reward_kwargs(
++        contract_events=contract_events,
++        trajectories=trajectories,
++        n=len(completions),
++    )
++    out = []
++    for item in events:
++        success = 1.0 if item.get("task_success") else 0.0
++        n_invalid = float(item.get("n_invalid") or 0)
++        out.append(success - LAMBDA * n_invalid)
++    return out
++
++
++reward_B.__name__ = "reward_B_I_task_success"
++reward_C.__name__ = "reward_C_I_success_minus_lambda_N_invalid"
+diff --git a/run_grpo_prep.py b/run_grpo_prep.py
+new file mode 100644
+index 0000000..72183e7
+--- /dev/null
++++ b/run_grpo_prep.py
+@@ -0,0 +1,28 @@
++#!/usr/bin/env python3
++"""Task 5 entrypoint: prepare the GRPO path and stop before any optimizer step.
++
++Usage:
++  .venv/bin/python run_grpo_prep.py
++  .venv/bin/python run_grpo_prep.py --skip-held-out
++  .venv/bin/python run_grpo_prep.py --skip-trainer-build
++"""
++
++from __future__ import annotations
++
++import os
++import sys
++from pathlib import Path
++
++ROOT = Path(__file__).resolve().parent
++if str(ROOT) not in sys.path:
++    sys.path.insert(0, str(ROOT))
++
++os.environ.setdefault("HF_HUB_DISABLE_TELEMETRY", "1")
++os.environ.setdefault("TOKENIZERS_PARALLELISM", "false")
++os.environ.setdefault("PYTORCH_ENABLE_MPS_FALLBACK", "1")
++os.environ.setdefault("PYTORCH_MPS_HIGH_WATERMARK_RATIO", "0.0")
++
++from contract.grpo_prep import main
++
++if __name__ == "__main__":
++    raise SystemExit(main())
