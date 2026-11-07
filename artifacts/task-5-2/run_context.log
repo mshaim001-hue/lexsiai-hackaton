@@ -1,0 +1,103 @@
+W1107 16:28:35.671000 85301 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<08:23,  1.74s/it]Loading weights:  57%|█████▋    | 164/290 [00:01<00:01, 123.46it/s]Loading weights:  88%|████████▊ | 254/290 [00:03<00:00, 72.86it/s] Loading weights: 100%|██████████| 290/290 [00:04<00:00, 68.76it/s]
+task_5_2 prefix_check
+prefix_check seed=100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+{
+  "stopped": "packing_diverged",
+  "divergence_detail": {
+    "turn_index": 1,
+    "first_diff_index": 1449,
+    "generate_token": 6,
+    "stream_token": 3,
+    "generate_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|USER_TOKEN|>Tool result for lookup_order: {'path': 'validation_then",
+    "stream_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+    "note": "generate input rewrites earlier stream tokens; cannot rebuild a shared loss stream without changing generation context"
+  },
+  "focused": [
+    {
+      "turn_index": 0,
+      "role": "first_tool_call",
+      "match": true,
+      "generate_input_len": 1425,
+      "trl_prefix_len": 1425,
+      "new_token_start_in_completion": 0,
+      "new_len": 25
+    },
+    {
+      "turn_index": 1,
+      "role": "second_tool_call",
+      "match": false,
+      "generate_input_len": 1673,
+      "trl_prefix_len": 1560,
+      "new_token_start_in_completion": 135,
+      "new_len": 27,
+      "first_diff": {
+        "index": 1449,
+        "left": 6,
+        "right": 3
+      },
+      "generate_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|USER_TOKEN|>Tool result for lookup_order: {'path': 'validation_then",
+      "trl_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><EOS_TOKEN>{'path': 'validation_then_execution', 'tool': 'lookup"
+    },
+    {
+      "turn_index": 4,
+      "role": "final",
+      "match": false,
+      "generate_input_len": 2564,
+      "trl_prefix_len": 2110,
+      "new_token_start_in_completion": 685,
+      "new_len": 14,
+      "first_diff": {
+        "index": 1449,
+        "left": 6,
+        "right": 3
+      },
+      "generate_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|USER_TOKEN|>Tool result for lookup_order: {'path': 'validation_then",
+      "trl_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><EOS_TOKEN>{'path': 'validation_then_execution', 'tool': 'lookup"
+    }
+  ]
+}
+task_5_2 train_binding
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/mapping_func.py:148: UserWarning: You are trying to modify a model with PEFT for a second time. If you want to reload the model with a different config, make sure to call `.unload()` before.
+  warnings.warn(
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/tuners/tuners_utils.py:331: UserWarning: Already found a `peft_config` attribute in the model. This will lead to having multiple adapters in the model. Make sure to know what you are doing!
+  warnings.warn(
+bind_check t0
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+bind_check t1
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+bind_check cross t0+t1
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+{
+  "prefix_all_match": false,
+  "packing_stop_reason": "packing_diverged_without_safe_repair",
+  "divergence_detail": {
+    "turn_index": 1,
+    "first_diff_index": 1449,
+    "generate_token": 6,
+    "stream_token": 3,
+    "generate_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><|END_OF_TURN_TOKEN|><|START_OF_TURN_TOKEN|><|USER_TOKEN|>Tool result for lookup_order: {'path': 'validation_then",
+    "stream_fragment": "\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+    "note": "generate input rewrites earlier stream tokens; cannot rebuild a shared loss stream without changing generation context"
+  },
+  "trl_loss_tokens": 183,
+  "bind_tasks": [
+    "t0",
+    "t1"
+  ],
+  "baseline_ready": true,
+  "optimizer_steps": 0,
+  "stopped_before_backward": true
+}

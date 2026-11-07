@@ -1,0 +1,276 @@
+{
+  "rows": [
+    {
+      "episode_id": "h0",
+      "order_id": "ORD-3001",
+      "customer_id": "CUS-701",
+      "amount_cents": 1640,
+      "generation_seed": 100,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h0",
+      "order_id": "ORD-3001",
+      "customer_id": "CUS-701",
+      "amount_cents": 1640,
+      "generation_seed": 101,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h0",
+      "order_id": "ORD-3001",
+      "customer_id": "CUS-701",
+      "amount_cents": 1640,
+      "generation_seed": 102,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h0",
+      "order_id": "ORD-3001",
+      "customer_id": "CUS-701",
+      "amount_cents": 1640,
+      "generation_seed": 103,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h1",
+      "order_id": "ORD-3002",
+      "customer_id": "CUS-702",
+      "amount_cents": 980,
+      "generation_seed": 100,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h1",
+      "order_id": "ORD-3002",
+      "customer_id": "CUS-702",
+      "amount_cents": 980,
+      "generation_seed": 101,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h1",
+      "order_id": "ORD-3002",
+      "customer_id": "CUS-702",
+      "amount_cents": 980,
+      "generation_seed": 102,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h1",
+      "order_id": "ORD-3002",
+      "customer_id": "CUS-702",
+      "amount_cents": 980,
+      "generation_seed": 103,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h2",
+      "order_id": "ORD-3003",
+      "customer_id": "CUS-703",
+      "amount_cents": 2450,
+      "generation_seed": 100,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h2",
+      "order_id": "ORD-3003",
+      "customer_id": "CUS-703",
+      "amount_cents": 2450,
+      "generation_seed": 101,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h2",
+      "order_id": "ORD-3003",
+      "customer_id": "CUS-703",
+      "amount_cents": 2450,
+      "generation_seed": 102,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h2",
+      "order_id": "ORD-3003",
+      "customer_id": "CUS-703",
+      "amount_cents": 2450,
+      "generation_seed": 103,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h3",
+      "order_id": "ORD-3004",
+      "customer_id": "CUS-704",
+      "amount_cents": 1320,
+      "generation_seed": 100,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h3",
+      "order_id": "ORD-3004",
+      "customer_id": "CUS-704",
+      "amount_cents": 1320,
+      "generation_seed": 101,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h3",
+      "order_id": "ORD-3004",
+      "customer_id": "CUS-704",
+      "amount_cents": 1320,
+      "generation_seed": 102,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    },
+    {
+      "episode_id": "h3",
+      "order_id": "ORD-3004",
+      "customer_id": "CUS-704",
+      "amount_cents": 1320,
+      "generation_seed": 103,
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "metrics": [
+        "task_success",
+        "invalid_attempt_rate",
+        "tasks_without_calls",
+        "calls_per_task",
+        "B",
+        "C"
+      ]
+    }
+  ]
+}

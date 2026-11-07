@@ -1,0 +1,971 @@
+{
+  "kind": "grpo_path_scoring_check",
+  "versions": {
+    "agenttune": "1.1.3",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.16"
+  },
+  "scripted_m0": {
+    "B": [
+      1.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "C": [
+      1.0,
+      0.0,
+      -0.5,
+      1.0
+    ],
+    "expected_B": [
+      1.0,
+      0.0,
+      0.0,
+      1.0
+    ],
+    "expected_C": [
+      1.0,
+      0.0,
+      -0.5,
+      1.0
+    ],
+    "match_B": true,
+    "match_C": true,
+    "optimizer_steps": 0,
+    "callback_invocations": 1,
+    "mask_example": {
+      "index": 0,
+      "generation_seed": 100,
+      "mask": {
+        "present": true,
+        "length": 699,
+        "completion_id_length": 0,
+        "lengths_match": false,
+        "trainable_model_tokens": 183,
+        "masked_observation_tokens": 516,
+        "has_masked_observations": true,
+        "has_trainable_tokens": true,
+        "runs": [
+          {
+            "value": 1,
+            "start": 0,
+            "end": 25,
+            "length": 25
+          },
+          {
+            "value": 0,
+            "start": 25,
+            "end": 136,
+            "length": 111
+          },
+          {
+            "value": 1,
+            "start": 136,
+            "end": 163,
+            "length": 27
+          },
+          {
+            "value": 0,
+            "start": 163,
+            "end": 280,
+            "length": 117
+          },
+          {
+            "value": 1,
+            "start": 280,
+            "end": 334,
+            "length": 54
+          },
+          {
+            "value": 0,
+            "start": 334,
+            "end": 484,
+            "length": 150
+          },
+          {
+            "value": 1,
+            "start": 484,
+            "end": 547,
+            "length": 63
+          },
+          {
+            "value": 0,
+            "start": 547,
+            "end": 685,
+            "length": 138
+          },
+          {
+            "value": 1,
+            "start": 685,
+            "end": 699,
+            "length": 14
+          }
+        ],
+        "head": [
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          1,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0,
+          0
+        ],
+        "note": "env_mask/tool_mask: 1 = model call or final answer tokens; 0 = tool observation tokens"
+      }
+    }
+  },
+  "live_t0": {
+    "B": [
+      1.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "C": [
+      1.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "correspondence": [
+      {
+        "index": 0,
+        "generation_seed": 100,
+        "rollout_id": "t0-g100",
+        "task_success": true,
+        "n_invalid": 0,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+        "B": 1.0,
+        "C": 1.0,
+        "validation_n": 4,
+        "raw_output_n": 5
+      },
+      {
+        "index": 1,
+        "generation_seed": 101,
+        "rollout_id": "t0-g101",
+        "task_success": false,
+        "n_invalid": 0,
+        "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+        "B": 0.0,
+        "C": 0.0,
+        "validation_n": 4,
+        "raw_output_n": 5
+      },
+      {
+        "index": 2,
+        "generation_seed": 102,
+        "rollout_id": "t0-g102",
+        "task_success": true,
+        "n_invalid": 0,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+        "B": 1.0,
+        "C": 1.0,
+        "validation_n": 4,
+        "raw_output_n": 5
+      },
+      {
+        "index": 3,
+        "generation_seed": 103,
+        "rollout_id": "t0-g103",
+        "task_success": true,
+        "n_invalid": 0,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+        "B": 1.0,
+        "C": 1.0,
+        "validation_n": 4,
+        "raw_output_n": 5
+      }
+    ],
+    "mask_examples": [
+      {
+        "index": 0,
+        "generation_seed": 100,
+        "mask": {
+          "present": true,
+          "length": 699,
+          "completion_id_length": 0,
+          "lengths_match": false,
+          "trainable_model_tokens": 183,
+          "masked_observation_tokens": 516,
+          "has_masked_observations": true,
+          "has_trainable_tokens": true,
+          "runs": [
+            {
+              "value": 1,
+              "start": 0,
+              "end": 25,
+              "length": 25
+            },
+            {
+              "value": 0,
+              "start": 25,
+              "end": 136,
+              "length": 111
+            },
+            {
+              "value": 1,
+              "start": 136,
+              "end": 163,
+              "length": 27
+            },
+            {
+              "value": 0,
+              "start": 163,
+              "end": 280,
+              "length": 117
+            },
+            {
+              "value": 1,
+              "start": 280,
+              "end": 334,
+              "length": 54
+            },
+            {
+              "value": 0,
+              "start": 334,
+              "end": 484,
+              "length": 150
+            },
+            {
+              "value": 1,
+              "start": 484,
+              "end": 547,
+              "length": 63
+            },
+            {
+              "value": 0,
+              "start": 547,
+              "end": 685,
+              "length": 138
+            },
+            {
+              "value": 1,
+              "start": 685,
+              "end": 699,
+              "length": 14
+            }
+          ],
+          "head": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "note": "env_mask/tool_mask: 1 = model call or final answer tokens; 0 = tool observation tokens"
+        }
+      },
+      {
+        "index": 1,
+        "generation_seed": 101,
+        "mask": {
+          "present": true,
+          "length": 722,
+          "completion_id_length": 0,
+          "lengths_match": false,
+          "trainable_model_tokens": 206,
+          "masked_observation_tokens": 516,
+          "has_masked_observations": true,
+          "has_trainable_tokens": true,
+          "runs": [
+            {
+              "value": 1,
+              "start": 0,
+              "end": 25,
+              "length": 25
+            },
+            {
+              "value": 0,
+              "start": 25,
+              "end": 136,
+              "length": 111
+            },
+            {
+              "value": 1,
+              "start": 136,
+              "end": 163,
+              "length": 27
+            },
+            {
+              "value": 0,
+              "start": 163,
+              "end": 280,
+              "length": 117
+            },
+            {
+              "value": 1,
+              "start": 280,
+              "end": 334,
+              "length": 54
+            },
+            {
+              "value": 0,
+              "start": 334,
+              "end": 484,
+              "length": 150
+            },
+            {
+              "value": 1,
+              "start": 484,
+              "end": 559,
+              "length": 75
+            },
+            {
+              "value": 0,
+              "start": 559,
+              "end": 697,
+              "length": 138
+            },
+            {
+              "value": 1,
+              "start": 697,
+              "end": 722,
+              "length": 25
+            }
+          ],
+          "head": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "note": "env_mask/tool_mask: 1 = model call or final answer tokens; 0 = tool observation tokens"
+        }
+      },
+      {
+        "index": 2,
+        "generation_seed": 102,
+        "mask": {
+          "present": true,
+          "length": 569,
+          "completion_id_length": 0,
+          "lengths_match": false,
+          "trainable_model_tokens": 167,
+          "masked_observation_tokens": 402,
+          "has_masked_observations": true,
+          "has_trainable_tokens": true,
+          "runs": [
+            {
+              "value": 1,
+              "start": 0,
+              "end": 25,
+              "length": 25
+            },
+            {
+              "value": 0,
+              "start": 25,
+              "end": 136,
+              "length": 111
+            },
+            {
+              "value": 1,
+              "start": 136,
+              "end": 163,
+              "length": 27
+            },
+            {
+              "value": 0,
+              "start": 163,
+              "end": 177,
+              "length": 14
+            },
+            {
+              "value": 1,
+              "start": 177,
+              "end": 223,
+              "length": 46
+            },
+            {
+              "value": 0,
+              "start": 223,
+              "end": 354,
+              "length": 131
+            },
+            {
+              "value": 1,
+              "start": 354,
+              "end": 410,
+              "length": 56
+            },
+            {
+              "value": 0,
+              "start": 410,
+              "end": 556,
+              "length": 146
+            },
+            {
+              "value": 1,
+              "start": 556,
+              "end": 569,
+              "length": 13
+            }
+          ],
+          "head": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "note": "env_mask/tool_mask: 1 = model call or final answer tokens; 0 = tool observation tokens"
+        }
+      },
+      {
+        "index": 3,
+        "generation_seed": 103,
+        "mask": {
+          "present": true,
+          "length": 699,
+          "completion_id_length": 0,
+          "lengths_match": false,
+          "trainable_model_tokens": 183,
+          "masked_observation_tokens": 516,
+          "has_masked_observations": true,
+          "has_trainable_tokens": true,
+          "runs": [
+            {
+              "value": 1,
+              "start": 0,
+              "end": 25,
+              "length": 25
+            },
+            {
+              "value": 0,
+              "start": 25,
+              "end": 136,
+              "length": 111
+            },
+            {
+              "value": 1,
+              "start": 136,
+              "end": 163,
+              "length": 27
+            },
+            {
+              "value": 0,
+              "start": 163,
+              "end": 280,
+              "length": 117
+            },
+            {
+              "value": 1,
+              "start": 280,
+              "end": 334,
+              "length": 54
+            },
+            {
+              "value": 0,
+              "start": 334,
+              "end": 484,
+              "length": 150
+            },
+            {
+              "value": 1,
+              "start": 484,
+              "end": 547,
+              "length": 63
+            },
+            {
+              "value": 0,
+              "start": 547,
+              "end": 685,
+              "length": 138
+            },
+            {
+              "value": 1,
+              "start": 685,
+              "end": 699,
+              "length": 14
+            }
+          ],
+          "head": [
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            1,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0,
+            0
+          ],
+          "note": "env_mask/tool_mask: 1 = model call or final answer tokens; 0 = tool observation tokens"
+        }
+      }
+    ],
+    "mask_note": "loss_masks audited on the scripted trainer path (same rollout_func / env_mask construction). Live t0 rewards below are from the earlier full trainer scoring run.",
+    "optimizer_steps": 0
+  },
+  "eval_manifest": {
+    "kind": "final_eval_ABC",
+    "conditions": [
+      "A_untrained",
+      "B_format_grpo",
+      "C_outcome_grpo"
+    ],
+    "held_out_tasks": [
+      {
+        "episode_id": "h0",
+        "order_id": "ORD-3001",
+        "customer_id": "CUS-701",
+        "amount_cents": 1640
+      },
+      {
+        "episode_id": "h1",
+        "order_id": "ORD-3002",
+        "customer_id": "CUS-702",
+        "amount_cents": 980
+      },
+      {
+        "episode_id": "h2",
+        "order_id": "ORD-3003",
+        "customer_id": "CUS-703",
+        "amount_cents": 2450
+      },
+      {
+        "episode_id": "h3",
+        "order_id": "ORD-3004",
+        "customer_id": "CUS-704",
+        "amount_cents": 1320
+      }
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "n_rollouts": 16,
+    "protocol": "one_action_per_turn",
+    "counting_rules": {
+      "task_success": "submitted and exact final answer",
+      "N_invalid": "malformed_syntax + missing_name + unknown_tool + schema_invalid",
+      "invalid_attempt_rate": "N_invalid / (parsed calls + malformed_syntax fragments)",
+      "B": "I(task_success)",
+      "C": "I(task_success) - 0.5 * N_invalid",
+      "lambda": 0.5
+    },
+    "breakdown": [
+      {
+        "episode_id": "h0",
+        "order_id": "ORD-3001",
+        "customer_id": "CUS-701",
+        "amount_cents": 1640,
+        "generation_seed": 100,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h0",
+        "order_id": "ORD-3001",
+        "customer_id": "CUS-701",
+        "amount_cents": 1640,
+        "generation_seed": 101,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h0",
+        "order_id": "ORD-3001",
+        "customer_id": "CUS-701",
+        "amount_cents": 1640,
+        "generation_seed": 102,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h0",
+        "order_id": "ORD-3001",
+        "customer_id": "CUS-701",
+        "amount_cents": 1640,
+        "generation_seed": 103,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h1",
+        "order_id": "ORD-3002",
+        "customer_id": "CUS-702",
+        "amount_cents": 980,
+        "generation_seed": 100,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h1",
+        "order_id": "ORD-3002",
+        "customer_id": "CUS-702",
+        "amount_cents": 980,
+        "generation_seed": 101,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h1",
+        "order_id": "ORD-3002",
+        "customer_id": "CUS-702",
+        "amount_cents": 980,
+        "generation_seed": 102,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h1",
+        "order_id": "ORD-3002",
+        "customer_id": "CUS-702",
+        "amount_cents": 980,
+        "generation_seed": 103,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h2",
+        "order_id": "ORD-3003",
+        "customer_id": "CUS-703",
+        "amount_cents": 2450,
+        "generation_seed": 100,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h2",
+        "order_id": "ORD-3003",
+        "customer_id": "CUS-703",
+        "amount_cents": 2450,
+        "generation_seed": 101,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h2",
+        "order_id": "ORD-3003",
+        "customer_id": "CUS-703",
+        "amount_cents": 2450,
+        "generation_seed": 102,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h2",
+        "order_id": "ORD-3003",
+        "customer_id": "CUS-703",
+        "amount_cents": 2450,
+        "generation_seed": 103,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h3",
+        "order_id": "ORD-3004",
+        "customer_id": "CUS-704",
+        "amount_cents": 1320,
+        "generation_seed": 100,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h3",
+        "order_id": "ORD-3004",
+        "customer_id": "CUS-704",
+        "amount_cents": 1320,
+        "generation_seed": 101,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h3",
+        "order_id": "ORD-3004",
+        "customer_id": "CUS-704",
+        "amount_cents": 1320,
+        "generation_seed": 102,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      },
+      {
+        "episode_id": "h3",
+        "order_id": "ORD-3004",
+        "customer_id": "CUS-704",
+        "amount_cents": 1320,
+        "generation_seed": 103,
+        "environment_seed": 0,
+        "prompt_protocol": "one_action_per_turn",
+        "metrics": [
+          "task_success",
+          "invalid_attempt_rate",
+          "tasks_without_calls",
+          "calls_per_task",
+          "B",
+          "C"
+        ]
+      }
+    ],
+    "baseline_seed100_only": {
+      "source": "artifacts/task-5/held_out_baseline/metrics.json",
+      "task_success_rate": 1.0,
+      "n_tasks": 4,
+      "at_ceiling": true,
+      "note": "Untrained held-out baseline on seeds=[100] only already saturates task success 4/4. Full A/B/C eval must use seeds 100–103 before treating ceiling as a training win."
+    },
+    "pilot_not_started": true
+  },
+  "optimizer_steps_total": 0,
+  "train_called": false,
+  "backward_called": false,
+  "stopped_after_scoring": true
+}

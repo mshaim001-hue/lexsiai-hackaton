@@ -35,6 +35,8 @@ The parser is not changed by this patch.
 .venv/bin/python run_contract.py --one-action --out artifacts/task-3
 .venv/bin/python run_contract.py --one-action-variability --out artifacts/task-4
 .venv/bin/python run_grpo_prep.py
+.venv/bin/python run_grpo_path.py
+.venv/bin/python run_grpo_context.py
 ```
 
 `run_grpo_prep.py` builds the GRPO pilot configs (B and C, `beta=0.0`),
@@ -42,5 +44,13 @@ replays the eight saved one-action trajectories through the shared reward
 callback, writes train/held-out manifests, and records untrained held-out
 metrics. It does not call `trainer.train()` and installs a stop callback that
 refuses the first optimizer step.
+
+`run_grpo_path.py` attaches an instrumented `rollout_func` to a real
+`GRPOTrainer`, scores the scripted m0 group and a live t0 group through
+`_generate_and_score_completions`, and stops after scoring (optimizer steps = 0).
+
+`run_grpo_context.py` checks generate→TRL prefix alignment, TRL loss masks,
+batch-task binding for two train tasks, and baseline A; stops before backward
+when packing cannot be repaired without changing generation context.
 
 Do not overwrite finished artifact directories.

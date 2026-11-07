@@ -1,0 +1,249 @@
+{
+  "negatives": {
+    "unknown_episode": "raised:unknown episode_id in batch: 'nope'",
+    "unbound_prompt": "raised:could not bind batch row to a task (episode_id=None, prompt_present=True)"
+  },
+  "per_task": {
+    "t0": {
+      "prompt": "Refund order ORD-2001 for customer CUS-601. Look up the order, look up the customer, calculate the refund, then submit it. Use exactly one tool call per turn: one JSON list with one object, then end the turn. Wait for each observation before the next call. After submit_refund is confirmed, finish with only REFUND_SUBMITTED amount_cents=<integer>.",
+      "environment_ids": [
+        {
+          "episode_id": "t0",
+          "order_id": "ORD-2001",
+          "customer_id": "CUS-601",
+          "amount_cents": 1500,
+          "environment_seed": 0,
+          "order_token": "order_1da51296d284ca96",
+          "customer_token": "customer_16425f10eb2b480e"
+        },
+        {
+          "episode_id": "t0",
+          "order_id": "ORD-2001",
+          "customer_id": "CUS-601",
+          "amount_cents": 1500,
+          "environment_seed": 0,
+          "order_token": "order_1da51296d284ca96",
+          "customer_token": "customer_16425f10eb2b480e"
+        }
+      ],
+      "isolation": {
+        "distinct_episode_objects_implied": true,
+        "same_task_tokens_match": true,
+        "episode_ids": [
+          "t0",
+          "t0"
+        ],
+        "order_ids": [
+          "ORD-2001",
+          "ORD-2001"
+        ],
+        "customer_ids": [
+          "CUS-601",
+          "CUS-601"
+        ]
+      },
+      "correspondence": [
+        {
+          "index": 0,
+          "episode_id": "t0",
+          "rollout_id": "t0-g100",
+          "environment": {
+            "episode_id": "t0",
+            "order_id": "ORD-2001",
+            "customer_id": "CUS-601",
+            "amount_cents": 1500,
+            "environment_seed": 0,
+            "order_token": "order_1da51296d284ca96",
+            "customer_token": "customer_16425f10eb2b480e"
+          },
+          "task_success": true,
+          "n_invalid": 0,
+          "B": 1.0,
+          "C": 1.0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1500"
+        },
+        {
+          "index": 1,
+          "episode_id": "t0",
+          "rollout_id": "t0-g101",
+          "environment": {
+            "episode_id": "t0",
+            "order_id": "ORD-2001",
+            "customer_id": "CUS-601",
+            "amount_cents": 1500,
+            "environment_seed": 0,
+            "order_token": "order_1da51296d284ca96",
+            "customer_token": "customer_16425f10eb2b480e"
+          },
+          "task_success": false,
+          "n_invalid": 0,
+          "B": 0.0,
+          "C": 0.0,
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+        }
+      ],
+      "B": [
+        1.0,
+        0.0
+      ],
+      "C": [
+        1.0,
+        0.0
+      ],
+      "prefix_all_match": false,
+      "optimizer_steps": 0
+    },
+    "t1": {
+      "prompt": "Refund order ORD-2002 for customer CUS-602. Look up the order, look up the customer, calculate the refund, then submit it. Use exactly one tool call per turn: one JSON list with one object, then end the turn. Wait for each observation before the next call. After submit_refund is confirmed, finish with only REFUND_SUBMITTED amount_cents=<integer>.",
+      "environment_ids": [
+        {
+          "episode_id": "t1",
+          "order_id": "ORD-2002",
+          "customer_id": "CUS-602",
+          "amount_cents": 2200,
+          "environment_seed": 0,
+          "order_token": "order_5e2e643d25b25802",
+          "customer_token": "customer_5ec62d09de295764"
+        },
+        {
+          "episode_id": "t1",
+          "order_id": "ORD-2002",
+          "customer_id": "CUS-602",
+          "amount_cents": 2200,
+          "environment_seed": 0,
+          "order_token": "order_5e2e643d25b25802",
+          "customer_token": "customer_5ec62d09de295764"
+        }
+      ],
+      "isolation": {
+        "distinct_episode_objects_implied": true,
+        "same_task_tokens_match": true,
+        "episode_ids": [
+          "t1",
+          "t1"
+        ],
+        "order_ids": [
+          "ORD-2002",
+          "ORD-2002"
+        ],
+        "customer_ids": [
+          "CUS-602",
+          "CUS-602"
+        ]
+      },
+      "correspondence": [
+        {
+          "index": 0,
+          "episode_id": "t1",
+          "rollout_id": "t1-g100",
+          "environment": {
+            "episode_id": "t1",
+            "order_id": "ORD-2002",
+            "customer_id": "CUS-602",
+            "amount_cents": 2200,
+            "environment_seed": 0,
+            "order_token": "order_5e2e643d25b25802",
+            "customer_token": "customer_5ec62d09de295764"
+          },
+          "task_success": true,
+          "n_invalid": 0,
+          "B": 1.0,
+          "C": 1.0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200"
+        },
+        {
+          "index": 1,
+          "episode_id": "t1",
+          "rollout_id": "t1-g101",
+          "environment": {
+            "episode_id": "t1",
+            "order_id": "ORD-2002",
+            "customer_id": "CUS-602",
+            "amount_cents": 2200,
+            "environment_seed": 0,
+            "order_token": "order_5e2e643d25b25802",
+            "customer_token": "customer_5ec62d09de295764"
+          },
+          "task_success": true,
+          "n_invalid": 0,
+          "B": 1.0,
+          "C": 1.0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200"
+        }
+      ],
+      "B": [
+        1.0,
+        1.0
+      ],
+      "C": [
+        1.0,
+        1.0
+      ],
+      "prefix_all_match": false,
+      "optimizer_steps": 0
+    }
+  },
+  "cross_task": {
+    "isolation": {
+      "tokens_differ": true,
+      "episode_ids": [
+        "t0",
+        "t1"
+      ],
+      "order_ids": [
+        "ORD-2001",
+        "ORD-2002"
+      ]
+    },
+    "correspondence": [
+      {
+        "index": 0,
+        "episode_id": "t0",
+        "rollout_id": "t0-g100",
+        "environment": {
+          "episode_id": "t0",
+          "order_id": "ORD-2001",
+          "customer_id": "CUS-601",
+          "amount_cents": 1500,
+          "environment_seed": 0,
+          "order_token": "order_1da51296d284ca96",
+          "customer_token": "customer_16425f10eb2b480e"
+        },
+        "task_success": true,
+        "n_invalid": 0,
+        "B": 1.0,
+        "C": 1.0,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      {
+        "index": 1,
+        "episode_id": "t1",
+        "rollout_id": "t1-g100",
+        "environment": {
+          "episode_id": "t1",
+          "order_id": "ORD-2002",
+          "customer_id": "CUS-602",
+          "amount_cents": 2200,
+          "environment_seed": 0,
+          "order_token": "order_5e2e643d25b25802",
+          "customer_token": "customer_5ec62d09de295764"
+        },
+        "task_success": true,
+        "n_invalid": 0,
+        "B": 1.0,
+        "C": 1.0,
+        "final_answer": "REFUND_SUBMITTED amount_cents=2200"
+      }
+    ],
+    "B": [
+      1.0,
+      1.0
+    ],
+    "C": [
+      1.0,
+      1.0
+    ],
+    "optimizer_steps": 0
+  },
+  "optimizer_steps_total": 0
+}
