@@ -62,6 +62,37 @@
       "formula": "per_token_loss[i, t] = -A_i on scored tokens (on-policy ratio 1, beta 0). scalar = sum(per_token_loss * mask) / num_items_in_batch. manual = sum_i (-A_i * n_i) / sum_j n_j. weight_i = n_i / denominator."
     },
     "old_per_token_logps_in_outputs": false,
+    "pilot_loss": {
+      "label": "m0-reward_B_I_task_success",
+      "loss_type": "dapo",
+      "temperature": 0.7,
+      "logit_dtype_before_div": "float16",
+      "logit_dtype_after_div": "float16",
+      "logit_dtype_unchanged_by_div": true,
+      "division": "logits.div_(temperature) on the model logit dtype, then selective_log_softmax",
+      "selective_vs_explicit_max_abs": 0.0,
+      "generated_tokens": 739,
+      "mask_tokens": 739,
+      "denominator": 739.0,
+      "mask_equals_generated_tokens": true,
+      "denominator_equals_generated_tokens": true,
+      "masked_logprob_sum": -22.390625,
+      "logprob_requires_grad": true,
+      "loss_scalar": 0.00820179097354412,
+      "scalar_manual": 0.008201791404548613,
+      "scalar_abs_diff": 4.310044925126544e-10,
+      "loss_requires_grad": true,
+      "loss_grad_fn": "DivBackward0",
+      "graph_reaches_turn_logps": true,
+      "trainable_parameters": 288,
+      "old_per_token_logps_absent": true,
+      "advantage_shape": [
+        4
+      ],
+      "one_advantage_per_trajectory": true,
+      "optimizer_steps": 0,
+      "backward_called": false
+    },
     "trajectories": [
       {
         "rollout_id": "m0-g100",
@@ -183,6 +214,37 @@
       "formula": "per_token_loss[i, t] = -A_i on scored tokens (on-policy ratio 1, beta 0). scalar = sum(per_token_loss * mask) / num_items_in_batch. manual = sum_i (-A_i * n_i) / sum_j n_j. weight_i = n_i / denominator."
     },
     "old_per_token_logps_in_outputs": false,
+    "pilot_loss": {
+      "label": "m0-reward_C_I_success_minus_lambda_N_invalid",
+      "loss_type": "dapo",
+      "temperature": 0.7,
+      "logit_dtype_before_div": "float16",
+      "logit_dtype_after_div": "float16",
+      "logit_dtype_unchanged_by_div": true,
+      "division": "logits.div_(temperature) on the model logit dtype, then selective_log_softmax",
+      "selective_vs_explicit_max_abs": 0.0,
+      "generated_tokens": 739,
+      "mask_tokens": 739,
+      "denominator": 739.0,
+      "mask_equals_generated_tokens": true,
+      "denominator_equals_generated_tokens": true,
+      "masked_logprob_sum": -22.390625,
+      "logprob_requires_grad": true,
+      "loss_scalar": -0.009696505032479763,
+      "scalar_manual": -0.00969650490519481,
+      "scalar_abs_diff": 1.272849534106335e-10,
+      "loss_requires_grad": true,
+      "loss_grad_fn": "DivBackward0",
+      "graph_reaches_turn_logps": true,
+      "trainable_parameters": 288,
+      "old_per_token_logps_absent": true,
+      "advantage_shape": [
+        4
+      ],
+      "one_advantage_per_trajectory": true,
+      "optimizer_steps": 0,
+      "backward_called": false
+    },
     "trajectories": [
       {
         "rollout_id": "m0-g100",

@@ -50,6 +50,98 @@ from contract.run import (
 TASK51 = ROOT / "artifacts" / "task-5-1"
 
 
+class _PrefixEncoder:
+    """Tokenizer stand-in so the rollout can reuse the live engine's chat template."""
+
+    def __init__(self, tokenizer):
+        self.tokenizer = tokenizer
+        self._chat_template = None
+
+
+def _encode_rollout_prefix(tokenizer, prompts, tools, gen_cfg) -> list[int]:
+    """Token ids of the prompt that generate() received, using the live engine's template."""
+    from agenttune.agentic.rollout_engines.transformers_engine import TransformersRolloutEngine
+
+    if isinstance(prompts, str) or (isinstance(prompts, list) and prompts and isinstance(prompts[0], str)):
+        raw = [prompts] if isinstance(prompts, str) else list(prompts)
+        conversations = [[{"role": "user", "content": text}] for text in raw]
+    elif isinstance(prompts, list) and prompts and isinstance(prompts[0], dict) and "role" in prompts[0]:
+        conversations = [prompts]
+    else:
+        conversations = prompts
+    enable_thinking = bool((gen_cfg or {}).get("enable_thinking", False))
+    tools_arg = tools if tools else None
+    if not hasattr(_PrefixEncoder, "_tool_content_survives_render"):
+        _PrefixEncoder._tool_content_survives_render = TransformersRolloutEngine._tool_content_survives_render
+    encoded = TransformersRolloutEngine._apply_chat_template(
+        _PrefixEncoder(tokenizer),
+        conversations,
+        tools_arg,
+        enable_thinking,
+    )
+    ids = encoded["input_ids"]
+    if hasattr(ids, "detach"):
+        row = ids[0].detach().cpu().tolist()
+    elif isinstance(ids, list) and ids and isinstance(ids[0], list):
+        row = list(ids[0])
+    else:
+        row = list(ids)
+    max_length = int((gen_cfg or {}).get("max_length", config.CONTEXT_LENGTH))
+    max_new = int((gen_cfg or {}).get("max_new_tokens", config.ONE_ACTION_MAX_NEW_TOKENS))
+    budget = max_length - max_new
+    if budget > 0 and len(row) > budget:
+        row = row[-budget:]
+    return [int(token) for token in row]
+
+
+class _TurnIdEngine:
+    """Record the input_ids and new_token_ids of every generate() call in a rollout."""
+
+    def __init__(self, inner, tokenizer):
+        self._inner = inner
+        self._tokenizer = tokenizer
+        self.calls: list[dict[str, Any]] = []
+
+    def __getattr__(self, name):
+        return getattr(self._inner, name)
+
+    def generate(self, prompts, tools, gen_cfg):
+        captured: list[int] | None = None
+        model = getattr(self._inner, "model", None)
+        if model is not None and hasattr(model, "generate"):
+            original = model.generate
+            box: dict[str, list[int]] = {}
+
+            def hooked_generate(*args, **kwargs):
+                ids = kwargs.get("input_ids")
+                if ids is None and args:
+                    ids = args[0]
+                if ids is not None and hasattr(ids, "detach"):
+                    row = ids[0] if getattr(ids, "dim", lambda: 1)() > 1 else ids
+                    box["ids"] = [int(token) for token in row.detach().cpu().tolist()]
+                return original(*args, **kwargs)
+
+            model.generate = hooked_generate
+            try:
+                result = self._inner.generate(prompts, tools, gen_cfg)
+            finally:
+                model.generate = original
+            captured = box.get("ids")
+        else:
+            captured = _encode_rollout_prefix(self._tokenizer, prompts, tools, gen_cfg)
+            result = self._inner.generate(prompts, tools, gen_cfg)
+        if not captured:
+            raise RuntimeError("rollout generate did not yield input_ids")
+        new_ids = ((result.get("metadata") or {}).get("completion_ids") or [[]])[0]
+        if hasattr(new_ids, "tolist"):
+            new_ids = new_ids.tolist()
+        new_ids = [int(token) for token in list(new_ids)]
+        if not new_ids:
+            raise RuntimeError("rollout generate did not yield new_token_ids")
+        self.calls.append({"input_ids": list(captured), "new_token_ids": new_ids})
+        return result
+
+
 class TokenizingScriptedEngine:
     """Replay saved raw strings at the generate() boundary; tokenize for masks."""
 
@@ -280,6 +372,8 @@ def make_instrumented_rollout_func(
             "tool_call_counts": [],
             "generation_seeds": [],
             "rollout_ids": [],
+            "turn_input_ids": [],
+            "turn_new_token_ids": [],
         }
         for i, _prompt in enumerate(prompt_list):
             seed = generation_seeds[i]
@@ -301,6 +395,7 @@ def make_instrumented_rollout_func(
                 engine = live_engine_factory()
             else:
                 raise ValueError(mode)
+            engine = _TurnIdEngine(engine, tokenizer)
 
             packed, _steps, events = _run_one_instrumented(
                 factory=factory,
@@ -331,6 +426,10 @@ def make_instrumented_rollout_func(
             merged["contract_events"].append(events)
             merged["generation_seeds"].append(seed)
             merged["rollout_ids"].append(events["rollout_id"])
+            if not engine.calls:
+                raise RuntimeError(f"rollout seed {seed} captured no turns")
+            merged["turn_input_ids"].append([list(call["input_ids"]) for call in engine.calls])
+            merged["turn_new_token_ids"].append([list(call["new_token_ids"]) for call in engine.calls])
 
         if len(merged["contract_events"]) != n:
             raise RuntimeError(
@@ -348,10 +447,14 @@ def make_instrumented_rollout_func(
                 f"loss_masks ({len(merged['loss_masks'])}) != completions ({n})"
             )
         rollout_fn.last_loss_masks = merged["loss_masks"]
+        rollout_fn.last_turn_input_ids = merged["turn_input_ids"]
+        rollout_fn.last_turn_new_token_ids = merged["turn_new_token_ids"]
         return merged
 
     rollout_fn.__name__ = f"instrumented_rollout_{episode_id}_{mode}"
     rollout_fn.last_loss_masks = []
+    rollout_fn.last_turn_input_ids = []
+    rollout_fn.last_turn_new_token_ids = []
     return rollout_fn
 
 
