@@ -1,0 +1,90 @@
+{
+  "kind": "grpo_b_only_one_step",
+  "reward": "reward_B_I_task_success",
+  "train_task": "t0",
+  "generation_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "num_generations": 4,
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "old_per_token_logps_computed": false,
+  "temperature": 0.7,
+  "loss_type": "dapo",
+  "gradient_accumulation_steps": 1,
+  "steps_per_generation": 1,
+  "num_iterations": 1,
+  "use_vllm": false,
+  "rows": [
+    {
+      "rollout_id": "t0-g103",
+      "reward": 0.0,
+      "advantage": -0.4999000132083893,
+      "n_turns": 5,
+      "n_scored_tokens": 206,
+      "turn_ids_bound": true,
+      "scored_ids_match_mask": true
+    },
+    {
+      "rollout_id": "t0-g101",
+      "reward": 0.0,
+      "advantage": -0.4999000132083893,
+      "n_turns": 5,
+      "n_scored_tokens": 241,
+      "turn_ids_bound": true,
+      "scored_ids_match_mask": true
+    },
+    {
+      "rollout_id": "t0-g100",
+      "reward": 1.0,
+      "advantage": 1.4997000694274902,
+      "n_turns": 5,
+      "n_scored_tokens": 195,
+      "turn_ids_bound": true,
+      "scored_ids_match_mask": true
+    },
+    {
+      "rollout_id": "t0-g102",
+      "reward": 0.0,
+      "advantage": -0.4999000132083893,
+      "n_turns": 5,
+      "n_scored_tokens": 206,
+      "turn_ids_bound": true,
+      "scored_ids_match_mask": true
+    }
+  ],
+  "rewards": [
+    0.0,
+    0.0,
+    1.0,
+    0.0
+  ],
+  "advantages": [
+    -0.4999000132083893,
+    -0.4999000132083893,
+    1.4997000694274902,
+    -0.4999000132083893
+  ],
+  "scored_tokens": 848,
+  "loss": 0.04008631780743599,
+  "lora_grad_norm": 0.0587712824344635,
+  "lora_param_change": {
+    "l2": 0.0012060001026839018,
+    "max_abs": 9.99994540507032e-07,
+    "changed": true
+  },
+  "optimizer_steps": 1,
+  "global_step": 1,
+  "stopped_for_identical_rewards": false,
+  "stopped_after_one_optimizer_step": true
+}

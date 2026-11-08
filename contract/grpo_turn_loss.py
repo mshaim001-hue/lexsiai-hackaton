@@ -864,6 +864,78 @@ def _score_rollout_turns(model, trainer, inputs):
     return logps, entropies, report
 
 
+class IdenticalRewards(RuntimeError):
+    """All trajectories in the group received the same reward. Stop before backward."""
+
+    def __init__(self, rows: list[dict[str, Any]]):
+        self.rows = rows
+        shown = ", ".join(f"{row['rollout_id']}={row['reward']}" for row in rows)
+        super().__init__(f"all four rewards are equal ({shown}). Stopping before backward.")
+
+
+def _verify_shuffled_batch(trainer, inputs) -> dict[str, Any]:
+    """After TRL shuffles the generation batch, ids must still belong to their rollout."""
+    import torch
+
+    saved = getattr(trainer, "_preshuffle_turns", None)
+    if not saved:
+        raise RuntimeError("turn ids never entered the batch that shuffle_sequence_dict permutes")
+    rollout_ids = [str(item) for item in inputs["rollout_id"]]
+    if len(rollout_ids) != len(set(rollout_ids)):
+        raise RuntimeError(f"rollout_id values are not unique after shuffle: {rollout_ids}")
+    if set(rollout_ids) != set(saved):
+        raise RuntimeError(f"shuffle dropped rollout ids: {rollout_ids} vs {sorted(saved)}")
+    rewards = inputs.get("trajectory_rewards")
+    if rewards is None:
+        raise RuntimeError("trajectory rewards did not travel through the shuffled batch")
+    reward_values = [float(item) for item in rewards.detach().float().cpu().tolist()]
+    advantages = inputs["advantages"].detach().float().cpu()
+    completion_ids = inputs["completion_ids"]
+    completion_mask = inputs["completion_mask"]
+    tool_mask = inputs["tool_mask"]
+    mask = completion_mask * tool_mask
+    rows = []
+    for index, rollout_id in enumerate(rollout_ids):
+        bound = saved[rollout_id]
+        got_inputs = [list(turn) for turn in inputs["turn_input_ids"][index]]
+        got_news = [list(turn) for turn in inputs["turn_new_token_ids"][index]]
+        if got_inputs != bound["turn_input_ids"] or got_news != bound["turn_new_token_ids"]:
+            raise RuntimeError(f"after shuffle, turn ids for {rollout_id} do not match that rollout")
+        expected = [token for turn in got_news for token in turn]
+        scored = [int(token) for token in completion_ids[index][mask[index].bool()].detach().cpu().tolist()]
+        if scored != expected:
+            raise RuntimeError(
+                f"after shuffle, scored ids for {rollout_id} do not match the loss mask "
+                f"({len(scored)} mask tokens, {len(expected)} generated tokens)"
+            )
+        rows.append(
+            {
+                "rollout_id": rollout_id,
+                "reward": reward_values[index],
+                "advantage": float(advantages[index].item()),
+                "n_turns": len(got_news),
+                "n_scored_tokens": len(expected),
+                "turn_ids_bound": True,
+                "scored_ids_match_mask": True,
+            }
+        )
+    if len(rows) != 4:
+        raise RuntimeError(f"expected one group of 4 trajectories, got {len(rows)}")
+    if len(set(reward_values)) == 1:
+        raise IdenticalRewards(rows)
+    if not torch.isfinite(advantages).all() or float(advantages.abs().max().item()) == 0.0:
+        raise RuntimeError(f"group advantage is zero or non-finite: {advantages.tolist()}")
+    trainer._smoke_rows = rows
+    trainer._smoke_scored_tokens = int(mask.sum().item())
+    print(
+        "shuffled group "
+        + ", ".join(f"{row['rollout_id']} r={row['reward']} A={row['advantage']}" for row in rows)
+        + f" scored_tokens={trainer._smoke_scored_tokens}",
+        flush=True,
+    )
+    return {"rows": rows, "scored_tokens": trainer._smoke_scored_tokens}
+
+
 def install_turn_scoring(trainer) -> None:
     """Route _compute_loss's logprob call through per-turn rollout ids. DAPO stays in TRL."""
     reason = pilot_old_logps_reason(trainer)
@@ -890,10 +962,24 @@ def install_turn_scoring(trainer) -> None:
                 "rollout did not pass per-turn input_ids and new_token_ids into _compute_loss"
             )
         trainer._turn_loss_inputs = inputs
+        if getattr(trainer, "_smoke_enable_graph", False):
+            _enable_loss_graph(model)
         try:
-            return original_compute(model, inputs)
+            loss = original_compute(model, inputs)
         finally:
             trainer._turn_loss_inputs = None
+        if getattr(trainer, "_smoke_check_batch", False):
+            value = float(loss.detach().item())
+            if value != value or value in (float("inf"), float("-inf")):
+                raise RuntimeError(f"loss is not finite before backward: {value}")
+            advantages = inputs["advantages"].detach().float()
+            if not bool((advantages == advantages).all().item()) or float(advantages.abs().max().item()) == 0.0:
+                raise RuntimeError(
+                    f"group advantage is zero or non-finite before backward: {advantages.tolist()}"
+                )
+            trainer._smoke_loss = value
+            print(f"loss before backward={value}", flush=True)
+        return loss
 
     def _get(model, input_ids, attention_mask, logits_to_keep, **kwargs):
         held = trainer._turn_loss_inputs
@@ -904,8 +990,51 @@ def install_turn_scoring(trainer) -> None:
         trainer._turn_logps = logps
         return logps, entropies, None
 
+    original_generate = trainer._generate_and_score_completions
+    original_prepare = trainer._prepare_inputs
+
+    def _generate_and_score_completions(inputs):
+        blocked = pilot_old_logps_reason(trainer)
+        if blocked is not None:
+            raise RuntimeError(blocked)
+        output = original_generate(inputs)
+        if output.get("old_per_token_logps") is not None:
+            raise RuntimeError(
+                "old_per_token_logps was computed while preparing the batch. "
+                "Per-turn scoring does not support old logprobs yet. Stopping before the loss."
+            )
+        if isinstance(inputs, list) and inputs and "turn_input_ids" in inputs[0]:
+            rollout_ids = []
+            turn_inputs = []
+            turn_news = []
+            for row in inputs:
+                rollout_ids.append(
+                    str(row.get("rollout_id") or (row.get("contract_events") or {}).get("rollout_id"))
+                )
+                turn_inputs.append([list(turn) for turn in row["turn_input_ids"]])
+                turn_news.append([list(turn) for turn in row["turn_new_token_ids"]])
+            output["rollout_id"] = rollout_ids
+            output["turn_input_ids"] = turn_inputs
+            output["turn_new_token_ids"] = turn_news
+            trainer._preshuffle_turns = {
+                rollout_ids[i]: {"turn_input_ids": turn_inputs[i], "turn_new_token_ids": turn_news[i]}
+                for i in range(len(rollout_ids))
+            }
+        rewards = getattr(trainer, "_smoke_reward_column", None)
+        if rewards is not None:
+            output["trajectory_rewards"] = rewards.detach().float().cpu()
+        return output
+
+    def _prepare_inputs(generation_batch):
+        inputs = original_prepare(generation_batch)
+        if getattr(trainer, "_smoke_check_batch", False):
+            _verify_shuffled_batch(trainer, inputs)
+        return inputs
+
     trainer._compute_loss = _compute_loss
     trainer._get_per_token_logps_and_entropies = _get
+    trainer._generate_and_score_completions = _generate_and_score_completions
+    trainer._prepare_inputs = _prepare_inputs
     trainer._turn_scoring_installed = True
 
 

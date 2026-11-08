@@ -372,6 +372,7 @@ def make_instrumented_rollout_func(
             "tool_call_counts": [],
             "generation_seeds": [],
             "rollout_ids": [],
+            "rollout_id": [],
             "turn_input_ids": [],
             "turn_new_token_ids": [],
         }
@@ -426,10 +427,16 @@ def make_instrumented_rollout_func(
             merged["contract_events"].append(events)
             merged["generation_seeds"].append(seed)
             merged["rollout_ids"].append(events["rollout_id"])
+            merged["rollout_id"].append(events["rollout_id"])
             if not engine.calls:
                 raise RuntimeError(f"rollout seed {seed} captured no turns")
             merged["turn_input_ids"].append([list(call["input_ids"]) for call in engine.calls])
             merged["turn_new_token_ids"].append([list(call["new_token_ids"]) for call in engine.calls])
+            print(
+                f"rollout {events['rollout_id']} turns={len(engine.calls)} "
+                f"new_tokens={sum(len(call['new_token_ids']) for call in engine.calls)}",
+                flush=True,
+            )
 
         if len(merged["contract_events"]) != n:
             raise RuntimeError(
