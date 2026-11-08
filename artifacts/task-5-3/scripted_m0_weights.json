@@ -1,0 +1,251 @@
+{
+  "same_rollouts": [
+    "m0-g100",
+    "m0-g101",
+    "m0-g102",
+    "m0-g103"
+  ],
+  "new_model_rollout": false,
+  "B": {
+    "group": "m0",
+    "reward": "reward_B_I_task_success",
+    "n_trajectories": 4,
+    "reward_callback_rows": 4,
+    "advantage_rank": 1,
+    "advantage_once_per_trajectory": true,
+    "advantage_matches_trl_formula": true,
+    "advantage_matches_formula": true,
+    "max_abs_advantage_diff": 0.0,
+    "advantage_formula": {
+      "rewards": [
+        1.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "mean": 0.5,
+      "std_bessel": 0.5773502588272095,
+      "eps": 0.0001,
+      "advantages": [
+        0.8658754229545593,
+        -0.8658754229545593,
+        -0.8658754229545593,
+        0.8658754229545593
+      ],
+      "formula": "A_i = (r_i - mean(r)) / (nanstd(r) + 1e-4), r_i = reward_B_I_task_success, nanstd uses Bessel correction"
+    },
+    "aggregation": {
+      "loss_type": "dapo",
+      "normalizer": 739,
+      "weights": [
+        0.2476319350473613,
+        0.2787550744248985,
+        0.2259810554803789,
+        0.2476319350473613
+      ],
+      "formula": "loss = sum_i sum_{t in scored(i)} per_token_loss_{i,t} / sum_j n_j, with per_token_loss = -A_i on-policy (ratio 1, beta 0). Trajectory weight w_i = n_i / sum_j n_j. n_i counts generated tokens over all turns; tool-observation tokens have mask 0."
+    },
+    "dapo_scalar": {
+      "denominator": 739.0,
+      "mask_token_count": 739.0,
+      "denominator_matches_mask": true,
+      "weights": [
+        0.2476319350473613,
+        0.2787550744248985,
+        0.2259810554803789,
+        0.2476319350473613
+      ],
+      "scalar_dapo": 0.008201799147506529,
+      "scalar_manual": 0.008201796969799615,
+      "abs_diff": 2.177706914102684e-09,
+      "within_atol": true,
+      "formula": "per_token_loss[i, t] = -A_i on scored tokens (on-policy ratio 1, beta 0). scalar = sum(per_token_loss * mask) / num_items_in_batch. manual = sum_i (-A_i * n_i) / sum_j n_j. weight_i = n_i / denominator."
+    },
+    "old_per_token_logps_in_outputs": false,
+    "trajectories": [
+      {
+        "rollout_id": "m0-g100",
+        "generation_seed": 100,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 183,
+        "n_observation_tokens": 516,
+        "reward_column": 1.0,
+        "reward": 1.0,
+        "advantage": 0.8658754229545593,
+        "advantage_reference": 0.8658754229545593,
+        "loss_weight": 0.2476319350473613,
+        "per_token_loss_coefficient": -0.001171685281399945
+      },
+      {
+        "rollout_id": "m0-g101",
+        "generation_seed": 101,
+        "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 206,
+        "n_observation_tokens": 516,
+        "reward_column": 0.0,
+        "reward": 0.0,
+        "advantage": -0.8658754229545593,
+        "advantage_reference": -0.8658754229545593,
+        "loss_weight": 0.2787550744248985,
+        "per_token_loss_coefficient": 0.001171685281399945
+      },
+      {
+        "rollout_id": "m0-g102",
+        "generation_seed": 102,
+        "final_answer": "REFUND_SUBMITTED amount_cents=0",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 167,
+        "n_observation_tokens": 402,
+        "reward_column": 0.0,
+        "reward": 0.0,
+        "advantage": -0.8658754229545593,
+        "advantage_reference": -0.8658754229545593,
+        "loss_weight": 0.2259810554803789,
+        "per_token_loss_coefficient": 0.001171685281399945
+      },
+      {
+        "rollout_id": "m0-g103",
+        "generation_seed": 103,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 183,
+        "n_observation_tokens": 516,
+        "reward_column": 1.0,
+        "reward": 1.0,
+        "advantage": 0.8658754229545593,
+        "advantage_reference": 0.8658754229545593,
+        "loss_weight": 0.2476319350473613,
+        "per_token_loss_coefficient": -0.001171685281399945
+      }
+    ],
+    "optimizer_steps": 0,
+    "note": "Each scored token of a trajectory is multiplied by that trajectory's single advantage. A longer answer or an extra model turn increases n_scored and therefore the DAPO weight. Observation tokens stay in the flat TRL mask with value 0 and add no weight."
+  },
+  "C": {
+    "group": "m0",
+    "reward": "reward_C_I_success_minus_lambda_N_invalid",
+    "n_trajectories": 4,
+    "reward_callback_rows": 4,
+    "advantage_rank": 1,
+    "advantage_once_per_trajectory": true,
+    "advantage_matches_trl_formula": true,
+    "advantage_matches_formula": true,
+    "max_abs_advantage_diff": 0.0,
+    "advantage_formula": {
+      "rewards": [
+        1.0,
+        0.0,
+        -0.5,
+        1.0
+      ],
+      "mean": 0.375,
+      "std_bessel": 0.75,
+      "eps": 0.0001,
+      "advantages": [
+        0.8332222104072571,
+        -0.4999333322048187,
+        -1.166511058807373,
+        0.8332222104072571
+      ],
+      "formula": "A_i = (r_i - mean(r)) / (nanstd(r) + 1e-4), r_i = reward_C_I_success_minus_lambda_N_invalid, nanstd uses Bessel correction"
+    },
+    "aggregation": {
+      "loss_type": "dapo",
+      "normalizer": 739,
+      "weights": [
+        0.2476319350473613,
+        0.2787550744248985,
+        0.2259810554803789,
+        0.2476319350473613
+      ],
+      "formula": "loss = sum_i sum_{t in scored(i)} per_token_loss_{i,t} / sum_j n_j, with per_token_loss = -A_i on-policy (ratio 1, beta 0). Trajectory weight w_i = n_i / sum_j n_j. n_i counts generated tokens over all turns; tool-observation tokens have mask 0."
+    },
+    "dapo_scalar": {
+      "denominator": 739.0,
+      "mask_token_count": 739.0,
+      "denominator_matches_mask": true,
+      "weights": [
+        0.2476319350473613,
+        0.2787550744248985,
+        0.2259810554803789,
+        0.2476319350473613
+      ],
+      "scalar_dapo": -0.009696513293399217,
+      "scalar_manual": -0.009696503050111143,
+      "abs_diff": 1.0243288073655266e-08,
+      "within_atol": true,
+      "formula": "per_token_loss[i, t] = -A_i on scored tokens (on-policy ratio 1, beta 0). scalar = sum(per_token_loss * mask) / num_items_in_batch. manual = sum_i (-A_i * n_i) / sum_j n_j. weight_i = n_i / denominator."
+    },
+    "old_per_token_logps_in_outputs": false,
+    "trajectories": [
+      {
+        "rollout_id": "m0-g100",
+        "generation_seed": 100,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 183,
+        "n_observation_tokens": 516,
+        "reward_column": 1.0,
+        "reward": 1.0,
+        "advantage": 0.8332222104072571,
+        "advantage_reference": 0.8332222104072571,
+        "loss_weight": 0.2476319350473613,
+        "per_token_loss_coefficient": -0.0011274996081289
+      },
+      {
+        "rollout_id": "m0-g101",
+        "generation_seed": 101,
+        "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-1001\"}}]",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 206,
+        "n_observation_tokens": 516,
+        "reward_column": 0.0,
+        "reward": 0.0,
+        "advantage": -0.4999333322048187,
+        "advantage_reference": -0.4999333322048187,
+        "loss_weight": 0.2787550744248985,
+        "per_token_loss_coefficient": 0.0006764997729429212
+      },
+      {
+        "rollout_id": "m0-g102",
+        "generation_seed": 102,
+        "final_answer": "REFUND_SUBMITTED amount_cents=0",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 167,
+        "n_observation_tokens": 402,
+        "reward_column": -0.5,
+        "reward": -0.5,
+        "advantage": -1.166511058807373,
+        "advantage_reference": -1.166511058807373,
+        "loss_weight": 0.2259810554803789,
+        "per_token_loss_coefficient": 0.001578499402986973
+      },
+      {
+        "rollout_id": "m0-g103",
+        "generation_seed": 103,
+        "final_answer": "REFUND_SUBMITTED amount_cents=1840",
+        "n_turns": 5,
+        "n_scored_turns_in_mask": 5,
+        "n_scored_tokens": 183,
+        "n_observation_tokens": 516,
+        "reward_column": 1.0,
+        "reward": 1.0,
+        "advantage": 0.8332222104072571,
+        "advantage_reference": 0.8332222104072571,
+        "loss_weight": 0.2476319350473613,
+        "per_token_loss_coefficient": -0.0011274996081289
+      }
+    ],
+    "optimizer_steps": 0,
+    "note": "Each scored token of a trajectory is multiplied by that trajectory's single advantage. A longer answer or an extra model turn increases n_scored and therefore the DAPO weight. Observation tokens stay in the flat TRL mask with value 0 and add no weight."
+  }
+}

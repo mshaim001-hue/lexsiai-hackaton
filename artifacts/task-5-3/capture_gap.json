@@ -1,0 +1,65 @@
+{
+  "path": "artifacts/task-5-2/generate_captures.json",
+  "seed": 100,
+  "n_turns": 5,
+  "generated_ids_complete": true,
+  "full_input_ids_complete": false,
+  "missing": [
+    {
+      "turn_index": 0,
+      "input_len": 1425,
+      "new_len": 25,
+      "full_input_ids_present": false,
+      "saved_prefix_ids": 64,
+      "head_len": 32,
+      "tail_len": 32,
+      "missing_middle_ids": 1361,
+      "new_token_ids_complete": true
+    },
+    {
+      "turn_index": 1,
+      "input_len": 1673,
+      "new_len": 27,
+      "full_input_ids_present": false,
+      "saved_prefix_ids": 64,
+      "head_len": 32,
+      "tail_len": 32,
+      "missing_middle_ids": 1609,
+      "new_token_ids_complete": true
+    },
+    {
+      "turn_index": 2,
+      "input_len": 1931,
+      "new_len": 52,
+      "full_input_ids_present": false,
+      "saved_prefix_ids": 64,
+      "head_len": 32,
+      "tail_len": 32,
+      "missing_middle_ids": 1867,
+      "new_token_ids_complete": true
+    },
+    {
+      "turn_index": 3,
+      "input_len": 2246,
+      "new_len": 65,
+      "full_input_ids_present": false,
+      "saved_prefix_ids": 64,
+      "head_len": 32,
+      "tail_len": 32,
+      "missing_middle_ids": 2182,
+      "new_token_ids_complete": true
+    },
+    {
+      "turn_index": 4,
+      "input_len": 2564,
+      "new_len": 14,
+      "full_input_ids_present": false,
+      "saved_prefix_ids": 64,
+      "head_len": 32,
+      "tail_len": 32,
+      "missing_middle_ids": 2500,
+      "new_token_ids_complete": true
+    }
+  ],
+  "gap": "Full generate input_ids are absent. Each turn stores input_ids_head (32) and input_ids_tail (32) only, so the middle of the prefix cannot be rebuilt. new_token_ids are complete for every turn. Re-tokenizing text is not a substitute."
+}
