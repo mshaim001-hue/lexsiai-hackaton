@@ -1,0 +1,74 @@
+{
+  "kind": "b_only_budget",
+  "written_before_training": true,
+  "held_out_ran": false,
+  "max_optimizer_steps": 4,
+  "reward": "reward_B_I_task_success",
+  "learning_rate": 1e-06,
+  "lora_dropout": 0.0,
+  "lora_init": "fresh",
+  "lora_init_seed": 0,
+  "rollout_mode": "eval during live rollout; restore the previous mode before the loss",
+  "scoring_mode": "train mode restored before the loss; lora_dropout 0 so scoring applies no dropout",
+  "train_task": "t0",
+  "train_groups": [
+    {
+      "optimizer_step": 1,
+      "task": "t0",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "optimizer_step": 2,
+      "task": "t0",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "optimizer_step": 3,
+      "task": "t0",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    },
+    {
+      "optimizer_step": 4,
+      "task": "t0",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ]
+    }
+  ],
+  "stop_when_group_rewards_identical": true,
+  "checkpoint_rule": "Save the adapter at the weights of the last completed optimizer step. A group whose four rewards are equal is recorded and does not complete a step. If no step completes, save the fresh LoRA. Do not choose among intermediate checkpoints, and do not use held-out to choose the checkpoint.",
+  "held_out_group": {
+    "tasks": [
+      "h0",
+      "h1",
+      "h2",
+      "h3"
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "protocol": "one_action_per_turn",
+    "settings": "baseline A"
+  }
+}

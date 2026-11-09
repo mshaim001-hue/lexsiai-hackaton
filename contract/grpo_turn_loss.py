@@ -1041,19 +1041,23 @@ def install_turn_scoring(trainer) -> None:
 def _enable_loss_graph(model) -> int:
     """Leave LoRA trainable and checkpoint the forward so the loss has a grad graph."""
     if not getattr(model, "_turn_loss_graph_ready", False):
-        if hasattr(model, "config") and model.config is not None:
-            model.config.use_cache = False
-        base = getattr(model, "get_base_model", lambda: model)()
-        if hasattr(base, "config") and base.config is not None:
-            base.config.use_cache = False
         if hasattr(model, "enable_input_require_grads"):
             model.enable_input_require_grads()
-        if hasattr(model, "gradient_checkpointing_enable"):
-            try:
-                model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
-            except TypeError:
-                model.gradient_checkpointing_enable()
         model._turn_loss_graph_ready = True
+    targets = [model]
+    get_base = getattr(model, "get_base_model", None)
+    if get_base is not None:
+        base = get_base()
+        if base is not None and base is not model:
+            targets.append(base)
+    for candidate in targets:
+        if hasattr(candidate, "config") and candidate.config is not None:
+            candidate.config.use_cache = False
+    if hasattr(model, "gradient_checkpointing_enable"):
+        try:
+            model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
+        except TypeError:
+            model.gradient_checkpointing_enable()
     model.train()
     trainable = sum(1 for param in model.parameters() if param.requires_grad)
     if trainable < 1:

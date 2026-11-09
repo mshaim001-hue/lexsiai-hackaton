@@ -323,6 +323,26 @@ def _run_one_instrumented(
     return packed, ep_rows, events
 
 
+def _arm_rollout_cache(model) -> None:
+    """Turn the KV cache on for generation after a loss forward disabled it."""
+    candidates = [model]
+    get_base = getattr(model, "get_base_model", None)
+    if get_base is not None:
+        base = get_base()
+        if base is not None and base is not model:
+            candidates.append(base)
+    for candidate in candidates:
+        config = getattr(candidate, "config", None)
+        if config is not None and hasattr(config, "use_cache"):
+            config.use_cache = True
+        generation = getattr(candidate, "generation_config", None)
+        if generation is not None and hasattr(generation, "use_cache"):
+            generation.use_cache = True
+        disable = getattr(candidate, "gradient_checkpointing_disable", None)
+        if disable is not None:
+            disable()
+
+
 def make_instrumented_rollout_func(
     *,
     episode_id: str,
@@ -409,7 +429,13 @@ def make_instrumented_rollout_func(
                 if model is None:
                     raise RuntimeError("rollout_eval requires the live engine model")
                 was_training = bool(model.training)
+                _arm_rollout_cache(model)
                 model.eval()
+                cache = getattr(getattr(model, "config", None), "use_cache", None)
+                print(
+                    f"rollout_eval seed={seed} training={model.training} use_cache={cache}",
+                    flush=True,
+                )
             try:
                 packed, _steps, events = _run_one_instrumented(
                     factory=factory,

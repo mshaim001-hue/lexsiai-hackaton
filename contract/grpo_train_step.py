@@ -102,7 +102,16 @@ def _param_change(before, after) -> dict[str, float]:
     }
 
 
-def _build_b_only_trainer(tokenizer, model, rollout_fn, probe, reward_fn=None, output_dir=None):
+def _build_b_only_trainer(
+    tokenizer,
+    model,
+    rollout_fn,
+    probe,
+    reward_fn=None,
+    output_dir=None,
+    lora_dropout: float | None = None,
+    max_steps: int = 1,
+):
     from datasets import Dataset
     from peft import LoraConfig
     from trl import GRPOConfig, GRPOTrainer
@@ -114,13 +123,16 @@ def _build_b_only_trainer(tokenizer, model, rollout_fn, probe, reward_fn=None, o
     dataset = Dataset.from_list([{"prompt": prompt, "episode_id": "t0"}])
     reward_fn = reward_B if reward_fn is None else reward_fn
     output_dir = TASK / "scratch" if output_dir is None else output_dir
+    lora = _lora_dict()
+    if lora_dropout is not None:
+        lora["lora_dropout"] = lora_dropout
     args = GRPOConfig(
         output_dir=str(output_dir),
         num_generations=4,
         per_device_train_batch_size=4,
         gradient_accumulation_steps=1,
         learning_rate=1e-6,
-        max_steps=1,
+        max_steps=max_steps,
         logging_steps=1,
         save_strategy="no",
         report_to=[],
@@ -143,7 +155,7 @@ def _build_b_only_trainer(tokenizer, model, rollout_fn, probe, reward_fn=None, o
         args=args,
         train_dataset=dataset,
         processing_class=tokenizer,
-        peft_config=ensure_lora_targets(LoraConfig(**_lora_dict()), model),
+        peft_config=ensure_lora_targets(LoraConfig(**lora), model),
         callbacks=[probe],
     )
     trainer.rollout_func = rollout_fn
@@ -163,10 +175,14 @@ def _hook_rewards(trainer) -> None:
             ev = row.get("contract_events") or {}
             if not isinstance(ev, dict):
                 ev = {}
+            harness = ev.get("harness_state") or {}
             captured.append(
                 {
                     "rollout_id": str(row.get("rollout_id") or ev.get("rollout_id") or ""),
                     "task_success": ev.get("task_success"),
+                    "task_success_harness": harness.get("task_success_harness"),
+                    "task_success_answer": harness.get("task_success_answer"),
+                    "final_answer": ev.get("final_answer"),
                     "n_invalid": ev.get("n_invalid"),
                 }
             )
