@@ -1,0 +1,88 @@
+{
+  "rollouts_match": true,
+  "rewards_differ": false,
+  "advantages_differ": false,
+  "parameter_updates": {
+    "B": {
+      "l2": 0.0012060001026839018,
+      "max_abs": 9.99994540507032e-07,
+      "changed": true
+    },
+    "C": {
+      "l2": 0.0012060001026839018,
+      "max_abs": 9.99994540507032e-07,
+      "changed": true
+    },
+    "updates_equal": true,
+    "update_l2_diff": 0.0,
+    "update_max_abs_diff": 0.0
+  },
+  "per_rollout": [
+    {
+      "rollout_id": "t0-g100",
+      "new_tokens_match": true,
+      "prefix_ids_match": true,
+      "n_scored_tokens_B": 195,
+      "n_scored_tokens_C": 195,
+      "reward_B": 1.0,
+      "reward_C": 1.0,
+      "advantage_B": 1.4997000694274902,
+      "advantage_C": 1.4997000694274902,
+      "task_success_B": true,
+      "task_success_C": true,
+      "n_invalid_B": 0,
+      "n_invalid_C": 0
+    },
+    {
+      "rollout_id": "t0-g101",
+      "new_tokens_match": true,
+      "prefix_ids_match": true,
+      "n_scored_tokens_B": 241,
+      "n_scored_tokens_C": 241,
+      "reward_B": 0.0,
+      "reward_C": 0.0,
+      "advantage_B": -0.4999000132083893,
+      "advantage_C": -0.4999000132083893,
+      "task_success_B": false,
+      "task_success_C": false,
+      "n_invalid_B": 0,
+      "n_invalid_C": 0
+    },
+    {
+      "rollout_id": "t0-g102",
+      "new_tokens_match": true,
+      "prefix_ids_match": true,
+      "n_scored_tokens_B": 206,
+      "n_scored_tokens_C": 206,
+      "reward_B": 0.0,
+      "reward_C": 0.0,
+      "advantage_B": -0.4999000132083893,
+      "advantage_C": -0.4999000132083893,
+      "task_success_B": false,
+      "task_success_C": false,
+      "n_invalid_B": 0,
+      "n_invalid_C": 0
+    },
+    {
+      "rollout_id": "t0-g103",
+      "new_tokens_match": true,
+      "prefix_ids_match": true,
+      "n_scored_tokens_B": 206,
+      "n_scored_tokens_C": 206,
+      "reward_B": 0.0,
+      "reward_C": 0.0,
+      "advantage_B": -0.4999000132083893,
+      "advantage_C": -0.4999000132083893,
+      "task_success_B": false,
+      "task_success_C": false,
+      "n_invalid_B": 0,
+      "n_invalid_C": 0
+    }
+  ],
+  "loss_B": 0.04008631780743599,
+  "loss_C": 0.04008631780743599,
+  "grad_norm_B": 0.0587712824344635,
+  "grad_norm_C": 0.0587712824344635,
+  "scored_tokens_B": 848,
+  "scored_tokens_C": 848
+}

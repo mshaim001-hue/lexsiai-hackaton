@@ -1,0 +1,176 @@
+{
+  "kind": "paired_bc_pilot",
+  "command": "TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_pair.py",
+  "git_head": "7e386a03536df82b879565a56333e331ec8eed82",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "train_task": "t0",
+  "generation_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "held_out_tasks": [
+    "h0",
+    "h1",
+    "h2",
+    "h3"
+  ],
+  "protocol": "one_action_per_turn",
+  "training": {
+    "rollouts_match": true,
+    "rewards_differ": false,
+    "advantages_differ": false,
+    "parameter_updates": {
+      "B": {
+        "l2": 0.0012060001026839018,
+        "max_abs": 9.99994540507032e-07,
+        "changed": true
+      },
+      "C": {
+        "l2": 0.0012060001026839018,
+        "max_abs": 9.99994540507032e-07,
+        "changed": true
+      },
+      "updates_equal": true,
+      "update_l2_diff": 0.0,
+      "update_max_abs_diff": 0.0
+    },
+    "per_rollout": [
+      {
+        "rollout_id": "t0-g100",
+        "new_tokens_match": true,
+        "prefix_ids_match": true,
+        "n_scored_tokens_B": 195,
+        "n_scored_tokens_C": 195,
+        "reward_B": 1.0,
+        "reward_C": 1.0,
+        "advantage_B": 1.4997000694274902,
+        "advantage_C": 1.4997000694274902,
+        "task_success_B": true,
+        "task_success_C": true,
+        "n_invalid_B": 0,
+        "n_invalid_C": 0
+      },
+      {
+        "rollout_id": "t0-g101",
+        "new_tokens_match": true,
+        "prefix_ids_match": true,
+        "n_scored_tokens_B": 241,
+        "n_scored_tokens_C": 241,
+        "reward_B": 0.0,
+        "reward_C": 0.0,
+        "advantage_B": -0.4999000132083893,
+        "advantage_C": -0.4999000132083893,
+        "task_success_B": false,
+        "task_success_C": false,
+        "n_invalid_B": 0,
+        "n_invalid_C": 0
+      },
+      {
+        "rollout_id": "t0-g102",
+        "new_tokens_match": true,
+        "prefix_ids_match": true,
+        "n_scored_tokens_B": 206,
+        "n_scored_tokens_C": 206,
+        "reward_B": 0.0,
+        "reward_C": 0.0,
+        "advantage_B": -0.4999000132083893,
+        "advantage_C": -0.4999000132083893,
+        "task_success_B": false,
+        "task_success_C": false,
+        "n_invalid_B": 0,
+        "n_invalid_C": 0
+      },
+      {
+        "rollout_id": "t0-g103",
+        "new_tokens_match": true,
+        "prefix_ids_match": true,
+        "n_scored_tokens_B": 206,
+        "n_scored_tokens_C": 206,
+        "reward_B": 0.0,
+        "reward_C": 0.0,
+        "advantage_B": -0.4999000132083893,
+        "advantage_C": -0.4999000132083893,
+        "task_success_B": false,
+        "task_success_C": false,
+        "n_invalid_B": 0,
+        "n_invalid_C": 0
+      }
+    ],
+    "loss_B": 0.04008631780743599,
+    "loss_C": 0.04008631780743599,
+    "grad_norm_B": 0.0587712824344635,
+    "grad_norm_C": 0.0587712824344635,
+    "scored_tokens_B": 848,
+    "scored_tokens_C": 848
+  },
+  "eval_table": [
+    {
+      "condition": "A",
+      "successes": "15/16",
+      "invalid_calls": "0/64",
+      "mean_calls": 4.0,
+      "task_success": {
+        "numerator": 15,
+        "denominator": 16,
+        "rate": 0.9375
+      },
+      "invalid_attempts": {
+        "numerator": 0,
+        "denominator": 64,
+        "rate": 0.0,
+        "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+      },
+      "calls_per_task_mean": 4.0
+    },
+    {
+      "condition": "B",
+      "successes": "15/16",
+      "invalid_calls": "0/64",
+      "mean_calls": 4.0,
+      "task_success": {
+        "numerator": 15,
+        "denominator": 16,
+        "rate": 0.9375
+      },
+      "invalid_attempts": {
+        "numerator": 0,
+        "denominator": 64,
+        "rate": 0.0,
+        "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+      },
+      "calls_per_task_mean": 4.0
+    },
+    {
+      "condition": "C",
+      "successes": "15/16",
+      "invalid_calls": "0/64",
+      "mean_calls": 4.0,
+      "task_success": {
+        "numerator": 15,
+        "denominator": 16,
+        "rate": 0.9375
+      },
+      "invalid_attempts": {
+        "numerator": 0,
+        "denominator": 64,
+        "rate": 0.0,
+        "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+      },
+      "calls_per_task_mean": 4.0
+    }
+  ],
+  "changed_pairs": [],
+  "baseline_a": "artifacts/task-5-2/baseline_a"
+}

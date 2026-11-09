@@ -1,0 +1,171 @@
+{
+  "n_tasks": 16,
+  "task_success": {
+    "numerator": 15,
+    "denominator": 16,
+    "rate": 0.9375
+  },
+  "invalid_attempts": {
+    "numerator": 0,
+    "denominator": 64,
+    "rate": 0.0,
+    "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+  },
+  "tasks_without_calls": {
+    "numerator": 0,
+    "denominator": 16,
+    "rate": 0.0
+  },
+  "calls_per_task": {
+    "values": [
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4,
+      4
+    ],
+    "mean": 4.0
+  },
+  "per_task": [
+    {
+      "rollout_id": "h0-g100",
+      "episode_id": "h0",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h0-g101",
+      "episode_id": "h0",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h0-g102",
+      "episode_id": "h0",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h0-g103",
+      "episode_id": "h0",
+      "task_success": false,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h1-g100",
+      "episode_id": "h1",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h1-g101",
+      "episode_id": "h1",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h1-g102",
+      "episode_id": "h1",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h1-g103",
+      "episode_id": "h1",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h2-g100",
+      "episode_id": "h2",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h2-g101",
+      "episode_id": "h2",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h2-g102",
+      "episode_id": "h2",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h2-g103",
+      "episode_id": "h2",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h3-g100",
+      "episode_id": "h3",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h3-g101",
+      "episode_id": "h3",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h3-g102",
+      "episode_id": "h3",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    },
+    {
+      "rollout_id": "h3-g103",
+      "episode_id": "h3",
+      "task_success": true,
+      "N_invalid": 0,
+      "attempt_count": 4,
+      "parsed_calls": 4
+    }
+  ],
+  "model_weights_updated": false
+}

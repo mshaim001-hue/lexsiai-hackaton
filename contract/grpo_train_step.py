@@ -71,8 +71,13 @@ class _OneStepProbe(TrainerCallback):
         self.after = None
 
     def on_train_begin(self, args, state, control, model=None, **kwargs):
+        import torch
+
         del args, state, kwargs
         self.before = _lora_vector(model)
+        expected = getattr(self, "expected_init", None)
+        if expected is not None and not torch.equal(self.before, expected):
+            raise RuntimeError("LoRA init diverged before the rollout")
 
     def on_pre_optimizer_step(self, args, state, control, model=None, **kwargs):
         del args, state, kwargs
@@ -97,7 +102,7 @@ def _param_change(before, after) -> dict[str, float]:
     }
 
 
-def _build_b_only_trainer(tokenizer, model, rollout_fn, probe):
+def _build_b_only_trainer(tokenizer, model, rollout_fn, probe, reward_fn=None, output_dir=None):
     from datasets import Dataset
     from peft import LoraConfig
     from trl import GRPOConfig, GRPOTrainer
@@ -107,8 +112,10 @@ def _build_b_only_trainer(tokenizer, model, rollout_fn, probe):
     task = _task_tuple("t0")
     prompt = [{"role": "user", "content": one_action_user_prompt(task[1], task[2])}]
     dataset = Dataset.from_list([{"prompt": prompt, "episode_id": "t0"}])
+    reward_fn = reward_B if reward_fn is None else reward_fn
+    output_dir = TASK / "scratch" if output_dir is None else output_dir
     args = GRPOConfig(
-        output_dir=str(TASK / "scratch"),
+        output_dir=str(output_dir),
         num_generations=4,
         per_device_train_batch_size=4,
         gradient_accumulation_steps=1,
@@ -132,7 +139,7 @@ def _build_b_only_trainer(tokenizer, model, rollout_fn, probe):
     )
     trainer = GRPOTrainer(
         model=model,
-        reward_funcs=[reward_B],
+        reward_funcs=[reward_fn],
         args=args,
         train_dataset=dataset,
         processing_class=tokenizer,
@@ -149,8 +156,21 @@ def _hook_rewards(trainer) -> None:
     def hooked(inputs_arg, prompts, completions, completion_ids_list):
         rewards = original(inputs_arg, prompts, completions, completion_ids_list)
         if rewards.shape[1] != 1:
-            raise RuntimeError(f"B-only smoke expected one reward column, got {tuple(rewards.shape)}")
+            raise RuntimeError(f"expected one reward column, got {tuple(rewards.shape)}")
         trainer._smoke_reward_column = rewards[:, 0].detach()
+        captured = []
+        for row in inputs_arg:
+            ev = row.get("contract_events") or {}
+            if not isinstance(ev, dict):
+                ev = {}
+            captured.append(
+                {
+                    "rollout_id": str(row.get("rollout_id") or ev.get("rollout_id") or ""),
+                    "task_success": ev.get("task_success"),
+                    "n_invalid": ev.get("n_invalid"),
+                }
+            )
+        trainer._smoke_events = captured
         return rewards
 
     trainer._calculate_rewards = hooked
