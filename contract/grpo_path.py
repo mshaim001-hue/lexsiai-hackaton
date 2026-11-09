@@ -334,8 +334,14 @@ def make_instrumented_rollout_func(
     mode: str,
     scripted_raws: dict[int, list[str]] | None = None,
     live_engine_factory: Callable | None = None,
+    rollout_eval: bool = False,
 ) -> Callable:
-    """rollout_func for GRPOTrainer: one fresh episode state per generation."""
+    """rollout_func for GRPOTrainer: one fresh episode state per generation.
+
+    rollout_eval calls model.eval() for the live generation and restores the
+    mode the model had when that trajectory started. The restore happens
+    before this function returns, so the loss forward sees the previous mode.
+    """
 
     prompt_text = one_action_user_prompt(order_id, customer_id)
     gen_kwargs = {
@@ -397,16 +403,28 @@ def make_instrumented_rollout_func(
             else:
                 raise ValueError(mode)
             engine = _TurnIdEngine(engine, tokenizer)
-
-            packed, _steps, events = _run_one_instrumented(
-                factory=factory,
-                engine=engine,
-                tokenizer=tokenizer,
-                episode=episode,
-                generation_seed=seed,
-                prompt_text=prompt_text,
-                gen_kwargs=gen_kwargs,
-            )
+            model = getattr(engine, "model", None)
+            was_training = None
+            if rollout_eval and mode == "live":
+                if model is None:
+                    raise RuntimeError("rollout_eval requires the live engine model")
+                was_training = bool(model.training)
+                model.eval()
+            try:
+                packed, _steps, events = _run_one_instrumented(
+                    factory=factory,
+                    engine=engine,
+                    tokenizer=tokenizer,
+                    episode=episode,
+                    generation_seed=seed,
+                    prompt_text=prompt_text,
+                    gen_kwargs=gen_kwargs,
+                )
+            finally:
+                if was_training is True:
+                    model.train()
+                elif was_training is False:
+                    model.eval()
             if not events:
                 raise RuntimeError(f"empty contract_events for generation seed {seed}")
             for key in (

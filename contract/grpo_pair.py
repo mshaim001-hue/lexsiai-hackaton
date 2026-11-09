@@ -154,6 +154,7 @@ def train_one(mode: str, reward_fn, init_state: dict | None) -> dict[str, Any]:
         tokenizer=tokenizer,
         mode="live",
         live_engine_factory=live_engine_factory,
+        rollout_eval=True,
     )
     probe = _OneStepProbe()
     trainer = _build_b_only_trainer(

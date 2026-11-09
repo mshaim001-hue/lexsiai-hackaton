@@ -238,6 +238,7 @@ def main(argv: list[str] | None = None) -> int:
         tokenizer=tokenizer,
         mode="live",
         live_engine_factory=live_engine_factory,
+        rollout_eval=True,
     )
     probe = _OneStepProbe()
     trainer = _build_b_only_trainer(tokenizer, model, rollout, probe)

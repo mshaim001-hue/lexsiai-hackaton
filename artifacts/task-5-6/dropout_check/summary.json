@@ -1,0 +1,627 @@
+{
+  "kind": "t0_dropout_control",
+  "optimizer_steps": 0,
+  "backward_ran": false,
+  "held_out_ran": false,
+  "device": "mps",
+  "lora_init": "artifacts/task-5-5/lora_init.pt",
+  "lora_dropout_modules": 144,
+  "seed_reset": "torch.manual_seed and mps seed before each run of a pair, and again before the eval run of that seed",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_dropout_check.py",
+  "hashes": {
+    "stock": {
+      "t0-g100": "ac9e61ae7e401cb8f9564316385c6a69cba0545ecc2a0c70846abe4a7a1e5776",
+      "t0-g101": "1cf51e23da601574372653b28a31ecd6f663cf0e1941c2a87642add9ca638395",
+      "t0-g102": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "t0-g103": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904"
+    },
+    "dropout_off": {
+      "t0-g100": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "t0-g101": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "t0-g102": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "t0-g103": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe"
+    },
+    "eval": {
+      "t0-g100": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "t0-g101": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "t0-g102": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "t0-g103": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe"
+    }
+  },
+  "saved_task_5_5_hashes": {
+    "t0-g100": "ac9e61ae7e401cb8f9564316385c6a69cba0545ecc2a0c70846abe4a7a1e5776",
+    "t0-g101": "1cf51e23da601574372653b28a31ecd6f663cf0e1941c2a87642add9ca638395",
+    "t0-g102": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+    "t0-g103": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904"
+  },
+  "hash_equals_saved_task_5_5": {
+    "stock": {
+      "t0-g100": true,
+      "t0-g101": true,
+      "t0-g102": true,
+      "t0-g103": true
+    },
+    "dropout_off": {
+      "t0-g100": false,
+      "t0-g101": false,
+      "t0-g102": false,
+      "t0-g103": false
+    },
+    "eval": {
+      "t0-g100": false,
+      "t0-g101": false,
+      "t0-g102": false,
+      "t0-g103": false
+    }
+  },
+  "t0_g102_equals_t0_g103": {
+    "stock": true,
+    "dropout_off": true,
+    "eval": true
+  },
+  "rows": [
+    {
+      "arm": "stock",
+      "seed": 100,
+      "rollout_id": "t0-g100",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        77,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "ac9e61ae7e401cb8f9564316385c6a69cba0545ecc2a0c70846abe4a7a1e5776",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "dropout_off",
+      "seed": 100,
+      "rollout_id": "t0-g100",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "eval",
+      "seed": 100,
+      "rollout_id": "t0-g100",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "arm": "stock",
+      "seed": 101,
+      "rollout_id": "t0-g101",
+      "refund_confirmed": true,
+      "final_answer_correct": false,
+      "raw_final_answer": "Tool result REFUND_SUBMITTED amount_cents=1500",
+      "failure": "final_answer_not_exact",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 0.0,
+      "reward_new": 0.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        39,
+        41,
+        66,
+        79,
+        16
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "1cf51e23da601574372653b28a31ecd6f663cf0e1941c2a87642add9ca638395",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "dropout_off",
+      "seed": 101,
+      "rollout_id": "t0-g101",
+      "refund_confirmed": true,
+      "final_answer_correct": false,
+      "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+      "failure": "final_answer_tool_call_after_submit",
+      "n_invalid": 0,
+      "n_final_tool_call": 1,
+      "B": 0.0,
+      "reward_new": -0.5,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        77,
+        25
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "eval",
+      "seed": 101,
+      "rollout_id": "t0-g101",
+      "refund_confirmed": true,
+      "final_answer_correct": false,
+      "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+      "failure": "final_answer_tool_call_after_submit",
+      "n_invalid": 0,
+      "n_final_tool_call": 1,
+      "B": 0.0,
+      "reward_new": -0.5,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        77,
+        25
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "arm": "stock",
+      "seed": 102,
+      "rollout_id": "t0-g102",
+      "refund_confirmed": true,
+      "final_answer_correct": false,
+      "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+      "failure": "final_answer_tool_call_after_submit",
+      "n_invalid": 0,
+      "n_final_tool_call": 1,
+      "B": 0.0,
+      "reward_new": -0.5,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        77,
+        25
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "dropout_off",
+      "seed": 102,
+      "rollout_id": "t0-g102",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "eval",
+      "seed": 102,
+      "rollout_id": "t0-g102",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    },
+    {
+      "arm": "stock",
+      "seed": 103,
+      "rollout_id": "t0-g103",
+      "refund_confirmed": true,
+      "final_answer_correct": false,
+      "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+      "failure": "final_answer_tool_call_after_submit",
+      "n_invalid": 0,
+      "n_final_tool_call": 1,
+      "B": 0.0,
+      "reward_new": -0.5,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        77,
+        25
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "dropout_off",
+      "seed": 103,
+      "rollout_id": "t0-g103",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        true,
+        true,
+        true,
+        true,
+        true
+      ]
+    },
+    {
+      "arm": "eval",
+      "seed": 103,
+      "rollout_id": "t0-g103",
+      "refund_confirmed": true,
+      "final_answer_correct": true,
+      "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500",
+      "failure": "none",
+      "n_invalid": 0,
+      "n_final_tool_call": 0,
+      "B": 1.0,
+      "reward_new": 1.0,
+      "turn_count": 5,
+      "new_token_lengths": [
+        25,
+        27,
+        52,
+        65,
+        14
+      ],
+      "cache_disabled_suspected": false,
+      "token_hash": "0f1577e4e024e28e37d0198e84c3c72fcdf862e07384e1a963bb6ca1796068fe",
+      "mode_after_rollout": "train",
+      "generate_model_training": [
+        false,
+        false,
+        false,
+        false,
+        false
+      ]
+    }
+  ],
+  "discrepancies_versus_5_1": [
+    {
+      "seed": 101,
+      "task_5_1": {
+        "refund_confirmed": true,
+        "final_answer_correct": false,
+        "failure": "final_answer_tool_call_after_submit"
+      },
+      "saved_task_5_5": {
+        "refund_confirmed": true,
+        "final_answer_correct": false,
+        "failure": "final_answer_not_exact"
+      },
+      "stock": {
+        "matches_task_5_1": false,
+        "failure": "final_answer_not_exact",
+        "final_answer_correct": false,
+        "raw_final_answer": "Tool result REFUND_SUBMITTED amount_cents=1500"
+      },
+      "dropout_off": {
+        "matches_task_5_1": true,
+        "failure": "final_answer_tool_call_after_submit",
+        "final_answer_correct": false,
+        "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+      },
+      "eval": {
+        "matches_task_5_1": true,
+        "failure": "final_answer_tool_call_after_submit",
+        "final_answer_correct": false,
+        "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+      },
+      "disappeared_with_dropout_off": true,
+      "disappeared_with_eval": true
+    },
+    {
+      "seed": 102,
+      "task_5_1": {
+        "refund_confirmed": true,
+        "final_answer_correct": true,
+        "failure": "none"
+      },
+      "saved_task_5_5": {
+        "refund_confirmed": true,
+        "final_answer_correct": false,
+        "failure": "final_answer_tool_call_after_submit"
+      },
+      "stock": {
+        "matches_task_5_1": false,
+        "failure": "final_answer_tool_call_after_submit",
+        "final_answer_correct": false,
+        "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+      },
+      "dropout_off": {
+        "matches_task_5_1": true,
+        "failure": "none",
+        "final_answer_correct": true,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      "eval": {
+        "matches_task_5_1": true,
+        "failure": "none",
+        "final_answer_correct": true,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      "disappeared_with_dropout_off": true,
+      "disappeared_with_eval": true
+    },
+    {
+      "seed": 103,
+      "task_5_1": {
+        "refund_confirmed": true,
+        "final_answer_correct": true,
+        "failure": "none"
+      },
+      "saved_task_5_5": {
+        "refund_confirmed": true,
+        "final_answer_correct": false,
+        "failure": "final_answer_tool_call_after_submit"
+      },
+      "stock": {
+        "matches_task_5_1": false,
+        "failure": "final_answer_tool_call_after_submit",
+        "final_answer_correct": false,
+        "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+      },
+      "dropout_off": {
+        "matches_task_5_1": true,
+        "failure": "none",
+        "final_answer_correct": true,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      "eval": {
+        "matches_task_5_1": true,
+        "failure": "none",
+        "final_answer_correct": true,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      "disappeared_with_dropout_off": true,
+      "disappeared_with_eval": true
+    }
+  ],
+  "eval_group": {
+    "per_seed": [
+      {
+        "seed": 100,
+        "refund_confirmed": true,
+        "final_answer_correct": true,
+        "failure": "none",
+        "n_invalid": 0,
+        "n_final_tool_call": 0,
+        "B": 1.0,
+        "reward_new": 1.0,
+        "advantage_B": 0.4999000132083893,
+        "advantage_new": 0.4999333322048187,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      {
+        "seed": 101,
+        "refund_confirmed": true,
+        "final_answer_correct": false,
+        "failure": "final_answer_tool_call_after_submit",
+        "n_invalid": 0,
+        "n_final_tool_call": 1,
+        "B": 0.0,
+        "reward_new": -0.5,
+        "advantage_B": -1.4997000694274902,
+        "advantage_new": -1.4997999668121338,
+        "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]"
+      },
+      {
+        "seed": 102,
+        "refund_confirmed": true,
+        "final_answer_correct": true,
+        "failure": "none",
+        "n_invalid": 0,
+        "n_final_tool_call": 0,
+        "B": 1.0,
+        "reward_new": 1.0,
+        "advantage_B": 0.4999000132083893,
+        "advantage_new": 0.4999333322048187,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      },
+      {
+        "seed": 103,
+        "refund_confirmed": true,
+        "final_answer_correct": true,
+        "failure": "none",
+        "n_invalid": 0,
+        "n_final_tool_call": 0,
+        "B": 1.0,
+        "reward_new": 1.0,
+        "advantage_B": 0.4999000132083893,
+        "advantage_new": 0.4999333322048187,
+        "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500"
+      }
+    ],
+    "B": [
+      1.0,
+      0.0,
+      1.0,
+      1.0
+    ],
+    "reward_new": [
+      1.0,
+      -0.5,
+      1.0,
+      1.0
+    ],
+    "advantage_B": [
+      0.4999000132083893,
+      -1.4997000694274902,
+      0.4999000132083893,
+      0.4999000132083893
+    ],
+    "advantage_new": [
+      0.4999333322048187,
+      -1.4997999668121338,
+      0.4999333322048187,
+      0.4999333322048187
+    ],
+    "centered_rewards_proportional": true,
+    "centered_scale": 1.5,
+    "n_invalid_unchanged_definition": true
+  },
+  "relative_advantage_changes": false,
+  "scale_only": {
+    "centered_scale": 1.5,
+    "note": "The new reward changes the centered values by one scale. Relative advantages inside the eval group stay the same aside from the 1e-4 term in the advantage denominator."
+  },
+  "proposed_paired_experiment": null,
+  "next_pilot_rollout": "model.eval() during the live rollout; the mode from before the trajectory is restored before the rollout returns and before the loss forward"
+}
