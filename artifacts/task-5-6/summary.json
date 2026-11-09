@@ -1,0 +1,755 @@
+{
+  "kind": "train_group_diagnostic",
+  "optimizer_steps": 0,
+  "trained": false,
+  "held_out_ran": false,
+  "command": "TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_train_diag.py",
+  "saved_t0": "artifacts/task-5-1/live_t0_trace.json",
+  "missing_pass": [
+    "t1",
+    "t2",
+    "t3"
+  ],
+  "generation_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "groups": [
+    {
+      "episode_id": "t0",
+      "seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "rows": [
+        {
+          "rollout_id": "t0-g100",
+          "episode_id": "t0",
+          "generation_seed": 100,
+          "source": "artifacts/task-5-1/live_t0_trace.json",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "missing_name": 0,
+            "unknown_tool": 0,
+            "schema_invalid": 0,
+            "N_invalid_provisional": 0
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t0-g101",
+          "episode_id": "t0",
+          "generation_seed": 101,
+          "source": "artifacts/task-5-1/live_t0_trace.json",
+          "task_success_harness": true,
+          "task_success_answer": false,
+          "task_success": false,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "missing_name": 0,
+            "unknown_tool": 0,
+            "schema_invalid": 0,
+            "N_invalid_provisional": 0
+          },
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]",
+          "final_answer_is_tool_call": true,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "final_answer_tool_call_after_submit",
+          "B": 0.0,
+          "C": 0.0
+        },
+        {
+          "rollout_id": "t0-g102",
+          "episode_id": "t0",
+          "generation_seed": 102,
+          "source": "artifacts/task-5-1/live_t0_trace.json",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "missing_name": 0,
+            "unknown_tool": 0,
+            "schema_invalid": 0,
+            "N_invalid_provisional": 0
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t0-g103",
+          "episode_id": "t0",
+          "generation_seed": 103,
+          "source": "artifacts/task-5-1/live_t0_trace.json",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "missing_name": 0,
+            "unknown_tool": 0,
+            "schema_invalid": 0,
+            "N_invalid_provisional": 0
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=1500",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        }
+      ],
+      "B": [
+        1.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "C": [
+        1.0,
+        0.0,
+        1.0,
+        1.0
+      ],
+      "advantage_B": [
+        0.4999000132083893,
+        -1.4997000694274902,
+        0.4999000132083893,
+        0.4999000132083893
+      ],
+      "advantage_C": [
+        0.4999000132083893,
+        -1.4997000694274902,
+        0.4999000132083893,
+        0.4999000132083893
+      ],
+      "c_changes_advantage": false,
+      "calls_after_confirmed_submit": false,
+      "n_invalid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "episode_id": "t1",
+      "seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "rows": [
+        {
+          "rollout_id": "t1-g100",
+          "episode_id": "t1",
+          "generation_seed": 100,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t1-g101",
+          "episode_id": "t1",
+          "generation_seed": 101,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t1-g102",
+          "episode_id": "t1",
+          "generation_seed": 102,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t1-g103",
+          "episode_id": "t1",
+          "generation_seed": 103,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=2200",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        }
+      ],
+      "B": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "C": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "advantage_B": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "advantage_C": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "c_changes_advantage": false,
+      "calls_after_confirmed_submit": false,
+      "n_invalid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "episode_id": "t2",
+      "seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "rows": [
+        {
+          "rollout_id": "t2-g100",
+          "episode_id": "t2",
+          "generation_seed": 100,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=875",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t2-g101",
+          "episode_id": "t2",
+          "generation_seed": 101,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=875",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t2-g102",
+          "episode_id": "t2",
+          "generation_seed": 102,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=875",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t2-g103",
+          "episode_id": "t2",
+          "generation_seed": 103,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=875",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        }
+      ],
+      "B": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "C": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "advantage_B": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "advantage_C": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "c_changes_advantage": false,
+      "calls_after_confirmed_submit": false,
+      "n_invalid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    },
+    {
+      "episode_id": "t3",
+      "seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "rows": [
+        {
+          "rollout_id": "t3-g100",
+          "episode_id": "t3",
+          "generation_seed": 100,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=3100",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t3-g101",
+          "episode_id": "t3",
+          "generation_seed": 101,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=3100",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t3-g102",
+          "episode_id": "t3",
+          "generation_seed": 102,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=3100",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        },
+        {
+          "rollout_id": "t3-g103",
+          "episode_id": "t3",
+          "generation_seed": 103,
+          "source": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-6/missing_train/model_episodes.jsonl",
+          "task_success_harness": true,
+          "task_success_answer": true,
+          "task_success": true,
+          "n_invalid": 0,
+          "n_invalid_components": {
+            "malformed_syntax": 0,
+            "omitted_by_native_parser": 0,
+            "schema_invalid": 0,
+            "unknown_tool": 0,
+            "missing_name": 0,
+            "truncated_fragment": 0,
+            "generation_truncated": 0,
+            "N_invalid_provisional": 0,
+            "C_status": "preliminary"
+          },
+          "final_answer": "REFUND_SUBMITTED amount_cents=3100",
+          "final_answer_is_tool_call": false,
+          "function_entries": [
+            "lookup_order",
+            "get_customer",
+            "calculate_refund",
+            "submit_refund"
+          ],
+          "entries_after_submit": [],
+          "calls_after_confirmed_submit": [],
+          "submit_confirmed": true,
+          "parsed_calls": 4,
+          "error_type": "none",
+          "B": 1.0,
+          "C": 1.0
+        }
+      ],
+      "B": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "C": [
+        1.0,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "advantage_B": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "advantage_C": [
+        0.0,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "c_changes_advantage": false,
+      "calls_after_confirmed_submit": false,
+      "n_invalid": [
+        0,
+        0,
+        0,
+        0
+      ]
+    }
+  ],
+  "any_calls_after_confirmed_submit": false,
+  "groups_where_c_changes_advantage": []
+}
