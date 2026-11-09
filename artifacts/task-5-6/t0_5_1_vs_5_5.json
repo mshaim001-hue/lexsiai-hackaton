@@ -1,0 +1,74 @@
+{
+  "kind": "t0_trace_comparison_5_1_vs_5_5",
+  "optimizer_steps": 0,
+  "regenerated": false,
+  "held_out_ran": false,
+  "generation_settings": {
+    "shared": {
+      "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "context_length": 4096,
+      "generation_seeds": [100, 101, 102, 103],
+      "environment_seed": 0,
+      "prompt_protocol": "one_action_per_turn",
+      "lora_dropout": 0.05,
+      "attention_dropout": 0.0
+    },
+    "task_5_1": {
+      "path": "score_group_via_trainer after model.eval()",
+      "model_mode": "eval",
+      "trainer_train_called": false,
+      "gradient_checkpointing_override": null
+    },
+    "task_5_5": {
+      "path": "GRPOTrainer.train live rollout",
+      "model_mode": "train",
+      "trainer_train_called": true,
+      "gradient_checkpointing": false,
+      "note": "LoRA dropout runs inside generate before the zero B matrix and advances the sampler RNG."
+    }
+  },
+  "token_hashes_sha256_prefix_and_new": {
+    "t0-g100": "ac9e61ae7e401cb8f9564316385c6a69cba0545ecc2a0c70846abe4a7a1e5776",
+    "t0-g101": "1cf51e23da601574372653b28a31ecd6f663cf0e1941c2a87642add9ca638395",
+    "t0-g102": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+    "t0-g103": "8154052e5d326b73da7f4b9f9881dc2406df6f8236b59275d809de6a7e334904",
+    "t0_g102_equals_t0_g103": true
+  },
+  "metrics": {
+    "task_5_1": [
+      {"seed": 100, "refund_confirmed": true, "final_answer_correct": true, "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500", "failure": "none"},
+      {"seed": 101, "refund_confirmed": true, "final_answer_correct": false, "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]", "failure": "final_answer_tool_call_after_submit"},
+      {"seed": 102, "refund_confirmed": true, "final_answer_correct": true, "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500", "failure": "none"},
+      {"seed": 103, "refund_confirmed": true, "final_answer_correct": true, "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500", "failure": "none"}
+    ],
+    "task_5_5": [
+      {"seed": 100, "refund_confirmed": true, "final_answer_correct": true, "raw_final_answer": "REFUND_SUBMITTED amount_cents=1500", "failure": "none"},
+      {"seed": 101, "refund_confirmed": true, "final_answer_correct": false, "raw_final_answer": "Tool result REFUND_SUBMITTED amount_cents=1500", "failure": "final_answer_not_exact"},
+      {"seed": 102, "refund_confirmed": true, "final_answer_correct": false, "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]", "failure": "final_answer_tool_call_after_submit"},
+      {"seed": 103, "refund_confirmed": true, "final_answer_correct": false, "raw_final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-2001\"}}]", "failure": "final_answer_tool_call_after_submit"}
+    ]
+  },
+  "new_penalty_on_tool_call_final_answer": {
+    "definition": "After a confirmed submit, a final answer that is a tool call counts as one N_invalid. C = I(task_success) - 0.5 * N_invalid.",
+    "group_where_relative_advantage_changes": "task_5_5 t0 seeds 100-103",
+    "task_5_5": {
+      "B": [1.0, 0.0, 0.0, 0.0],
+      "C": [1.0, 0.0, -0.5, -0.5],
+      "centered_proportional": false,
+      "advantage_B": [1.4997000694274902, -0.4999000132083893, -0.4999000132083893, -0.4999000132083893],
+      "advantage_C": [1.4140136241912842, 0.0, -0.7070068120956421, -0.7070068120956421]
+    },
+    "task_5_1_magnitude_only": {
+      "B": [1.0, 0.0, 1.0, 1.0],
+      "C": [1.0, -0.5, 1.0, 1.0],
+      "centered_proportional": true,
+      "centered_scale": 1.5,
+      "advantage_B": [0.4999000132083893, -1.4997000694274902, 0.4999000132083893, 0.4999000132083893],
+      "advantage_C": [0.4999333322048187, -1.4997999668121338, 0.4999333322048187, 0.4999333322048187]
+    }
+  }
+}
