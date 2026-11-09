@@ -1,0 +1,35 @@
+{
+  "kind": "b_only_interim_report",
+  "interrupted": true,
+  "exit_code": 143,
+  "optimizer_steps_completed": 1,
+  "optimizer_steps_budget": 4,
+  "interrupted_during": "optimizer step 2, live rollout t0-g100, before that trajectory finished",
+  "adapter_saved": false,
+  "held_out_ran": false,
+  "checkpoint_chosen": false,
+  "step_1": {
+    "task": "t0",
+    "generation_seeds": [100, 101, 102, 103],
+    "rollout_mode": "eval",
+    "use_cache": true,
+    "rewards_in_seed_order": {"t0-g100": 1.0, "t0-g101": 0.0, "t0-g102": 1.0, "t0-g103": 1.0},
+    "advantages_in_seed_order": {
+      "t0-g100": 0.4999000132083893,
+      "t0-g101": -1.4997000694274902,
+      "t0-g102": 0.4999000132083893,
+      "t0-g103": 0.4999000132083893
+    },
+    "new_token_lengths": {
+      "t0-g100": [25, 27, 52, 65, 14],
+      "t0-g101": [25, 27, 52, 77, 25],
+      "t0-g102": [25, 27, 52, 65, 14],
+      "t0-g103": [25, 27, 52, 65, 14]
+    },
+    "scored_tokens": 755,
+    "loss": 0.045686230063438416,
+    "lora_grad_norm": 0.03955341503024101,
+    "lora_parameters_changed": true,
+    "elapsed_s": 3333
+  }
+}
