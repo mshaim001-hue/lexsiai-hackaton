@@ -1,0 +1,90 @@
+{
+  "method": "SFT",
+  "optimizer_steps": 16,
+  "max_optimizer_steps": 16,
+  "learning_rate": 0.0002,
+  "history": [
+    {
+      "step": 1,
+      "loss": 0.03476132079958916,
+      "n_supervised": 12
+    },
+    {
+      "step": 2,
+      "loss": 0.020208127796649933,
+      "n_supervised": 12
+    },
+    {
+      "step": 3,
+      "loss": 0.016324715688824654,
+      "n_supervised": 12
+    },
+    {
+      "step": 4,
+      "loss": 0.010877625085413456,
+      "n_supervised": 12
+    },
+    {
+      "step": 5,
+      "loss": 0.008451414294540882,
+      "n_supervised": 12
+    },
+    {
+      "step": 6,
+      "loss": 0.004392548929899931,
+      "n_supervised": 12
+    },
+    {
+      "step": 7,
+      "loss": 0.006294125225394964,
+      "n_supervised": 12
+    },
+    {
+      "step": 8,
+      "loss": 0.005105555057525635,
+      "n_supervised": 12
+    },
+    {
+      "step": 9,
+      "loss": 0.011016798205673695,
+      "n_supervised": 12
+    },
+    {
+      "step": 10,
+      "loss": 0.0038154192734509706,
+      "n_supervised": 12
+    },
+    {
+      "step": 11,
+      "loss": 0.0070145693607628345,
+      "n_supervised": 12
+    },
+    {
+      "step": 12,
+      "loss": 0.01605607569217682,
+      "n_supervised": 12
+    },
+    {
+      "step": 13,
+      "loss": 0.04472498595714569,
+      "n_supervised": 12
+    },
+    {
+      "step": 14,
+      "loss": 0.12860238552093506,
+      "n_supervised": 12
+    },
+    {
+      "step": 15,
+      "loss": 0.7046340107917786,
+      "n_supervised": 12
+    },
+    {
+      "step": 16,
+      "loss": 1.2539891004562378,
+      "n_supervised": 12
+    }
+  ],
+  "adapter": "artifacts/task-5-11/adapter_SFT",
+  "n_train_chains": 16
+}

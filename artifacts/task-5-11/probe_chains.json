@@ -1,0 +1,781 @@
+{
+  "method": "SFT",
+  "chains": [
+    {
+      "episode_id": "p0",
+      "order_id": "ORD-7101",
+      "customer_id": "CUS-B01",
+      "amount_cents": 1310,
+      "prompt": "Refund ORD-7101 please. Customer CUS-B01. The stand does not fit the monitor model sold.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Refund ORD-7101 please. Customer CUS-B01. The stand does not fit the monitor model sold."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7101\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7101\"}"
+              },
+              "id": "f902fef5b"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7101'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_b55c2af649764ff7'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B01\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B01\"}"
+              },
+              "id": "083e6d31f"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B01'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_31696c5cf90ba6b0'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b55c2af649764ff7\", \"customer_validation_token\": \"customer_31696c5cf90ba6b0\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_b55c2af649764ff7\", \"customer_validation_token\": \"customer_31696c5cf90ba6b0\"}"
+              },
+              "id": "d405b2253"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_b55c2af649764ff7', 'customer_validation_token': 'customer_31696c5cf90ba6b0'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_3400884f859e737e', 'amount_cents': 1310}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_3400884f859e737e\", \"order_id\": \"ORD-7101\", \"customer_id\": \"CUS-B01\", \"amount_cents\": 1310}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_3400884f859e737e\", \"order_id\": \"ORD-7101\", \"customer_id\": \"CUS-B01\", \"amount_cents\": 1310}"
+              },
+              "id": "7f820ae06"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_3400884f859e737e', 'order_id': 'ORD-7101', 'customer_id': 'CUS-B01', 'amount_cents': 1310}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=1310",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p1",
+      "order_id": "ORD-7102",
+      "customer_id": "CUS-B02",
+      "amount_cents": 2420,
+      "prompt": "CUS-B02 — money back for ORD-7102. Package soaked in transit; contents ruined.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "CUS-B02 — money back for ORD-7102. Package soaked in transit; contents ruined."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7102\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7102\"}"
+              },
+              "id": "943c48946"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7102'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_c0067aaf4f5fb943'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B02\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B02\"}"
+              },
+              "id": "9f6a2ceb6"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B02'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_53d8841761ac4f7e'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_c0067aaf4f5fb943\", \"customer_validation_token\": \"customer_53d8841761ac4f7e\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_c0067aaf4f5fb943\", \"customer_validation_token\": \"customer_53d8841761ac4f7e\"}"
+              },
+              "id": "f875e34f3"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_c0067aaf4f5fb943', 'customer_validation_token': 'customer_53d8841761ac4f7e'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_78c1449c245f0d0a', 'amount_cents': 2420}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_78c1449c245f0d0a\", \"order_id\": \"ORD-7102\", \"customer_id\": \"CUS-B02\", \"amount_cents\": 2420}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_78c1449c245f0d0a\", \"order_id\": \"ORD-7102\", \"customer_id\": \"CUS-B02\", \"amount_cents\": 2420}"
+              },
+              "id": "323020c5e"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_78c1449c245f0d0a', 'order_id': 'ORD-7102', 'customer_id': 'CUS-B02', 'amount_cents': 2420}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=2420",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p2",
+      "order_id": "ORD-7103",
+      "customer_id": "CUS-B03",
+      "amount_cents": 3530,
+      "prompt": "Handle refund on ORD-7103 (CUS-B03). Preorder slipped three months past the ETA.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Handle refund on ORD-7103 (CUS-B03). Preorder slipped three months past the ETA."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7103\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7103\"}"
+              },
+              "id": "2c1aa3e8e"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7103'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_1e9bdf3a1bac54c3'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B03\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B03\"}"
+              },
+              "id": "74a4f1124"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B03'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_8295ef4408ff3759'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_1e9bdf3a1bac54c3\", \"customer_validation_token\": \"customer_8295ef4408ff3759\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_1e9bdf3a1bac54c3\", \"customer_validation_token\": \"customer_8295ef4408ff3759\"}"
+              },
+              "id": "994af312e"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_1e9bdf3a1bac54c3', 'customer_validation_token': 'customer_8295ef4408ff3759'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_6cefcf481c63afd4', 'amount_cents': 3530}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_6cefcf481c63afd4\", \"order_id\": \"ORD-7103\", \"customer_id\": \"CUS-B03\", \"amount_cents\": 3530}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_6cefcf481c63afd4\", \"order_id\": \"ORD-7103\", \"customer_id\": \"CUS-B03\", \"amount_cents\": 3530}"
+              },
+              "id": "8a76ddc57"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_6cefcf481c63afd4', 'order_id': 'ORD-7103', 'customer_id': 'CUS-B03', 'amount_cents': 3530}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=3530",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p3",
+      "order_id": "ORD-7104",
+      "customer_id": "CUS-B04",
+      "amount_cents": 1640,
+      "prompt": "Customer CUS-B04 wants ORD-7104 refunded. Lens haze out of the sealed box.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Customer CUS-B04 wants ORD-7104 refunded. Lens haze out of the sealed box."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7104\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7104\"}"
+              },
+              "id": "d2f2adc73"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7104'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_6c2f1caad114aec9'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B04\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B04\"}"
+              },
+              "id": "7a769b00c"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B04'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_3133d4000a2ae71a'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_6c2f1caad114aec9\", \"customer_validation_token\": \"customer_3133d4000a2ae71a\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_6c2f1caad114aec9\", \"customer_validation_token\": \"customer_3133d4000a2ae71a\"}"
+              },
+              "id": "dac27a7ae"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_6c2f1caad114aec9', 'customer_validation_token': 'customer_3133d4000a2ae71a'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_947999f1dd946e33', 'amount_cents': 1640}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_947999f1dd946e33\", \"order_id\": \"ORD-7104\", \"customer_id\": \"CUS-B04\", \"amount_cents\": 1640}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_947999f1dd946e33\", \"order_id\": \"ORD-7104\", \"customer_id\": \"CUS-B04\", \"amount_cents\": 1640}"
+              },
+              "id": "3b32c8bf5"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_947999f1dd946e33', 'order_id': 'ORD-7104', 'customer_id': 'CUS-B04', 'amount_cents': 1640}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=1640",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p4",
+      "order_id": "ORD-7105",
+      "customer_id": "CUS-B05",
+      "amount_cents": 2750,
+      "prompt": "Please refund order ORD-7105 for CUS-B05. Duplicate SKU billed after cart glitch.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Please refund order ORD-7105 for CUS-B05. Duplicate SKU billed after cart glitch."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7105\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7105\"}"
+              },
+              "id": "3bcacd704"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7105'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_c2437c5384c58144'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B05\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B05\"}"
+              },
+              "id": "c992c14d1"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B05'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_723554be17eecfa8'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_c2437c5384c58144\", \"customer_validation_token\": \"customer_723554be17eecfa8\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_c2437c5384c58144\", \"customer_validation_token\": \"customer_723554be17eecfa8\"}"
+              },
+              "id": "0478d49ee"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_c2437c5384c58144', 'customer_validation_token': 'customer_723554be17eecfa8'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_81d77b0e4bb06ab5', 'amount_cents': 2750}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_81d77b0e4bb06ab5\", \"order_id\": \"ORD-7105\", \"customer_id\": \"CUS-B05\", \"amount_cents\": 2750}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_81d77b0e4bb06ab5\", \"order_id\": \"ORD-7105\", \"customer_id\": \"CUS-B05\", \"amount_cents\": 2750}"
+              },
+              "id": "db296189a"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_81d77b0e4bb06ab5', 'order_id': 'ORD-7105', 'customer_id': 'CUS-B05', 'amount_cents': 2750}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=2750",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p5",
+      "order_id": "ORD-7106",
+      "customer_id": "CUS-B06",
+      "amount_cents": 1860,
+      "prompt": "Account CUS-B06: return funds for ORD-7106. Assembly instructions missing half the steps.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Account CUS-B06: return funds for ORD-7106. Assembly instructions missing half the steps."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7106\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7106\"}"
+              },
+              "id": "05edd97bb"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7106'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_6a09c39c4eac0436'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B06\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B06\"}"
+              },
+              "id": "9aa628f24"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B06'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_339757f45348c70b'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_6a09c39c4eac0436\", \"customer_validation_token\": \"customer_339757f45348c70b\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_6a09c39c4eac0436\", \"customer_validation_token\": \"customer_339757f45348c70b\"}"
+              },
+              "id": "320eb5e46"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_6a09c39c4eac0436', 'customer_validation_token': 'customer_339757f45348c70b'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_e34ba7f6ee71f330', 'amount_cents': 1860}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_e34ba7f6ee71f330\", \"order_id\": \"ORD-7106\", \"customer_id\": \"CUS-B06\", \"amount_cents\": 1860}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_e34ba7f6ee71f330\", \"order_id\": \"ORD-7106\", \"customer_id\": \"CUS-B06\", \"amount_cents\": 1860}"
+              },
+              "id": "5bf25af36"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_e34ba7f6ee71f330', 'order_id': 'ORD-7106', 'customer_id': 'CUS-B06', 'amount_cents': 1860}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=1860",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p6",
+      "order_id": "ORD-7107",
+      "customer_id": "CUS-B07",
+      "amount_cents": 2970,
+      "prompt": "Hi support, ORD-7107 / CUS-B07. The scent candle arrived melted into a brick.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Hi support, ORD-7107 / CUS-B07. The scent candle arrived melted into a brick."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7107\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7107\"}"
+              },
+              "id": "62a09ae55"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7107'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_d5a2822495622240'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B07\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B07\"}"
+              },
+              "id": "3bcd467e1"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B07'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_9136283c255711c4'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_d5a2822495622240\", \"customer_validation_token\": \"customer_9136283c255711c4\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_d5a2822495622240\", \"customer_validation_token\": \"customer_9136283c255711c4\"}"
+              },
+              "id": "a0a690f03"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_d5a2822495622240', 'customer_validation_token': 'customer_9136283c255711c4'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_ec9b2ada2ef39ba8', 'amount_cents': 2970}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_ec9b2ada2ef39ba8\", \"order_id\": \"ORD-7107\", \"customer_id\": \"CUS-B07\", \"amount_cents\": 2970}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_ec9b2ada2ef39ba8\", \"order_id\": \"ORD-7107\", \"customer_id\": \"CUS-B07\", \"amount_cents\": 2970}"
+              },
+              "id": "3b766deec"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_ec9b2ada2ef39ba8', 'order_id': 'ORD-7107', 'customer_id': 'CUS-B07', 'amount_cents': 2970}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=2970",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    },
+    {
+      "episode_id": "p7",
+      "order_id": "ORD-7108",
+      "customer_id": "CUS-B08",
+      "amount_cents": 1080,
+      "prompt": "Refund ORD-7108, customer CUS-B08. Warranty void sticker was already scratched.",
+      "prefix_messages": [
+        {
+          "role": "system",
+          "content": "You are a refund agent. Use the tools. Do not invent tokens or amounts. The refund amount is unknown until a tool returns it. If you need a tool, emit exactly one JSON list with exactly one call and end the turn. The next call comes only after the observation for the previous call. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only REFUND_SUBMITTED amount_cents=<integer>.\n\nYou can call these tools:\n[\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"lookup_order\",\n      \"description\": \"Return this episode's order context token for an existing order.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"order_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The order context token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"get_customer\",\n      \"description\": \"Return this episode's customer validation token.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier to look up.\"\n          }\n        },\n        \"required\": [\n          \"customer_id\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The customer validation token for this episode.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"calculate_refund\",\n      \"description\": \"Calculate a refund from both tokens issued for this episode.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"order_context_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by lookup_order for this episode.\"\n          },\n          \"customer_validation_token\": {\n            \"type\": \"string\",\n            \"description\": \"Token returned by get_customer for this episode.\"\n          }\n        },\n        \"required\": [\n          \"order_context_token\",\n          \"customer_validation_token\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"The quote token and the refund amount in cents.\"\n      }\n    }\n  },\n  {\n    \"type\": \"function\",\n    \"function\": {\n      \"name\": \"submit_refund\",\n      \"description\": \"Submit a refund when the quote, identifiers, and amount match.\",\n      \"parameters\": {\n        \"type\": \"object\",\n        \"properties\": {\n          \"quote_token\": {\n            \"type\": \"string\",\n            \"description\": \"Quote token returned by calculate_refund.\"\n          },\n          \"order_id\": {\n            \"type\": \"string\",\n            \"description\": \"Order identifier for this refund.\"\n          },\n          \"customer_id\": {\n            \"type\": \"string\",\n            \"description\": \"Customer identifier for this refund.\"\n          },\n          \"amount_cents\": {\n            \"type\": \"integer\",\n            \"description\": \"Refund amount in cents.\"\n          }\n        },\n        \"required\": [\n          \"quote_token\",\n          \"order_id\",\n          \"customer_id\",\n          \"amount_cents\"\n        ],\n        \"additionalProperties\": false\n      },\n      \"return\": {\n        \"type\": \"string\",\n        \"description\": \"Whether the refund was submitted.\"\n      }\n    }\n  }\n]\n\nIf you need a tool, reply with exactly one JSON list that contains exactly one call object, and no other text: [{\"tool_name\": \"<name>\", \"parameters\": {\"<argument>\": <value>}}]. Then end the turn. A user turn that starts with \"Tool result\" is an observation, not a new message from the user. Put the next tool call only after you have received that observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "user",
+          "content": "Refund ORD-7108, customer CUS-B08. Warranty void sticker was already scratched."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-7108\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "lookup_order",
+                "arguments": "{\"order_id\": \"ORD-7108\"}"
+              },
+              "id": "bdce763d8"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for lookup_order: {'path': 'validation_then_execution', 'tool': 'lookup_order', 'validation': 'valid', 'arguments': {'order_id': 'ORD-7108'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'lookup_order', 'execution': 'success', 'order_or_token': False, 'order_context_token': 'order_7c7ada0a98ad6d26'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-B08\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "get_customer",
+                "arguments": "{\"customer_id\": \"CUS-B08\"}"
+              },
+              "id": "0a0d82ff7"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for get_customer: {'path': 'validation_then_execution', 'tool': 'get_customer', 'validation': 'valid', 'arguments': {'customer_id': 'CUS-B08'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'get_customer', 'execution': 'success', 'order_or_token': False, 'customer_validation_token': 'customer_2abf8dfb816cdaf7'}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_7c7ada0a98ad6d26\", \"customer_validation_token\": \"customer_2abf8dfb816cdaf7\"}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "calculate_refund",
+                "arguments": "{\"order_context_token\": \"order_7c7ada0a98ad6d26\", \"customer_validation_token\": \"customer_2abf8dfb816cdaf7\"}"
+              },
+              "id": "089bf20f0"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for calculate_refund: {'path': 'validation_then_execution', 'tool': 'calculate_refund', 'validation': 'valid', 'arguments': {'order_context_token': 'order_7c7ada0a98ad6d26', 'customer_validation_token': 'customer_2abf8dfb816cdaf7'}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'calculate_refund', 'execution': 'success', 'order_or_token': False, 'quote_token': 'quote_515209ce0933ed20', 'amount_cents': 1080}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        },
+        {
+          "role": "assistant",
+          "content": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_515209ce0933ed20\", \"order_id\": \"ORD-7108\", \"customer_id\": \"CUS-B08\", \"amount_cents\": 1080}}]",
+          "tool_calls": [
+            {
+              "type": "function",
+              "function": {
+                "name": "submit_refund",
+                "arguments": "{\"quote_token\": \"quote_515209ce0933ed20\", \"order_id\": \"ORD-7108\", \"customer_id\": \"CUS-B08\", \"amount_cents\": 1080}"
+              },
+              "id": "fc0266f27"
+            }
+          ]
+        },
+        {
+          "role": "user",
+          "content": "Tool result for submit_refund: {'path': 'validation_then_execution', 'tool': 'submit_refund', 'validation': 'valid', 'arguments': {'quote_token': 'quote_515209ce0933ed20', 'order_id': 'ORD-7108', 'customer_id': 'CUS-B08', 'amount_cents': 1080}, 'problems': [], 'execution': 'success', 'order_or_token': False, 'function_entered': True, 'structured_result': {'ok': True, 'tool': 'submit_refund', 'execution': 'success', 'order_or_token': False, 'submitted': True}}\nThis is an observation. If another tool is needed, reply with exactly one JSON list that contains exactly one call object, and no other text, then end the turn. Put that next call only after this observation. Never put more than one tool call in the same response. Take arguments of a dependent call only from observations you have already received. After submit_refund is confirmed, reply with only the final answer line REFUND_SUBMITTED amount_cents=<integer> and no tool call."
+        }
+      ],
+      "target_final": "REFUND_SUBMITTED amount_cents=1080",
+      "harness_submitted": true,
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ]
+    }
+  ]
+}

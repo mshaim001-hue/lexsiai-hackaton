@@ -1,0 +1,13 @@
+{
+  "episode_id": "s0",
+  "n_prefix": 2499,
+  "n_target": 12,
+  "n_unmasked_labels": 12,
+  "prefix_fully_masked": true,
+  "target_fully_supervised": true,
+  "unmasked_equals_target_len": true,
+  "target_text": "REFUND_SUBMITTED amount_cents=1110",
+  "model_loss": 0.02817457914352417,
+  "manual_masked_ce": 0.02817457914352417,
+  "losses_agree": true
+}

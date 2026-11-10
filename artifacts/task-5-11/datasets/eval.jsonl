@@ -1,0 +1,4 @@
+{"episode_id": "e0", "order_id": "ORD-8101", "customer_id": "CUS-C01", "amount_cents": 1710, "split": "eval", "prompt": "I need a refund for order ORD-8101. Customer number CUS-C01. The zipper failed on first use.", "environment_seed": 0}
+{"episode_id": "e1", "order_id": "ORD-8102", "customer_id": "CUS-C02", "amount_cents": 2820, "split": "eval", "prompt": "Please reverse ORD-8102 for CUS-C02. Warehouse sent the floor demo unit by mistake.", "environment_seed": 0}
+{"episode_id": "e2", "order_id": "ORD-8103", "customer_id": "CUS-C03", "amount_cents": 1930, "split": "eval", "prompt": "Customer CUS-C03 here about ORD-8103. Cloud backup tier charged after I cancelled.", "environment_seed": 0}
+{"episode_id": "e3", "order_id": "ORD-8104", "customer_id": "CUS-C04", "amount_cents": 2140, "split": "eval", "prompt": "Refund request: ORD-8104, id CUS-C04. Ceramic coated pan arrived with a hairline crack.", "environment_seed": 0}

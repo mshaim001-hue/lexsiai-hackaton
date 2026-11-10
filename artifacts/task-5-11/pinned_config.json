@@ -1,0 +1,123 @@
+{
+  "kind": "sft_final_answer_pilot",
+  "method": "SFT",
+  "method_note": "Supervised fine-tuning on gold REFUND_SUBMITTED finals from harness submit_refund; not GRPO.",
+  "written_before_training": true,
+  "full_eval_ran": false,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_final.py",
+  "time_limit_s": 7200,
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "lora": {
+    "r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "bias": "none",
+    "task_type": "CAUSAL_LM",
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ]
+  },
+  "training": {
+    "max_optimizer_steps": 16,
+    "learning_rate": 0.0002,
+    "per_device_train_batch_size": 1,
+    "gradient_accumulation_steps": 1,
+    "loss": "causal_lm_on_final_answer_only",
+    "prefix_masked": true
+  },
+  "train": {
+    "n": 16,
+    "episode_ids": [
+      "s0",
+      "s1",
+      "s2",
+      "s3",
+      "s4",
+      "s5",
+      "s6",
+      "s7",
+      "s8",
+      "s9",
+      "s10",
+      "s11",
+      "s12",
+      "s13",
+      "s14",
+      "s15"
+    ],
+    "order_ids": [
+      "ORD-6101",
+      "ORD-6102",
+      "ORD-6103",
+      "ORD-6104",
+      "ORD-6105",
+      "ORD-6106",
+      "ORD-6107",
+      "ORD-6108",
+      "ORD-6109",
+      "ORD-6110",
+      "ORD-6111",
+      "ORD-6112",
+      "ORD-6113",
+      "ORD-6114",
+      "ORD-6115",
+      "ORD-6116"
+    ]
+  },
+  "probe": {
+    "n": 8,
+    "episode_ids": [
+      "p0",
+      "p1",
+      "p2",
+      "p3",
+      "p4",
+      "p5",
+      "p6",
+      "p7"
+    ],
+    "order_ids": [
+      "ORD-7101",
+      "ORD-7102",
+      "ORD-7103",
+      "ORD-7104",
+      "ORD-7105",
+      "ORD-7106",
+      "ORD-7107",
+      "ORD-7108"
+    ],
+    "excluded_from_training": true,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "seed_base": 300
+  },
+  "full_eval": {
+    "tasks": [
+      "e0",
+      "e1",
+      "e2",
+      "e3"
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "settings": "same as task-5-8 one-action (T=0.7, top_p=0.9, max_new_tokens=512)",
+    "excluded_from_training": true,
+    "excludes_v0_v3": true
+  },
+  "gate_to_full_eval": {
+    "min_fixed_finals": 2,
+    "must_not_break_any_correct_base_final": true,
+    "definition": "On the 8 probe prefixes, adapter must turn >=2 base-incorrect finals into correct REFUND_SUBMITTED lines, and must keep every base-correct final correct."
+  },
+  "protocol": "one_action_per_turn",
+  "stop_reason": "probe_failed_skip_full_eval",
+  "optimizer_steps_completed": 16
+}

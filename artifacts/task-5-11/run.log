@@ -1,0 +1,52 @@
+W1110 22:08:46.796000 19696 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.11 method=SFT collecting scripted successful chains
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+collected train=16 probe=8
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:03<15:37,  3.24s/it]Loading weights:  56%|█████▌    | 163/290 [00:03<00:01, 68.58it/s]Loading weights:  89%|████████▊ | 257/290 [00:06<00:00, 45.97it/s]Loading weights: 100%|██████████| 290/290 [00:07<00:00, 37.54it/s]
+loss-mask ok episode=s0 n_target=12 loss=0.028175
+sft step=1/16 loss=0.034761
+sft step=2/16 loss=0.020208
+sft step=3/16 loss=0.016325
+sft step=4/16 loss=0.010878
+sft step=5/16 loss=0.008451
+sft step=6/16 loss=0.004393
+sft step=7/16 loss=0.006294
+sft step=8/16 loss=0.005106
+sft step=9/16 loss=0.011017
+sft step=10/16 loss=0.003815
+sft step=11/16 loss=0.007015
+sft step=12/16 loss=0.016056
+sft step=13/16 loss=0.044725
+sft step=14/16 loss=0.128602
+sft step=15/16 loss=0.704634
+sft step=16/16 loss=1.253989
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<13:28,  2.80s/it]Loading weights:  48%|████▊     | 139/290 [00:02<00:02, 65.15it/s]Loading weights:  64%|██████▍   | 187/290 [00:04<00:02, 49.17it/s]Loading weights:  74%|███████▍  | 215/290 [00:05<00:01, 45.89it/s]Loading weights:  80%|████████  | 233/290 [00:05<00:01, 45.20it/s]Loading weights:  85%|████████▍ | 246/290 [00:06<00:01, 39.02it/s]Loading weights:  88%|████████▊ | 256/290 [00:06<00:00, 38.26it/s]Loading weights:  91%|█████████ | 264/290 [00:06<00:00, 38.01it/s]Loading weights:  93%|█████████▎| 271/290 [00:06<00:00, 36.97it/s]Loading weights:  96%|█████████▌| 277/290 [00:07<00:00, 33.34it/s]Loading weights:  98%|█████████▊| 283/290 [00:07<00:00, 34.49it/s]Loading weights: 100%|██████████| 290/290 [00:07<00:00, 38.88it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:06<33:29,  6.95s/it]Loading weights:  56%|█████▌    | 163/290 [00:07<00:04, 31.51it/s]Loading weights:  68%|██████▊   | 196/290 [00:08<00:03, 31.08it/s]Loading weights:  74%|███████▍  | 215/290 [00:09<00:02, 30.73it/s]Loading weights:  79%|███████▊  | 228/290 [00:09<00:02, 30.40it/s]Loading weights:  82%|████████▏ | 238/290 [00:09<00:01, 31.00it/s]Loading weights:  85%|████████▍ | 246/290 [00:10<00:01, 30.53it/s]Loading weights:  87%|████████▋ | 252/290 [00:10<00:01, 31.81it/s]Loading weights:  89%|████████▉ | 259/290 [00:10<00:00, 31.85it/s]Loading weights:  92%|█████████▏| 267/290 [00:10<00:00, 35.49it/s]Loading weights:  95%|█████████▍| 275/290 [00:10<00:00, 36.66it/s]Loading weights:  98%|█████████▊| 283/290 [00:10<00:00, 36.85it/s]Loading weights: 100%|██████████| 290/290 [00:10<00:00, 26.51it/s]
+probe p0 base_ok=False adapter_ok=False fixed=False broken=False
+probe p1 base_ok=True adapter_ok=False fixed=False broken=True
+probe p2 base_ok=True adapter_ok=False fixed=False broken=True
+probe p3 base_ok=False adapter_ok=False fixed=False broken=False
+probe p4 base_ok=False adapter_ok=False fixed=False broken=False
+probe p5 base_ok=True adapter_ok=False fixed=False broken=True
+probe p6 base_ok=True adapter_ok=False fixed=False broken=True
+probe p7 base_ok=True adapter_ok=False fixed=False broken=True
+probe gate failed fixed=0 broken=5; skip full eval
+{
+  "method": "SFT",
+  "stop_reason": "probe_failed_skip_full_eval",
+  "optimizer_steps": 16,
+  "probe_gate": {
+    "n_fixed": 0,
+    "n_broken": 5,
+    "n_base_correct": 5,
+    "min_fixed_required": 2,
+    "passed": false
+  },
+  "full_eval": null,
+  "elapsed_s": 4872.327051583998
+}
