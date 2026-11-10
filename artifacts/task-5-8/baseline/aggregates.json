@@ -1,0 +1,56 @@
+{
+  "n_rollouts": 16,
+  "full_success": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75,
+    "label": "task_success"
+  },
+  "confirmed_returns": {
+    "numerator": 14,
+    "denominator": 16,
+    "rate": 0.875,
+    "label": "task_success_harness"
+  },
+  "correct_finals": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75,
+    "label": "task_success_answer"
+  },
+  "invalid_calls": {
+    "numerator": 0,
+    "denominator": 64,
+    "rate": 0.0,
+    "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+  },
+  "error_type_counts": {
+    "none": 12,
+    "final_answer_tool_call_after_submit": 2,
+    "submit_refund_not_confirmed": 2
+  },
+  "failure_mode_counts": {
+    "final_answer_tool_call_after_submit": 2,
+    "submit_refund_not_confirmed": 2
+  },
+  "next_pilot_failure_to_check": {
+    "failure_mode": "final_answer_tool_call_after_submit",
+    "count_on_test": 2,
+    "n_failures": 4,
+    "tied_with": {
+      "failure_mode": "submit_refund_not_confirmed",
+      "count_on_test": 2,
+      "example_rollouts": [
+        "v1-g101",
+        "v1-g102"
+      ],
+      "note": "Wrong or incomplete tool order; submit never confirmed. Newly visible without sequence coaching."
+    },
+    "rationale": "On the realistic test, failures split 2/2 between a post-submit tool-call final (v0-g102, v2-g102) and an unconfirmed submit from disordered tools (v1-g101, v1-g102). Prefer final_answer_tool_call_after_submit for the next limited pilot: it matches the Track 3 claim (stop and confirm only after successful submit), already appeared as the sole residual on the coached 5.5 matrix (15/16), and here still occurs even when the four-tool sequence completed. Train on separate paraphrases u0–u3; keep this test fixed.",
+    "example_rollouts": [
+      "v0-g102",
+      "v2-g102"
+    ]
+  },
+  "calls_per_rollout_mean": 4.0
+}

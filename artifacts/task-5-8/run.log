@@ -1,0 +1,125 @@
+pinned split written
+{
+  "train": [
+    "u0",
+    "u1",
+    "u2",
+    "u3"
+  ],
+  "test": [
+    "v0",
+    "v1",
+    "v2",
+    "v3"
+  ],
+  "seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "temperature": 0.7,
+  "top_p": 0.9
+}
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+W1110 10:56:20.588000 68536 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+Fetching 2 files:   0%|          | 0/2 [00:00<?, ?it/s]Fetching 2 files:  50%|█████     | 1/2 [01:50<01:50, 110.48s/it]Fetching 2 files: 100%|██████████| 2/2 [03:21<00:00, 99.28s/it] Fetching 2 files: 100%|██████████| 2/2 [03:21<00:00, 100.96s/it]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:04<23:11,  4.81s/it]Loading weights:  59%|█████▉    | 172/290 [00:04<00:02, 49.20it/s]Loading weights:  88%|████████▊ | 256/290 [00:07<00:00, 42.52it/s]Loading weights: 100%|██████████| 290/290 [00:08<00:00, 35.40it/s]
+realistic_baseline v0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v0-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v0-g102
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v0-g103
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v1-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v1-g102
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v1-g103
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v2-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v2-g102
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v2-g103
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v3-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v3-g102
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+realistic_baseline v3-g103
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+python(77337) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+{
+  "n_rollouts": 16,
+  "full_success": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75,
+    "label": "task_success"
+  },
+  "confirmed_returns": {
+    "numerator": 14,
+    "denominator": 16,
+    "rate": 0.875,
+    "label": "task_success_harness"
+  },
+  "correct_finals": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75,
+    "label": "task_success_answer"
+  },
+  "invalid_calls": {
+    "numerator": 0,
+    "denominator": 64,
+    "rate": 0.0,
+    "definition": "numerator = provisional N_invalid (malformed_syntax + missing_name + unknown_tool + schema_invalid); denominator = parsed call attempts + malformed_syntax fragments"
+  },
+  "error_type_counts": {
+    "none": 12,
+    "final_answer_tool_call_after_submit": 2,
+    "submit_refund_not_confirmed": 2
+  },
+  "failure_mode_counts": {
+    "final_answer_tool_call_after_submit": 2,
+    "submit_refund_not_confirmed": 2
+  },
+  "next_pilot_failure_to_check": {
+    "failure_mode": "final_answer_tool_call_after_submit",
+    "count_on_test": 2,
+    "n_failures": 4,
+    "rationale": "Most frequent non-success mode on the fixed realistic test matrix; use separate train paraphrases (u0–u3) for a limited pilot.",
+    "example_rollouts": [
+      "v0-g102",
+      "v2-g102"
+    ]
+  },
+  "calls_per_rollout_mean": 4.0
+}

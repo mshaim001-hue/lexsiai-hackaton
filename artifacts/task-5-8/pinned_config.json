@@ -1,0 +1,82 @@
+{
+  "kind": "realistic_refund_split_pinned_before_run",
+  "git_head": "9e415d10f3c35f1dbfa8651e68604bca8c0d7355",
+  "train": {
+    "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-8/datasets/train.jsonl",
+    "n": 4,
+    "episode_ids": [
+      "u0",
+      "u1",
+      "u2",
+      "u3"
+    ],
+    "order_ids": [
+      "ORD-4001",
+      "ORD-4002",
+      "ORD-4003",
+      "ORD-4004"
+    ]
+  },
+  "test": {
+    "path": "/Users/Guest/lexsiai-hackaton/artifacts/task-5-8/datasets/test.jsonl",
+    "n": 4,
+    "episode_ids": [
+      "v0",
+      "v1",
+      "v2",
+      "v3"
+    ],
+    "order_ids": [
+      "ORD-5001",
+      "ORD-5002",
+      "ORD-5003",
+      "ORD-5004"
+    ]
+  },
+  "overlap": [],
+  "prior_task5_comparison": "artifacts/task-5-5/summary.json",
+  "generation": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "environment_seed": 0,
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn",
+    "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+    "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+    "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+    "weights_updated": false,
+    "condition": "A_untrained"
+  },
+  "metrics": {
+    "full_success": "task_success = submitted refund AND accepted final answer",
+    "confirmed_returns": "task_success_harness = submit_refund confirmed by harness",
+    "correct_finals": "task_success_answer = final answer is exactly REFUND_SUBMITTED amount_cents=<n>",
+    "invalid_calls": "N_invalid provisional = malformed_syntax + missing_name + unknown_tool + schema_invalid; denominator = parsed call attempts + malformed_syntax fragments"
+  },
+  "matrix": {
+    "test_episodes": [
+      "v0",
+      "v1",
+      "v2",
+      "v3"
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "n_rollouts": 16
+  }
+}
