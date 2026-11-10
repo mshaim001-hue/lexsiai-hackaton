@@ -1,0 +1,60 @@
+{
+  "kind": "realistic_b_only_one_step_pilot",
+  "written_before_training": true,
+  "held_out_ran": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_realistic_pilot.py",
+  "reward": "reward_B_I_task_success",
+  "rollout_mode": "eval during live rollout; restore previous mode before the loss",
+  "lora_dropout": 0.0,
+  "learning_rate": 1e-06,
+  "max_optimizer_steps": 1,
+  "time_limit_s": 10800,
+  "train_order": [
+    "u0",
+    "u1",
+    "u2",
+    "u3"
+  ],
+  "generation_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "eligibility": {
+    "require_full_success": true,
+    "require_error_type": "final_answer_tool_call_after_submit",
+    "require_differing_rewards": true
+  },
+  "stop_if_no_eligible_group": true,
+  "stop_if_time_limit": true,
+  "test_matrix": {
+    "tasks": [
+      "v0",
+      "v1",
+      "v2",
+      "v3"
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "settings": "artifacts/task-5-8/pinned_config.json",
+    "baseline": "artifacts/task-5-8/baseline"
+  },
+  "success_criterion": {
+    "fewer_calls_after_confirmed_submit": true,
+    "more_full_successes": true,
+    "confirmed_returns_at_least_baseline": true,
+    "note": "Observation on the 5.8 test matrix, which already selected the target failure mode; not an independent held-out claim."
+  },
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "max_new_tokens": 512,
+  "protocol": "one_action_per_turn",
+  "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+  "optimizer_steps_completed": 1,
+  "stop_reason": "step_completed"
+}

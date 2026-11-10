@@ -355,6 +355,7 @@ def make_instrumented_rollout_func(
     scripted_raws: dict[int, list[str]] | None = None,
     live_engine_factory: Callable | None = None,
     rollout_eval: bool = False,
+    prompt_text: str | None = None,
 ) -> Callable:
     """rollout_func for GRPOTrainer: one fresh episode state per generation.
 
@@ -363,7 +364,7 @@ def make_instrumented_rollout_func(
     before this function returns, so the loss forward sees the previous mode.
     """
 
-    prompt_text = one_action_user_prompt(order_id, customer_id)
+    prompt_text = prompt_text or one_action_user_prompt(order_id, customer_id)
     gen_kwargs = {
         "max_new_tokens": config.ONE_ACTION_MAX_NEW_TOKENS,
         "temperature": config.ONE_ACTION_TEMPERATURE,

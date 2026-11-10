@@ -1,0 +1,876 @@
+{
+  "kind": "realistic_b_only_one_step_pilot",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_realistic_pilot.py",
+  "git_head": "5f2ebc89377664ce4be1c81e93d6a97f413c4598",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "pilot_config": {
+    "kind": "realistic_b_only_one_step_pilot",
+    "written_before_training": true,
+    "held_out_ran": false,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_realistic_pilot.py",
+    "reward": "reward_B_I_task_success",
+    "rollout_mode": "eval during live rollout; restore previous mode before the loss",
+    "lora_dropout": 0.0,
+    "learning_rate": 1e-06,
+    "max_optimizer_steps": 1,
+    "time_limit_s": 10800,
+    "train_order": [
+      "u0",
+      "u1",
+      "u2",
+      "u3"
+    ],
+    "generation_seeds": [
+      100,
+      101,
+      102,
+      103
+    ],
+    "eligibility": {
+      "require_full_success": true,
+      "require_error_type": "final_answer_tool_call_after_submit",
+      "require_differing_rewards": true
+    },
+    "stop_if_no_eligible_group": true,
+    "stop_if_time_limit": true,
+    "test_matrix": {
+      "tasks": [
+        "v0",
+        "v1",
+        "v2",
+        "v3"
+      ],
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "settings": "artifacts/task-5-8/pinned_config.json",
+      "baseline": "artifacts/task-5-8/baseline"
+    },
+    "success_criterion": {
+      "fewer_calls_after_confirmed_submit": true,
+      "more_full_successes": true,
+      "confirmed_returns_at_least_baseline": true,
+      "note": "Observation on the 5.8 test matrix, which already selected the target failure mode; not an independent held-out claim."
+    },
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "max_new_tokens": 512,
+    "protocol": "one_action_per_turn",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence"
+  },
+  "time_limit_s": 10800,
+  "elapsed_s": 4689.481268874981,
+  "stop_reason": "step_completed",
+  "optimizer_steps": 1,
+  "trained_group": "u1",
+  "group_scan": [
+    {
+      "episode_id": "u0",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "started_monotonic": 157461.113342375,
+      "status": "identical_rewards",
+      "eligible": false,
+      "optimizer_steps": 0,
+      "diagnosis": {
+        "rows": [
+          {
+            "rollout_id": "u0-g100",
+            "task_success": false,
+            "task_success_harness": false,
+            "task_success_answer": false,
+            "n_invalid": 1,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"cus_801\"}}]",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": false,
+            "parsed_calls": 0,
+            "error_type": "invalid:n_invalid",
+            "B": 0.0
+          },
+          {
+            "rollout_id": "u0-g101",
+            "task_success": false,
+            "task_success_harness": false,
+            "task_success_answer": false,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-4001\"}}]\nREFUND_SUBMITTED amount_cents=500",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": false,
+            "parsed_calls": 0,
+            "error_type": "submit_refund_not_confirmed",
+            "B": 0.0
+          },
+          {
+            "rollout_id": "u0-g102",
+            "task_success": false,
+            "task_success_harness": false,
+            "task_success_answer": false,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-4001\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=500",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": false,
+            "parsed_calls": 0,
+            "error_type": "submit_refund_not_confirmed",
+            "B": 0.0
+          },
+          {
+            "rollout_id": "u0-g103",
+            "task_success": false,
+            "task_success_harness": false,
+            "task_success_answer": false,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_49d8136112f66714\", \"order_id\": \"ORD-4001\", \"customer_id\": \"CUS-801\", \"amount_cents\": 1750}}]",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": false,
+            "parsed_calls": 0,
+            "error_type": "submit_refund_not_confirmed",
+            "B": 0.0
+          }
+        ],
+        "rewards": [
+          0.0,
+          0.0,
+          0.0,
+          0.0
+        ],
+        "n_full_success": 0,
+        "n_target_failure": 0,
+        "n_confirmed": 0,
+        "rewards_differ": false,
+        "error_types": [
+          "invalid:n_invalid",
+          "submit_refund_not_confirmed",
+          "submit_refund_not_confirmed",
+          "submit_refund_not_confirmed"
+        ],
+        "eligible": false
+      },
+      "rows": [
+        {
+          "rollout_id": "u0-g103",
+          "reward": 0.0,
+          "advantage": 0.0,
+          "n_turns": 5,
+          "n_scored_tokens": 203,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u0-g101",
+          "reward": 0.0,
+          "advantage": 0.0,
+          "n_turns": 5,
+          "n_scored_tokens": 218,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u0-g100",
+          "reward": 0.0,
+          "advantage": 0.0,
+          "n_turns": 5,
+          "n_scored_tokens": 183,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u0-g102",
+          "reward": 0.0,
+          "advantage": 0.0,
+          "n_turns": 5,
+          "n_scored_tokens": 259,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        }
+      ],
+      "reused_from_disk": true,
+      "elapsed_s_total": 4.287500632926822e-05
+    },
+    {
+      "episode_id": "u1",
+      "generation_seeds": [
+        100,
+        101,
+        102,
+        103
+      ],
+      "started_monotonic": 158163.217527333,
+      "status": "step_completed",
+      "eligible": true,
+      "optimizer_steps": 1,
+      "diagnosis": {
+        "rows": [
+          {
+            "rollout_id": "u1-g100",
+            "task_success": true,
+            "task_success_harness": true,
+            "task_success_answer": true,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "REFUND_SUBMITTED amount_cents=2340",
+            "final_answer_is_tool_call": false,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": true,
+            "parsed_calls": 0,
+            "error_type": "none",
+            "B": 1.0
+          },
+          {
+            "rollout_id": "u1-g101",
+            "task_success": true,
+            "task_success_harness": true,
+            "task_success_answer": true,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "REFUND_SUBMITTED amount_cents=2340",
+            "final_answer_is_tool_call": false,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": true,
+            "parsed_calls": 0,
+            "error_type": "none",
+            "B": 1.0
+          },
+          {
+            "rollout_id": "u1-g102",
+            "task_success": false,
+            "task_success_harness": true,
+            "task_success_answer": false,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-802\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=500",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": true,
+            "parsed_calls": 0,
+            "error_type": "final_answer_tool_call_after_submit",
+            "B": 0.0
+          },
+          {
+            "rollout_id": "u1-g103",
+            "task_success": false,
+            "task_success_harness": true,
+            "task_success_answer": false,
+            "n_invalid": 0,
+            "n_invalid_components": {},
+            "final_answer": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-802\"}}] \nTool result REFUND_SUBMITTED amount_cents=2340",
+            "final_answer_is_tool_call": true,
+            "function_entries": [],
+            "entries_after_submit": [],
+            "calls_after_confirmed_submit": [],
+            "submit_confirmed": true,
+            "parsed_calls": 0,
+            "error_type": "final_answer_tool_call_after_submit",
+            "B": 0.0
+          }
+        ],
+        "rewards": [
+          1.0,
+          1.0,
+          0.0,
+          0.0
+        ],
+        "n_full_success": 2,
+        "n_target_failure": 2,
+        "n_confirmed": 4,
+        "rewards_differ": true,
+        "error_types": [
+          "none",
+          "none",
+          "final_answer_tool_call_after_submit",
+          "final_answer_tool_call_after_submit"
+        ],
+        "eligible": true
+      },
+      "loss": 0.15349610149860382,
+      "lora_grad_norm": 0.07256115227937698,
+      "lora_param_change": {
+        "l2": 0.0012085807975381613,
+        "max_abs": 9.999967005569488e-07,
+        "changed": true
+      },
+      "rewards": [
+        0.0,
+        1.0,
+        1.0,
+        0.0
+      ],
+      "advantages": [
+        -0.8658754229545593,
+        0.8658754229545593,
+        0.8658754229545593,
+        -0.8658754229545593
+      ],
+      "adapter": "artifacts/task-5-9/adapter_B",
+      "rows": [
+        {
+          "rollout_id": "u1-g103",
+          "reward": 0.0,
+          "advantage": -0.8658754229545593,
+          "n_turns": 5,
+          "n_scored_tokens": 254,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u1-g101",
+          "reward": 1.0,
+          "advantage": 0.8658754229545593,
+          "n_turns": 5,
+          "n_scored_tokens": 181,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u1-g100",
+          "reward": 1.0,
+          "advantage": 0.8658754229545593,
+          "n_turns": 5,
+          "n_scored_tokens": 181,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        },
+        {
+          "rollout_id": "u1-g102",
+          "reward": 0.0,
+          "advantage": -0.8658754229545593,
+          "n_turns": 5,
+          "n_scored_tokens": 264,
+          "turn_ids_bound": true,
+          "scored_ids_match_mask": true
+        }
+      ],
+      "elapsed_s_total": 1955.5489209579828
+    }
+  ],
+  "adapter": "artifacts/task-5-9/adapter_B",
+  "baseline_5_8": "artifacts/task-5-8/baseline",
+  "comparison": {
+    "baseline_metrics": {
+      "full_success": {
+        "numerator": 12,
+        "denominator": 16,
+        "rate": 0.75
+      },
+      "confirmed_returns": {
+        "numerator": 14,
+        "denominator": 16,
+        "rate": 0.875
+      },
+      "correct_finals": {
+        "numerator": 12,
+        "denominator": 16,
+        "rate": 0.75
+      },
+      "calls_after_confirmed_submit": {
+        "total_calls": 2,
+        "episodes_with_any": 2,
+        "denominator_episodes": 16,
+        "definition": "executed tool calls after confirmed submit_refund; if none executed but the final answer is a tool call after confirm, count 1"
+      },
+      "target_failure_episodes": {
+        "numerator": 2,
+        "denominator": 16,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "invalid_calls_numerator": 0
+    },
+    "pilot_metrics": {
+      "full_success": {
+        "numerator": 12,
+        "denominator": 16,
+        "rate": 0.75
+      },
+      "confirmed_returns": {
+        "numerator": 14,
+        "denominator": 16,
+        "rate": 0.875
+      },
+      "correct_finals": {
+        "numerator": 12,
+        "denominator": 16,
+        "rate": 0.75
+      },
+      "calls_after_confirmed_submit": {
+        "total_calls": 2,
+        "episodes_with_any": 2,
+        "denominator_episodes": 16,
+        "definition": "executed tool calls after confirmed submit_refund; if none executed but the final answer is a tool call after confirm, count 1"
+      },
+      "target_failure_episodes": {
+        "numerator": 2,
+        "denominator": 16,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "invalid_calls_numerator": 0
+    },
+    "transitions": [
+      {
+        "rollout_id": "v0-g100",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v0-g101",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v0-g102",
+        "baseline": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "error_type": "final_answer_tool_call_after_submit",
+          "n_calls_after_confirmed_submit": 1,
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-5001\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=1520"
+        },
+        "pilot": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "error_type": "final_answer_tool_call_after_submit",
+          "n_calls_after_confirmed_submit": 1,
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-5001\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=1520"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v0-g103",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1520"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v1-g100",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1180"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1180"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v1-g101",
+        "baseline": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "error_type": "submit_refund_not_confirmed",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_6b111251df08899c\", \"order_id\": \"ORD-5002\", \"customer_id\": \"CUS-902\", \"amount_cents\": 1180}}]\nREFUND_SUBMITTED amount_cents=1180"
+        },
+        "pilot": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "error_type": "submit_refund_not_confirmed",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_6b111251df08899c\", \"order_id\": \"ORD-5002\", \"customer_id\": \"CUS-902\", \"amount_cents\": 1180}}]\nREFUND_SUBMITTED amount_cents=1180"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v1-g102",
+        "baseline": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "error_type": "submit_refund_not_confirmed",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_f0365b1ba8011335\", \"customer_validation_token\": \"customer_1cef4c0fee65e3dc\"}}]"
+        },
+        "pilot": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "error_type": "submit_refund_not_confirmed",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_f0365b1ba8011335\", \"customer_validation_token\": \"customer_1cef4c0fee65e3dc\"}}]"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v1-g103",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1180"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1180"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v2-g100",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v2-g101",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v2-g102",
+        "baseline": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "error_type": "final_answer_tool_call_after_submit",
+          "n_calls_after_confirmed_submit": 1,
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-5003\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=2675"
+        },
+        "pilot": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "error_type": "final_answer_tool_call_after_submit",
+          "n_calls_after_confirmed_submit": 1,
+          "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-5003\"}}]\nTool result\nREFUND_SUBMITTED amount_cents=2675"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v2-g103",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=2675"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v3-g100",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v3-g101",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v3-g102",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      },
+      {
+        "rollout_id": "v3-g103",
+        "baseline": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "pilot": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "error_type": "none",
+          "n_calls_after_confirmed_submit": 0,
+          "final_answer": "REFUND_SUBMITTED amount_cents=1430"
+        },
+        "changed": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_calls_after_confirmed_submit": false,
+          "error_type": false
+        }
+      }
+    ],
+    "changed_rollouts": [],
+    "success_criterion": {
+      "fewer_calls_after_confirmed_submit": false,
+      "more_full_successes": false,
+      "confirmed_returns_at_least_baseline": true,
+      "pilot_succeeded": false
+    },
+    "observation_caveat": "Result is an observation on the 5.8 test matrix that already selected the target failure; not an independent held-out claim.",
+    "observation": "One B-only step on eligible train group u1 (2 full successes + 2 final_answer_tool_call_after_submit). On the same 5.8 test matrix used to choose that failure, full success stayed 12/16, confirmed returns 14/16, and the two target-failure pairs (v0-g102, v2-g102) still emitted a tool-call final after confirm. Criterion not met: post-submit tool-call finals did not decrease and full successes did not increase."
+  },
+  "trained": true,
+  "held_out_ran": true,
+  "observation": "One B-only step on eligible train group u1 (2 full successes + 2 final_answer_tool_call_after_submit). On the same 5.8 test matrix used to choose that failure, full success stayed 12/16, confirmed returns 14/16, and the two target-failure pairs (v0-g102, v2-g102) still emitted a tool-call final after confirm. Criterion not met: post-submit tool-call finals did not decrease and full successes did not increase."
+}

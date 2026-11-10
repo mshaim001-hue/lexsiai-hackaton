@@ -1,0 +1,29 @@
+{
+  "full_success": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75
+  },
+  "confirmed_returns": {
+    "numerator": 14,
+    "denominator": 16,
+    "rate": 0.875
+  },
+  "correct_finals": {
+    "numerator": 12,
+    "denominator": 16,
+    "rate": 0.75
+  },
+  "calls_after_confirmed_submit": {
+    "total_calls": 2,
+    "episodes_with_any": 2,
+    "denominator_episodes": 16,
+    "definition": "executed tool calls after confirmed submit_refund; if none executed but the final answer is a tool call after confirm, count 1"
+  },
+  "target_failure_episodes": {
+    "numerator": 2,
+    "denominator": 16,
+    "error_type": "final_answer_tool_call_after_submit"
+  },
+  "invalid_calls_numerator": 0
+}
