@@ -40,11 +40,17 @@ confirmed returns 14/16, and the same two pairs still ended with a
 tool-call final after confirm. The pilot success criterion (fewer
 post-submit calls, more full successes, at least as many confirmed
 returns) was not met. This is an observation on the matrix used to choose
-the failure, not an independent held-out win.
+the failure, not an independent held-out win. The primary reported
+comparison remains 5.8 versus 5.9.
+
+**Follow-up (task 5.10).** One further reward_B step on u1 at learning rate
+1e-5 did not shift mean token log-probability on the post-submit train
+contexts toward the correct final line, so the full 5.8 test was not
+rerun.
 
 **Artifacts.** Public GitHub commands, pinned configs, episode traces, and
-the 5.9 adapter_B are in-repo under artifacts/task-5-{5,8,9}/. Hugging Face
+adapters are in-repo under artifacts/task-5-{5,8,9,10}/. Hugging Face
 collections for the adapter, datasets, and traces remain to be published
 for the submission form.
 
-<!-- Body ≈375 words (under 500). -->
+<!-- Body under 500 words. -->

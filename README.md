@@ -30,6 +30,14 @@ not an independent held-out claim. **No metric gain.**
 Sources: [artifacts/task-5-8/baseline/aggregates.json](artifacts/task-5-8/baseline/aggregates.json),
 [artifacts/task-5-9/comparison.json](artifacts/task-5-9/comparison.json).
 
+**Follow-up 5.10 (not a second main table).** Same u1 group and reward_B, learning
+rate raised to `1e-5`, one optimizer step from the 5.9 LoRA-init recipe. On the
+saved post-submit train contexts, mean token log-probability of the correct
+final versus a repeated tool call did **not** move toward the correct final
+(gap −0.038851 → −0.038865), so the full 5.8 test was **not** run. Details:
+[artifacts/task-5-10/logprob_probe.json](artifacts/task-5-10/logprob_probe.json),
+[artifacts/task-5-10/summary.json](artifacts/task-5-10/summary.json).
+
 ## Separate reference: coached matrix 5.5
 
 Earlier held-out **h0–h3 × 100–103** used prompts that spelled the tool order.
@@ -79,6 +87,10 @@ TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_realistic_b
 # 5.9 — scan u0→u3, at most one reward_B step on first eligible group, eval on 5.8 test
 HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 \
   .venv/bin/python run_grpo_realistic_pilot.py
+
+# 5.10 — u1 at lr=1e-5; full 5.8 eval only if post-submit logprob gap improves
+HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 \
+  .venv/bin/python run_grpo_lr_probe.py
 ```
 
 ### Configs, traces, adapters
@@ -88,6 +100,7 @@ HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 \
 | 5.5 | [commands.txt](artifacts/task-5-5/commands.txt), [summary.json](artifacts/task-5-5/summary.json) | [eval_B](artifacts/task-5-5/eval_B/), [eval_C](artifacts/task-5-5/eval_C/), [train_B.json](artifacts/task-5-5/train_B.json) | [adapter_B](artifacts/task-5-5/adapter_B/), [adapter_C](artifacts/task-5-5/adapter_C/) |
 | 5.8 | [pinned_config.json](artifacts/task-5-8/pinned_config.json), [datasets/](artifacts/task-5-8/datasets/) | [baseline/](artifacts/task-5-8/baseline/) (`traces.json`, `per_pair.json`, `summary.json`) | untrained |
 | 5.9 | [pilot_config.json](artifacts/task-5-9/pilot_config.json) | [group_u1.json](artifacts/task-5-9/group_u1.json), [eval_B/](artifacts/task-5-9/eval_B/), [comparison.json](artifacts/task-5-9/comparison.json) | [adapter_B](artifacts/task-5-9/adapter_B/) |
+| 5.10 | [pilot_config.json](artifacts/task-5-10/pilot_config.json) | [logprob_probe.json](artifacts/task-5-10/logprob_probe.json), [train_u1.json](artifacts/task-5-10/train_u1.json) (no full eval) | [adapter_B](artifacts/task-5-10/adapter_B/) |
 
 Submission draft (annotation + remaining HF/form items):
 [submission/](submission/).
