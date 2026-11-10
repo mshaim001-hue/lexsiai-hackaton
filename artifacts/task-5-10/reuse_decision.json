@@ -1,0 +1,7 @@
+{
+  "reuse_saved_5_9_rollouts": false,
+  "reason": "artifacts/task-5-9/group_u1.json has no turn_input_ids or turn_new_token_ids; those ids are required for exact per-turn GRPO scoring. Regenerate only u1 from the same LoRA-init recipe as 5.9.",
+  "prior_group": "artifacts/task-5-9/group_u1.json",
+  "prior_init_file": null,
+  "prior_init_note": "5.9 did not persist lora_init.pt; 5.10 recreates init with config.SEED (0) before attaching LoRA, matching the 5.9 procedure."
+}

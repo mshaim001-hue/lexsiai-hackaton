@@ -1,0 +1,44 @@
+{
+  "kind": "realistic_b_only_lr_probe",
+  "written_before_training": true,
+  "held_out_ran": false,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_lr_probe.py",
+  "reward": "reward_B_I_task_success",
+  "learning_rate": 1e-05,
+  "learning_rate_5_9": 1e-06,
+  "max_optimizer_steps": 1,
+  "time_limit_s": 7200,
+  "train_task": "u1",
+  "generation_seeds": [
+    100,
+    101,
+    102,
+    103
+  ],
+  "rollout_mode": "eval during live rollout; restore previous mode before the loss",
+  "lora_dropout": 0.0,
+  "reuse_decision": {
+    "reuse_saved_5_9_rollouts": false,
+    "reason": "artifacts/task-5-9/group_u1.json has no turn_input_ids or turn_new_token_ids; those ids are required for exact per-turn GRPO scoring. Regenerate only u1 from the same LoRA-init recipe as 5.9.",
+    "prior_group": "artifacts/task-5-9/group_u1.json",
+    "prior_init_file": null,
+    "prior_init_note": "5.9 did not persist lora_init.pt; 5.10 recreates init with config.SEED (0) before attaching LoRA, matching the 5.9 procedure."
+  },
+  "logprob_probe": {
+    "correct_final": "REFUND_SUBMITTED amount_cents=2340",
+    "repeated_call": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-802\"}}]",
+    "contexts": "last-turn prefixes after submit from the live u1 group",
+    "eval_gate": "run full 5.8 eval only if (mean_logp_correct - mean_logp_repeated) increases"
+  },
+  "success_criterion": {
+    "fewer_calls_after_confirmed_submit": true,
+    "more_full_successes": true,
+    "confirmed_returns_at_least": 14
+  },
+  "temperature": 0.7,
+  "top_p": 0.9,
+  "max_new_tokens": 512,
+  "protocol": "one_action_per_turn",
+  "optimizer_steps_completed": 1,
+  "stop_reason": "step_completed_eval_skipped_gate"
+}

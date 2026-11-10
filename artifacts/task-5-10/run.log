@@ -1,0 +1,67 @@
+W1110 13:28:30.681000 1475 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.10 train u1 lr=1e-05 remaining_s=7200
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<13:21,  2.77s/it]Loading weights:  56%|█████▌    | 163/290 [00:02<00:01, 78.69it/s]Loading weights:  82%|████████▏ | 239/290 [00:04<00:00, 66.32it/s]Loading weights:  98%|█████████▊| 283/290 [00:05<00:00, 52.34it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 50.61it/s]
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+[transformers] The tokenizer has new PAD/BOS/EOS tokens that differ from the model config and generation config. The model config and generation config were aligned accordingly, being updated with the tokenizer's values. Updated tokens: {'eos_token_id': 6}.
+  0%|          | 0/1 [00:00<?, ?it/s]/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/torch/utils/data/dataloader.py:775: UserWarning: 'pin_memory' argument is set as true but not supported on MPS now, device pinned memory won't be used.
+  super().__init__(loader)
+rollout_eval seed=100 training=False use_cache=True
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+rollout u1-g100 turns=5 new_tokens=181
+rollout_eval seed=101 training=False use_cache=True
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+rollout u1-g101 turns=5 new_tokens=181
+rollout_eval seed=102 training=False use_cache=True
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+rollout u1-g102 turns=5 new_tokens=264
+rollout_eval seed=103 training=False use_cache=True
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+rollout u1-g103 turns=5 new_tokens=254
+shuffled group u1-g103 r=0.0 A=-0.8658754229545593, u1-g101 r=1.0 A=0.8658754229545593, u1-g100 r=1.0 A=0.8658754229545593, u1-g102 r=0.0 A=-0.8658754229545593 scored_tokens=880
+turn-loss row 0 turn 0 prefix=1391 new=42
+turn-loss row 0 turn 1 prefix=1663 new=25
+turn-loss row 0 turn 2 prefix=1912 new=67
+turn-loss row 0 turn 3 prefix=2240 new=78
+turn-loss row 0 turn 4 prefix=2569 new=42
+turn-loss row 1 turn 0 prefix=1391 new=25
+turn-loss row 1 turn 1 prefix=1640 new=27
+turn-loss row 1 turn 2 prefix=1897 new=52
+turn-loss row 1 turn 3 prefix=2210 new=63
+turn-loss row 1 turn 4 prefix=2524 new=14
+turn-loss row 2 turn 0 prefix=1391 new=25
+turn-loss row 2 turn 1 prefix=1640 new=27
+turn-loss row 2 turn 2 prefix=1897 new=52
+turn-loss row 2 turn 3 prefix=2210 new=63
+turn-loss row 2 turn 4 prefix=2524 new=14
+turn-loss row 3 turn 0 prefix=1391 new=39
+turn-loss row 3 turn 1 prefix=1654 new=41
+turn-loss row 3 turn 2 prefix=1925 new=66
+turn-loss row 3 turn 3 prefix=2252 new=77
+turn-loss row 3 turn 4 prefix=2580 new=41
+loss before backward=0.15349610149860382
+lora_grad_norm=0.07256115227937698
+100%|██████████| 1/1 [33:58<00:00, 2038.35s/it]                                               {'loss': '0.1535', 'grad_norm': '0.07256', 'learning_rate': '1e-05', 'num_tokens': '6444', 'completions/mean_length': '220', 'completions/min_length': '181', 'completions/max_length': '264', 'completions/clipped_ratio': '1', 'completions/mean_terminated_length': '0', 'completions/min_terminated_length': '0', 'completions/max_terminated_length': '0', 'rewards/reward_B_I_task_success/mean': '0.5', 'rewards/reward_B_I_task_success/std': '0.5774', 'reward': '0.5', 'reward_std': '0.5774', 'frac_reward_zero_std': '0', 'entropy': '0', 'clip_ratio/low_mean': '0', 'clip_ratio/low_min': '0', 'clip_ratio/high_mean': '0', 'clip_ratio/high_max': '0', 'clip_ratio/region_mean': '0', 'step_time': '2037', 'epoch': '1'}
+100%|██████████| 1/1 [33:58<00:00, 2038.35s/it]                                               {'train_runtime': '2038', 'train_samples_per_second': '0.002', 'train_steps_per_second': '0', 'train_loss': '0.1535', 'epoch': '1'}
+100%|██████████| 1/1 [33:58<00:00, 2038.35s/it]100%|██████████| 1/1 [33:58<00:00, 2038.40s/it]
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+saved adapter /Users/Guest/lexsiai-hackaton/artifacts/task-5-10/adapter_B
+logprob gap before=-0.038851 after=-0.038865 delta=-0.000014 gate=False
+eval gate failed gap -0.038851 -> -0.038865; skip full eval
+{
+  "stop_reason": "step_completed_eval_skipped_gate",
+  "optimizer_steps": 1,
+  "eval_gate": {
+    "gap_before": -0.03885129513218999,
+    "gap_after": -0.03886536438949406,
+    "gap_delta": -1.406925730407238e-05,
+    "moved_toward_correct_final": false
+  },
+  "success_criterion": null,
+  "elapsed_s": 2502.216861999972
+}
