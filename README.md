@@ -1,56 +1,105 @@
-# Lexsi hackathon — refund contract
+# Lexsi Hackathon — Track 3 Reliable tool calling
 
-Pinned AgentTune revision: `d4db4c12d52342227c4113a70183d0f64aa2f345`.
+Refund agent on **CohereLabs/tiny-aya-global**
+(`af89d219b53ed9b13b8a4645f9c8028973510324`) with AgentTune
+`d4db4c12d52342227c4113a70183d0f64aa2f345` and a local top_p generate patch.
+The agent must look up order and customer, calculate a refund, submit it, then
+stop with exactly `REFUND_SUBMITTED amount_cents=<integer>`.
 
-## Apply the top_p forward patch
+Public repo: [mshaim001-hue/lexsiai-hackaton](https://github.com/mshaim001-hue/lexsiai-hackaton).
 
-AgentTune’s transformers engine does not pass `top_p` into `model.generate`. The
-project patch for the pinned revision is
-`patches/agenttune-d4db4c1-top_p.patch`.
+## Main result (realistic matrix 5.8 → pilot 5.9)
 
-From a clean checkout of that AgentTune commit:
+Fixed test: paraphrased refund requests **v0–v3 × seeds 100–103** (16 pairs),
+**without** tool-sequence coaching. Generation: `T=0.7`, `top_p=0.9`,
+`max_new_tokens=512`, one action per turn. The same matrix was used to choose
+the target failure `final_answer_tool_call_after_submit`; the one-step B-only
+pilot on train paraphrases **u0–u3** is therefore an observation on that matrix,
+not an independent held-out claim. **No metric gain.**
+
+| Metric | 5.8 baseline (untrained) | 5.9 after 1× reward_B on u1 |
+| --- | --- | --- |
+| Full success | **12/16** | **12/16** |
+| Confirmed returns | **14/16** | **14/16** |
+| Correct finals | **12/16** | **12/16** |
+| Calls after confirmed submit | **2** | **2** |
+| Target-failure episodes | **2** (`v0-g102`, `v2-g102`) | **2** (same pairs) |
+| Invalid calls | **0/64** | **0** (numerator) |
+| Pilot criterion met | — | **no** |
+
+Sources: [artifacts/task-5-8/baseline/aggregates.json](artifacts/task-5-8/baseline/aggregates.json),
+[artifacts/task-5-9/comparison.json](artifacts/task-5-9/comparison.json).
+
+## Separate reference: coached matrix 5.5
+
+Earlier held-out **h0–h3 × 100–103** used prompts that spelled the tool order.
+Do **not** mix with the 5.8/5.9 table.
+
+| Condition | Full success | Invalid calls | Mean calls |
+| --- | --- | --- | --- |
+| A untrained | 15/16 | 0/64 | 4.0 |
+| B one GRPO step | 15/16 | 0/64 | 4.0 |
+| C one GRPO step | 15/16 | 0/64 | 4.0 |
+
+Residual on that matrix: `h0-g103` — submit confirmed, then another
+`lookup_order` instead of the final line. B and C adapters matched byte-for-byte
+after one step (invalid-call penalty unused in the train group).
+Source: [artifacts/task-5-5/summary.json](artifacts/task-5-5/summary.json).
+
+## Environment
 
 ```bash
-git clone https://github.com/Lexsi-Labs/AgentTune.git
-cd AgentTune
-git checkout d4db4c12d52342227c4113a70183d0f64aa2f345
-git apply --check /path/to/lexsiai-hackaton/patches/agenttune-d4db4c1-top_p.patch
-git apply /path/to/lexsiai-hackaton/patches/agenttune-d4db4c1-top_p.patch
-```
-
-When AgentTune lives under `vendor/AgentTune` in this repo:
-
-```bash
+git clone https://github.com/mshaim001-hue/lexsiai-hackaton.git
+cd lexsiai-hackaton
+python3.12 -m venv .venv
+.venv/bin/python -m pip install 'torch==2.11.0' 'transformers==5.22.1' 'trl==1.7.1' \
+  'peft==0.21.2' 'accelerate==1.15.0' 'datasets==5.1.0' 'safetensors==0.8.0' requests
+git clone https://github.com/Lexsi-Labs/AgentTune.git vendor/AgentTune
+git -C vendor/AgentTune checkout d4db4c12d52342227c4113a70183d0f64aa2f345
 git -C vendor/AgentTune apply --check ../../patches/agenttune-d4db4c1-top_p.patch
 git -C vendor/AgentTune apply ../../patches/agenttune-d4db4c1-top_p.patch
+.venv/bin/python -m pip install --no-deps -e vendor/AgentTune
+.venv/bin/hf auth login   # Read token; do not commit it
 ```
 
-The parser is not changed by this patch.
+After the model is cached, prefer `HF_HUB_OFFLINE=1`. MPS vs CPU can change
+samples under the same seeds.
 
-## Contract runs
+## Reproduce reported runs
+
+Do not overwrite finished `artifacts/` directories. Recorded commands:
+
+```bash
+# 5.5 — paired B/C one-step pilots + coached held-out eval
+TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_grpo_pair.py
+
+# 5.8 — pin realistic split, untrained baseline on v0–v3 × 100–103
+TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_realistic_baseline.py
+
+# 5.9 — scan u0→u3, at most one reward_B step on first eligible group, eval on 5.8 test
+HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 \
+  .venv/bin/python run_grpo_realistic_pilot.py
+```
+
+### Configs, traces, adapters
+
+| Run | Config / pin | Traces & metrics | Adapter |
+| --- | --- | --- | --- |
+| 5.5 | [commands.txt](artifacts/task-5-5/commands.txt), [summary.json](artifacts/task-5-5/summary.json) | [eval_B](artifacts/task-5-5/eval_B/), [eval_C](artifacts/task-5-5/eval_C/), [train_B.json](artifacts/task-5-5/train_B.json) | [adapter_B](artifacts/task-5-5/adapter_B/), [adapter_C](artifacts/task-5-5/adapter_C/) |
+| 5.8 | [pinned_config.json](artifacts/task-5-8/pinned_config.json), [datasets/](artifacts/task-5-8/datasets/) | [baseline/](artifacts/task-5-8/baseline/) (`traces.json`, `per_pair.json`, `summary.json`) | untrained |
+| 5.9 | [pilot_config.json](artifacts/task-5-9/pilot_config.json) | [group_u1.json](artifacts/task-5-9/group_u1.json), [eval_B/](artifacts/task-5-9/eval_B/), [comparison.json](artifacts/task-5-9/comparison.json) | [adapter_B](artifacts/task-5-9/adapter_B/) |
+
+Submission draft (annotation + remaining HF/form items):
+[submission/](submission/).
+
+## Earlier contract tooling
 
 ```bash
 .venv/bin/python run_contract.py --out artifacts/<new-dir> --max-new-tokens 512
-.venv/bin/python run_contract.py --variability --out artifacts/task-2
-.venv/bin/python run_contract.py --one-action --out artifacts/task-3
-.venv/bin/python run_contract.py --one-action-variability --out artifacts/task-4
 .venv/bin/python run_grpo_prep.py
 .venv/bin/python run_grpo_path.py
 .venv/bin/python run_grpo_context.py
 ```
 
-`run_grpo_prep.py` builds the GRPO pilot configs (B and C, `beta=0.0`),
-replays the eight saved one-action trajectories through the shared reward
-callback, writes train/held-out manifests, and records untrained held-out
-metrics. It does not call `trainer.train()` and installs a stop callback that
-refuses the first optimizer step.
-
-`run_grpo_path.py` attaches an instrumented `rollout_func` to a real
-`GRPOTrainer`, scores the scripted m0 group and a live t0 group through
-`_generate_and_score_completions`, and stops after scoring (optimizer steps = 0).
-
-`run_grpo_context.py` checks generate→TRL prefix alignment, TRL loss masks,
-batch-task binding for two train tasks, and baseline A; stops before backward
-when packing cannot be repaired without changing generation context.
-
-Do not overwrite finished artifact directories.
+Pinned AgentTune does not pass `top_p` into `model.generate` until
+`patches/agenttune-d4db4c1-top_p.patch` is applied (parser unchanged).
