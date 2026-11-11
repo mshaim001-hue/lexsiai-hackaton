@@ -1,0 +1,30 @@
+{
+  "n_episodes": 12,
+  "full_success": 7,
+  "confirmed_returns": 10,
+  "unconfirmed_returns": 2,
+  "correct_finals": 7,
+  "final_failure_after_confirm": 3,
+  "final_failure_after_confirm_queries": [
+    "d1",
+    "d2",
+    "d4"
+  ],
+  "n_queries_with_final_failure_after_confirm": 3,
+  "error_type_counts": {
+    "none": 7,
+    "final_answer_tool_call_after_submit": 3,
+    "submit_refund_not_confirmed": 2
+  },
+  "unconfirmed_rollout_ids": [
+    "d4-g101",
+    "d5-g100"
+  ],
+  "final_failure_after_confirm_rollout_ids": [
+    "d1-g101",
+    "d2-g101",
+    "d4-g100"
+  ],
+  "keep_discovery_as_eval_set": true,
+  "eval_set_decision": "Keep d0–d5 × {100,101} as held-out eval; collect train examples on a separate prompt set."
+}

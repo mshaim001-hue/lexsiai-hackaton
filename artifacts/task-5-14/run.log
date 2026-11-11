@@ -1,0 +1,101 @@
+W1111 10:56:54.351000 48311 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.14 pinned discovery matrix
+{
+  "queries": [
+    "d0",
+    "d1",
+    "d2",
+    "d3",
+    "d4",
+    "d5"
+  ],
+  "seeds": [
+    100,
+    101
+  ],
+  "n_episodes": 12,
+  "temperature": 0.7,
+  "top_p": 0.9
+}
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<11:43,  2.44s/it]Loading weights:  56%|█████▌    | 163/290 [00:02<00:01, 87.66it/s]Loading weights:  78%|███████▊  | 227/290 [00:03<00:00, 77.93it/s]Loading weights:  91%|█████████▏| 265/290 [00:04<00:00, 78.76it/s]Loading weights: 100%|██████████| 290/290 [00:04<00:00, 64.26it/s]
+discovery d0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2510
+discovery d0-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2510
+discovery d1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2525
+discovery d1-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=True answer=False err=final_answer_tool_call_after_submit post_submit_ids=2537
+discovery d2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2518
+discovery d2-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=True answer=False err=final_answer_tool_call_after_submit post_submit_ids=2530
+discovery d3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2504
+discovery d3-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2504
+discovery d4-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=True answer=False err=final_answer_tool_call_after_submit post_submit_ids=2569
+discovery d4-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=False answer=False err=submit_refund_not_confirmed post_submit_ids=2501
+discovery d5-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=False answer=False err=submit_refund_not_confirmed post_submit_ids=2518
+discovery d5-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True answer=True err=none post_submit_ids=2505
+{
+  "n_episodes": 12,
+  "full_success": 7,
+  "confirmed_returns": 10,
+  "unconfirmed_returns": 2,
+  "correct_finals": 7,
+  "final_failure_after_confirm": 3,
+  "final_failure_after_confirm_queries": [
+    "d1",
+    "d2",
+    "d4"
+  ],
+  "n_queries_with_final_failure_after_confirm": 3,
+  "error_type_counts": {
+    "none": 7,
+    "final_answer_tool_call_after_submit": 3,
+    "submit_refund_not_confirmed": 2
+  },
+  "unconfirmed_rollout_ids": [
+    "d4-g101",
+    "d5-g100"
+  ],
+  "final_failure_after_confirm_rollout_ids": [
+    "d1-g101",
+    "d2-g101",
+    "d4-g100"
+  ],
+  "keep_discovery_as_eval_set": true,
+  "eval_set_decision": "Keep d0–d5 × {100,101} as held-out eval; collect train examples on a separate prompt set."
+}

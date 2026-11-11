@@ -1,0 +1,61 @@
+{
+  "kind": "discovery_matrix_pinned_before_run",
+  "written_before_run": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_discovery_baseline.py",
+  "git_head": "844583b8dda999f8136967f7ca1dc65f08f41fb0",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "condition": "A_untrained_tiny_aya_only",
+  "discovery": {
+    "n_queries": 6,
+    "episode_ids": [
+      "d0",
+      "d1",
+      "d2",
+      "d3",
+      "d4",
+      "d5"
+    ],
+    "order_ids": [
+      "ORD-9401",
+      "ORD-9402",
+      "ORD-9403",
+      "ORD-9404",
+      "ORD-9405",
+      "ORD-9406"
+    ],
+    "generation_seeds": [
+      100,
+      101
+    ],
+    "n_episodes": 12,
+    "max_episodes": 12
+  },
+  "generation": {
+    "settings": "same as task-5-8 one-action",
+    "environment_seed": 0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn",
+    "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+    "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+    "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+    "weights_updated": false
+  },
+  "captures": {
+    "full_episode_log": true,
+    "post_submit_final_turn_input_ids": true,
+    "generated_token_ids": true,
+    "verification": true
+  },
+  "metrics": {
+    "unconfirmed_returns": "not task_success_harness",
+    "final_failure_after_confirm": "task_success_harness and not task_success_answer (includes wrong/empty final and tool call after submit)",
+    "full_success": "task_success"
+  },
+  "eval_set_rule": "If final_failure_after_confirm occurs on several different queries, keep this discovery matrix as a held-out eval set and collect train examples separately."
+}
