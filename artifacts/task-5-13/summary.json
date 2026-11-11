@@ -1,0 +1,220 @@
+{
+  "kind": "sft_lr_probe",
+  "method": "SFT",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_lr_probe.py",
+  "git_head": "a1c07f6811db91e793cc031f75712e0d53e5e63d",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 1848.896219834016,
+  "time_limit_s": 1800,
+  "stop_reason": "collapse_not_reproduced_stop",
+  "pinned_config": {
+    "kind": "sft_lr_probe",
+    "method": "SFT",
+    "written_before_runs": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_lr_probe.py",
+    "time_limit_s": 1800,
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "lora": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "bias": "none",
+      "task_type": "CAUSAL_LM",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "train_example": {
+      "episode_id": "s0",
+      "order_id": "ORD-6101",
+      "amount_cents": 1110,
+      "target_final": "REFUND_SUBMITTED amount_cents=1110",
+      "source": "artifacts/task-5-11/train_chains.json",
+      "target_and_mask": "same as task-5-11 (_tokenize_example, prefix labels -100)"
+    },
+    "probe_prefixes": [
+      {
+        "episode_id": "p0",
+        "amount_cents": 1310,
+        "source": "artifacts/task-5-11/probe_chains.json"
+      },
+      {
+        "episode_id": "p1",
+        "amount_cents": 2420,
+        "source": "artifacts/task-5-11/probe_chains.json"
+      }
+    ],
+    "learning_rates": [
+      0.0002,
+      2e-05
+    ],
+    "max_optimizer_steps_per_lr": 3,
+    "same_lora_init": true,
+    "init_seed": 0,
+    "collapse_definition": "P(<|END_RESPONSE|>) >= P(first token of REFUND_SUBMITTED...) on train or probe prefix",
+    "no_full_episode_eval": true
+  },
+  "init_logit_match_passed": true,
+  "collapse_reproduced": false,
+  "collapse_by_lr": {
+    "0.0002": false,
+    "2e-05": false
+  },
+  "arms": [
+    {
+      "learning_rate": 0.0002,
+      "steps_completed": 3,
+      "collapse_seen": false,
+      "adapter": "artifacts/task-5-13/adapter_lr_0p0002",
+      "trainable_dtypes": [
+        "torch.float32"
+      ],
+      "history_brief": [
+        {
+          "step": 0,
+          "phase": "before_step",
+          "eval_loss": 0.02797509729862213,
+          "p_gold_first": 0.7770589590072632,
+          "p_end_response": 0.00048700362094677985,
+          "grad_norm": null,
+          "grad_all_finite": null,
+          "weight_change_l2": 0.0,
+          "collapse_train": false,
+          "collapse_probe": false
+        },
+        {
+          "step": 1,
+          "phase": "after_step",
+          "eval_loss": 0.021076420322060585,
+          "p_gold_first": 0.8394433856010437,
+          "p_end_response": 0.0004642830172087997,
+          "grad_norm": 391460.5,
+          "grad_all_finite": true,
+          "weight_change_l2": 0.24299415946006775,
+          "collapse_train": false,
+          "collapse_probe": false
+        },
+        {
+          "step": 2,
+          "phase": "after_step",
+          "eval_loss": 0.014294974505901337,
+          "p_gold_first": 0.9075722694396973,
+          "p_end_response": 0.0004226961173117161,
+          "grad_norm": 384645.46875,
+          "grad_all_finite": true,
+          "weight_change_l2": 0.5116870403289795,
+          "collapse_train": false,
+          "collapse_probe": false
+        },
+        {
+          "step": 3,
+          "phase": "after_step",
+          "eval_loss": 0.01040543895214796,
+          "p_gold_first": 0.9500890374183655,
+          "p_end_response": 0.00042554622632451355,
+          "grad_norm": 503299.625,
+          "grad_all_finite": true,
+          "weight_change_l2": 0.8160130977630615,
+          "collapse_train": false,
+          "collapse_probe": false
+        }
+      ]
+    },
+    {
+      "learning_rate": 2e-05,
+      "steps_completed": 1,
+      "collapse_seen": false,
+      "adapter": "artifacts/task-5-13/adapter_lr_2e-05",
+      "trainable_dtypes": [
+        "torch.float32"
+      ],
+      "history_brief": [
+        {
+          "step": 0,
+          "phase": "before_step",
+          "eval_loss": 0.02797509729862213,
+          "p_gold_first": 0.7770589590072632,
+          "p_end_response": 0.00048700362094677985,
+          "grad_norm": null,
+          "grad_all_finite": null,
+          "weight_change_l2": 0.0,
+          "collapse_train": false,
+          "collapse_probe": false
+        },
+        {
+          "step": 1,
+          "phase": "after_step",
+          "eval_loss": 0.02781810611486435,
+          "p_gold_first": 0.7786322832107544,
+          "p_end_response": 0.00048419207450933754,
+          "grad_norm": 391460.5,
+          "grad_all_finite": true,
+          "weight_change_l2": 0.024253390729427338,
+          "collapse_train": false,
+          "collapse_probe": false
+        }
+      ]
+    }
+  ],
+  "comparison": {
+    "learning_rates": [
+      0.0002,
+      2e-05
+    ],
+    "collapse_by_lr": {
+      "0.0002": false,
+      "2e-05": false
+    },
+    "collapse_reproduced": false,
+    "final_metrics": {
+      "0.0002": {
+        "eval_loss": 0.01040543895214796,
+        "p_gold_first_train": 0.9500890374183655,
+        "p_end_response_train": 0.00042554622632451355,
+        "probe": {
+          "p0": {
+            "p_gold_first": 0.9437946081161499,
+            "p_end_response": 0.0004194372158963233,
+            "prefer_end_response_over_gold": false
+          },
+          "p1": {
+            "p_gold_first": 0.9405959248542786,
+            "p_end_response": 0.00044497536146081984,
+            "prefer_end_response_over_gold": false
+          }
+        },
+        "weight_change_l2": 0.8160130977630615
+      },
+      "2e-05": {
+        "eval_loss": 0.02781810611486435,
+        "p_gold_first_train": 0.7786322832107544,
+        "p_end_response_train": 0.00048419207450933754,
+        "probe": {
+          "p0": {
+            "p_gold_first": 0.7715073823928833,
+            "p_end_response": 0.0004471868451219052,
+            "prefer_end_response_over_gold": false
+          },
+          "p1": {
+            "p_gold_first": 0.743869960308075,
+            "p_end_response": 0.0004698596312664449,
+            "prefer_end_response_over_gold": false
+          }
+        },
+        "weight_change_l2": 0.024253390729427338
+      }
+    }
+  }
+}

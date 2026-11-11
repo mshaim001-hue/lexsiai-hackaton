@@ -1,0 +1,51 @@
+{
+  "kind": "sft_lr_probe",
+  "method": "SFT",
+  "written_before_runs": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_lr_probe.py",
+  "time_limit_s": 1800,
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "lora": {
+    "r": 8,
+    "lora_alpha": 16,
+    "lora_dropout": 0.05,
+    "bias": "none",
+    "task_type": "CAUSAL_LM",
+    "target_modules": [
+      "q_proj",
+      "k_proj",
+      "v_proj",
+      "o_proj"
+    ]
+  },
+  "train_example": {
+    "episode_id": "s0",
+    "order_id": "ORD-6101",
+    "amount_cents": 1110,
+    "target_final": "REFUND_SUBMITTED amount_cents=1110",
+    "source": "artifacts/task-5-11/train_chains.json",
+    "target_and_mask": "same as task-5-11 (_tokenize_example, prefix labels -100)"
+  },
+  "probe_prefixes": [
+    {
+      "episode_id": "p0",
+      "amount_cents": 1310,
+      "source": "artifacts/task-5-11/probe_chains.json"
+    },
+    {
+      "episode_id": "p1",
+      "amount_cents": 2420,
+      "source": "artifacts/task-5-11/probe_chains.json"
+    }
+  ],
+  "learning_rates": [
+    0.0002,
+    2e-05
+  ],
+  "max_optimizer_steps_per_lr": 3,
+  "same_lora_init": true,
+  "init_seed": 0,
+  "collapse_definition": "P(<|END_RESPONSE|>) >= P(first token of REFUND_SUBMITTED...) on train or probe prefix",
+  "no_full_episode_eval": true
+}

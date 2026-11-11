@@ -1,0 +1,315 @@
+{
+  "learning_rate": 0.0002,
+  "max_steps": 3,
+  "steps_completed": 3,
+  "trainable_dtypes": {
+    "n_trainable_lora": 288,
+    "dtypes": [
+      "torch.float32"
+    ],
+    "params": [
+      {
+        "name": "base_model.model.model.layers.0.self_attn.q_proj.lora_A.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          8,
+          2048
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.q_proj.lora_B.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          2048,
+          8
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.k_proj.lora_A.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          8,
+          2048
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.k_proj.lora_B.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          512,
+          8
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.v_proj.lora_A.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          8,
+          2048
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.v_proj.lora_B.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          512,
+          8
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.o_proj.lora_A.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          8,
+          2048
+        ]
+      },
+      {
+        "name": "base_model.model.model.layers.0.self_attn.o_proj.lora_B.default.weight",
+        "dtype": "torch.float32",
+        "requires_grad": true,
+        "shape": [
+          2048,
+          8
+        ]
+      }
+    ],
+    "n_listed": 8
+  },
+  "history": [
+    {
+      "step": 0,
+      "phase": "before_step",
+      "eval_loss": 0.02797509729862213,
+      "train_first_token": {
+        "gold_text": "REFUND_SUBMITTED amount_cents=1110",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7770589590072632,
+        "p_end_response": 0.00048700362094677985,
+        "logp_gold_first": -0.25224003195762634,
+        "logp_end_response": -7.627240180969238,
+        "prefer_end_response_over_gold": false,
+        "ratio_end_over_gold": 0.0006267267307090244
+      },
+      "probe_first_token": {
+        "p0": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.7665101885795593,
+          "p_end_response": 0.0004477749753277749,
+          "logp_gold_first": -0.26590800285339355,
+          "logp_end_response": -7.711220741271973,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.000584173546548101
+        },
+        "p1": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.7404095530509949,
+          "p_end_response": 0.0004750387161038816,
+          "logp_gold_first": -0.300552636384964,
+          "logp_end_response": -7.652115345001221,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.0006415891234066288
+        }
+      },
+      "weight_change_from_init": {
+        "l2": 0.0,
+        "max_abs": 0.0,
+        "changed": false
+      },
+      "grad": null,
+      "collapse_on_train_prefix": false,
+      "collapse_on_any_probe": false
+    },
+    {
+      "step": 1,
+      "phase": "after_step",
+      "eval_loss": 0.021076420322060585,
+      "train_first_token": {
+        "gold_text": "REFUND_SUBMITTED amount_cents=1110",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.8394433856010437,
+        "p_end_response": 0.0004642830172087997,
+        "logp_gold_first": -0.17501705884933472,
+        "logp_end_response": -7.6750168800354,
+        "prefer_end_response_over_gold": false,
+        "ratio_end_over_gold": 0.0005530843713496793
+      },
+      "probe_first_token": {
+        "p0": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.8341993093490601,
+          "p_end_response": 0.0004200936236884445,
+          "logp_gold_first": -0.1812836229801178,
+          "logp_end_response": -7.775033473968506,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.0005035890331966958
+        },
+        "p1": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.8141593933105469,
+          "p_end_response": 0.00046097737504169345,
+          "logp_gold_first": -0.20559971034526825,
+          "logp_end_response": -7.682162284851074,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.0005662004010876303
+        }
+      },
+      "weight_change_from_init": {
+        "l2": 0.24299415946006775,
+        "max_abs": 0.0002000000240514055,
+        "changed": true
+      },
+      "grad": {
+        "n_grads": 288,
+        "all_finite": true,
+        "n_nonfinite_tensors": 0,
+        "grad_abs_max": 16423.728515625,
+        "grad_norm": 391460.5,
+        "train_loss_for_backward": 0.0
+      },
+      "collapse_on_train_prefix": false,
+      "collapse_on_any_probe": false
+    },
+    {
+      "step": 2,
+      "phase": "after_step",
+      "eval_loss": 0.014294974505901337,
+      "train_first_token": {
+        "gold_text": "REFUND_SUBMITTED amount_cents=1110",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.9075722694396973,
+        "p_end_response": 0.0004226961173117161,
+        "logp_gold_first": -0.09698281437158585,
+        "logp_end_response": -7.768857955932617,
+        "prefer_end_response_over_gold": false,
+        "ratio_end_over_gold": 0.0004657437556710206
+      },
+      "probe_first_token": {
+        "p0": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.9007993340492249,
+          "p_end_response": 0.0003972140548285097,
+          "logp_gold_first": -0.1044735312461853,
+          "logp_end_response": -7.83103609085083,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.00044095731403682813
+        },
+        "p1": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.8900961875915527,
+          "p_end_response": 0.0004378591547720134,
+          "logp_gold_first": -0.1164265051484108,
+          "logp_end_response": -7.733613967895508,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.000491923413307482
+        }
+      },
+      "weight_change_from_init": {
+        "l2": 0.5116870403289795,
+        "max_abs": 0.00040027120849117637,
+        "changed": true
+      },
+      "grad": {
+        "n_grads": 288,
+        "all_finite": true,
+        "n_nonfinite_tensors": 0,
+        "grad_abs_max": 15508.3681640625,
+        "grad_norm": 384645.46875,
+        "train_loss_for_backward": 2.9007087505306117e-06
+      },
+      "collapse_on_train_prefix": false,
+      "collapse_on_any_probe": false
+    },
+    {
+      "step": 3,
+      "phase": "after_step",
+      "eval_loss": 0.01040543895214796,
+      "train_first_token": {
+        "gold_text": "REFUND_SUBMITTED amount_cents=1110",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.9500890374183655,
+        "p_end_response": 0.00042554622632451355,
+        "logp_gold_first": -0.0511997826397419,
+        "logp_end_response": -7.762137413024902,
+        "prefer_end_response_over_gold": false,
+        "ratio_end_over_gold": 0.00044790141719857257
+      },
+      "probe_first_token": {
+        "p0": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.9437946081161499,
+          "p_end_response": 0.0004194372158963233,
+          "logp_gold_first": -0.0578470341861248,
+          "logp_end_response": -7.776597023010254,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.0004444157789092862
+        },
+        "p1": {
+          "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+          "gold_first_token_id": 26501,
+          "gold_first_token": "REF",
+          "end_response_token_id": 261001,
+          "p_gold_first": 0.9405959248542786,
+          "p_end_response": 0.00044497536146081984,
+          "logp_gold_first": -0.061241742223501205,
+          "logp_end_response": -7.717491626739502,
+          "prefer_end_response_over_gold": false,
+          "ratio_end_over_gold": 0.00047307813026061906
+        }
+      },
+      "weight_change_from_init": {
+        "l2": 0.8160130977630615,
+        "max_abs": 0.0006009930511936545,
+        "changed": true
+      },
+      "grad": {
+        "n_grads": 288,
+        "all_finite": true,
+        "n_nonfinite_tensors": 0,
+        "grad_abs_max": 15820.8642578125,
+        "grad_norm": 503299.625,
+        "train_loss_for_backward": 0.0
+      },
+      "collapse_on_train_prefix": false,
+      "collapse_on_any_probe": false
+    }
+  ],
+  "collapse_seen": false,
+  "adapter": "artifacts/task-5-13/adapter_lr_0p0002"
+}

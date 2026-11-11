@@ -1,0 +1,27 @@
+W1111 10:22:16.404000 40680 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+5.13 creating fresh LoRA and checking init logits vs base
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<11:03,  2.29s/it]Loading weights:  56%|█████▌    | 163/290 [00:02<00:01, 90.48it/s]Loading weights:  73%|███████▎  | 213/290 [00:03<00:00, 80.32it/s]Loading weights:  84%|████████▍ | 243/290 [00:03<00:00, 79.09it/s]Loading weights:  91%|█████████▏| 265/290 [00:03<00:00, 80.59it/s]Loading weights:  97%|█████████▋| 282/290 [00:04<00:00, 71.97it/s]Loading weights: 100%|██████████| 290/290 [00:04<00:00, 65.55it/s]
+init match ok max_abs_train=0.000e+00 max_abs_probe=0.000e+00
+5.13 arm lr=0.0002 loading fresh base+LoRA
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<08:56,  1.86s/it]Loading weights:  45%|████▌     | 131/290 [00:01<00:01, 92.32it/s]Loading weights:  68%|██████▊   | 197/290 [00:02<00:00, 103.85it/s]Loading weights:  82%|████████▏ | 239/290 [00:03<00:00, 96.49it/s] Loading weights:  92%|█████████▏| 268/290 [00:04<00:00, 64.29it/s]Loading weights:  99%|█████████▉| 288/290 [00:04<00:00, 68.80it/s]Loading weights: 100%|██████████| 290/290 [00:04<00:00, 68.84it/s]
+lr=0.0002 step=0 eval_loss=0.027975 p_gold=0.7771 p_end=0.0005
+lr=0.0002 step=1 train_loss=0.000000 eval_loss=0.021076 p_gold=0.8394 p_end=0.0005 grad_norm=391460.500000 dW_l2=0.242994
+lr=0.0002 step=2 train_loss=0.000003 eval_loss=0.014295 p_gold=0.9076 p_end=0.0004 grad_norm=384645.468750 dW_l2=0.511687
+lr=0.0002 step=3 train_loss=0.000000 eval_loss=0.010405 p_gold=0.9501 p_end=0.0004 grad_norm=503299.625000 dW_l2=0.816013
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+5.13 arm lr=2e-05 loading fresh base+LoRA
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<12:00,  2.49s/it]Loading weights:  48%|████▊     | 139/290 [00:02<00:02, 72.78it/s]Loading weights:  66%|██████▌   | 190/290 [00:03<00:01, 56.18it/s]Loading weights:  76%|███████▌  | 220/290 [00:04<00:01, 49.30it/s]Loading weights:  82%|████████▏ | 239/290 [00:05<00:01, 38.60it/s]Loading weights:  87%|████████▋ | 252/290 [00:06<00:01, 30.65it/s]Loading weights:  90%|█████████ | 261/290 [00:07<00:01, 27.51it/s]Loading weights:  92%|█████████▏| 268/290 [00:07<00:00, 24.66it/s]Loading weights:  95%|█████████▍| 275/290 [00:08<00:00, 23.63it/s]Loading weights:  96%|█████████▌| 279/290 [00:08<00:00, 22.68it/s]Loading weights:  98%|█████████▊| 283/290 [00:08<00:00, 21.07it/s]Loading weights:  99%|█████████▊| 286/290 [00:08<00:00, 20.28it/s]Loading weights: 100%|██████████| 290/290 [00:08<00:00, 32.48it/s]
+lr=2e-05 step=0 eval_loss=0.027975 p_gold=0.7771 p_end=0.0005
+lr=2e-05 step=1 train_loss=0.000011 eval_loss=0.027818 p_gold=0.7786 p_end=0.0005 grad_norm=391460.500000 dW_l2=0.024253
+{
+  "stop_reason": "collapse_not_reproduced_stop",
+  "collapse_reproduced": false,
+  "collapse_by_lr": {
+    "0.0002": false,
+    "2e-05": false
+  },
+  "elapsed_s": 1848.896219834016
+}
