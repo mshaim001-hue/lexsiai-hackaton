@@ -1,0 +1,178 @@
+{
+  "kind": "sft_logprob_diag_5_17",
+  "method": "mean_token_logprob_teacher_forced",
+  "no_training": true,
+  "no_full_episode_generation": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_logprob_diag_517.py",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "fail_ids": [
+    "d1-g101",
+    "d2-g101"
+  ],
+  "control_ids": [
+    "d0-g100",
+    "d3-g100"
+  ],
+  "adapters": [
+    "artifacts/task-5-16/adapters/step_1",
+    "artifacts/task-5-16/adapters/step_2",
+    "artifacts/task-5-16/adapters/step_3"
+  ],
+  "metric": {
+    "name": "mean_logprob",
+    "definition": "Average log p(token_t | prefix + tokens_<t) over continuation tokens",
+    "gap": "mean_logprob_gold - mean_logprob_call",
+    "delta_gap_vs_base": "gap(model) - gap(base)"
+  },
+  "examples": [
+    {
+      "rollout_id": "d1-g101",
+      "role": "fail",
+      "episode_id": "d1",
+      "generation_seed": 101,
+      "amount_cents": 2480,
+      "order_id": "ORD-9402",
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "episode_task_success": false,
+      "n_prefix": 2537,
+      "gold_text": "REFUND_SUBMITTED amount_cents=2480<|END_RESPONSE|><EOS_TOKEN>",
+      "gold_source": "encoded_refund_submitted_end_eos",
+      "call_text": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9402\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "call_source": "saved_new_token_ids",
+      "n_gold_tokens": 14,
+      "n_call_tokens": 25,
+      "gold_token_ids_head": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864
+      ],
+      "call_token_ids_head": [
+        73,
+        50934,
+        77567,
+        7445,
+        2228,
+        485,
+        62138,
+        42680
+      ]
+    },
+    {
+      "rollout_id": "d2-g101",
+      "role": "fail",
+      "episode_id": "d2",
+      "generation_seed": 101,
+      "amount_cents": 1350,
+      "order_id": "ORD-9403",
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "episode_task_success": false,
+      "n_prefix": 2530,
+      "gold_text": "REFUND_SUBMITTED amount_cents=1350<|END_RESPONSE|><EOS_TOKEN>",
+      "gold_source": "encoded_refund_submitted_end_eos",
+      "call_text": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9403\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "call_source": "saved_new_token_ids",
+      "n_gold_tokens": 14,
+      "n_call_tokens": 25,
+      "gold_token_ids_head": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864
+      ],
+      "call_token_ids_head": [
+        73,
+        50934,
+        77567,
+        7445,
+        2228,
+        485,
+        62138,
+        42680
+      ]
+    },
+    {
+      "rollout_id": "d0-g100",
+      "role": "control",
+      "episode_id": "d0",
+      "generation_seed": 100,
+      "amount_cents": 1620,
+      "order_id": "ORD-9401",
+      "episode_error_type": "none",
+      "episode_task_success": true,
+      "n_prefix": 2510,
+      "gold_text": "REFUND_SUBMITTED amount_cents=1620<|END_RESPONSE|><EOS_TOKEN>",
+      "gold_source": "saved_new_token_ids",
+      "call_text": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9401\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "call_source": "encoded_lookup_order_matched_fail_template",
+      "n_gold_tokens": 14,
+      "n_call_tokens": 25,
+      "gold_token_ids_head": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864
+      ],
+      "call_token_ids_head": [
+        73,
+        50934,
+        77567,
+        7445,
+        2228,
+        485,
+        62138,
+        42680
+      ]
+    },
+    {
+      "rollout_id": "d3-g100",
+      "role": "control",
+      "episode_id": "d3",
+      "generation_seed": 100,
+      "amount_cents": 2790,
+      "order_id": "ORD-9404",
+      "episode_error_type": "none",
+      "episode_task_success": true,
+      "n_prefix": 2504,
+      "gold_text": "REFUND_SUBMITTED amount_cents=2790<|END_RESPONSE|><EOS_TOKEN>",
+      "gold_source": "saved_new_token_ids",
+      "call_text": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9404\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "call_source": "encoded_lookup_order_matched_fail_template",
+      "n_gold_tokens": 14,
+      "n_call_tokens": 25,
+      "gold_token_ids_head": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864
+      ],
+      "call_token_ids_head": [
+        73,
+        50934,
+        77567,
+        7445,
+        2228,
+        485,
+        62138,
+        42680
+      ]
+    }
+  ]
+}

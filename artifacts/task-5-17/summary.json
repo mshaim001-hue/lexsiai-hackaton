@@ -1,0 +1,360 @@
+{
+  "kind": "sft_logprob_diag_5_17",
+  "method": "mean_token_logprob_teacher_forced",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_logprob_diag_517.py",
+  "git_head": "e7af52525892eebf153350ce3537c023f45c9e69",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 734.0,
+  "fail_ids": [
+    "d1-g101",
+    "d2-g101"
+  ],
+  "control_ids": [
+    "d0-g100",
+    "d3-g100"
+  ],
+  "per_example": [
+    {
+      "rollout_id": "d1-g101",
+      "role": "fail",
+      "amount_cents": 2480,
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "models": {
+        "base": {
+          "mean_logprob_gold": -0.11761480975979564,
+          "mean_logprob_call": -0.0347709022735944,
+          "gap_gold_minus_call": -0.08284390748620124
+        },
+        "step_1": {
+          "mean_logprob_gold": -0.11605123131785179,
+          "mean_logprob_call": -0.034850225401023636,
+          "gap_gold_minus_call": -0.08120100591682816,
+          "delta_gap_vs_base": 0.0016429015693730786,
+          "delta_mean_logprob_gold_vs_base": 0.0015635784419438525,
+          "delta_mean_logprob_call_vs_base": -7.932312742923303e-05
+        },
+        "step_2": {
+          "mean_logprob_gold": -0.11356528221441715,
+          "mean_logprob_call": -0.035579194464735335,
+          "gap_gold_minus_call": -0.07798608774968183,
+          "delta_gap_vs_base": 0.004857819736519414,
+          "delta_mean_logprob_gold_vs_base": 0.00404952754537849,
+          "delta_mean_logprob_call_vs_base": -0.0008082921911409316
+        },
+        "step_3": {
+          "mean_logprob_gold": -0.10804986114393549,
+          "mean_logprob_call": -0.03657497585387318,
+          "gap_gold_minus_call": -0.0714748852900623,
+          "delta_gap_vs_base": 0.011369022196138945,
+          "delta_mean_logprob_gold_vs_base": 0.009564948615860158,
+          "delta_mean_logprob_call_vs_base": -0.0018040735802787797
+        }
+      }
+    },
+    {
+      "rollout_id": "d2-g101",
+      "role": "fail",
+      "amount_cents": 1350,
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "models": {
+        "base": {
+          "mean_logprob_gold": -0.1263711536189349,
+          "mean_logprob_call": -0.03401862739050557,
+          "gap_gold_minus_call": -0.09235252622842932
+        },
+        "step_1": {
+          "mean_logprob_gold": -0.12549169380423106,
+          "mean_logprob_call": -0.034082380764193655,
+          "gap_gold_minus_call": -0.09140931304003741,
+          "delta_gap_vs_base": 0.0009432131883919115,
+          "delta_mean_logprob_gold_vs_base": 0.0008794598147038313,
+          "delta_mean_logprob_call_vs_base": -6.375337368808714e-05
+        },
+        "step_2": {
+          "mean_logprob_gold": -0.12296227012086902,
+          "mean_logprob_call": -0.03452152172299975,
+          "gap_gold_minus_call": -0.08844074839786928,
+          "delta_gap_vs_base": 0.003911777830560043,
+          "delta_mean_logprob_gold_vs_base": 0.0034088834980658678,
+          "delta_mean_logprob_call_vs_base": -0.0005028943324941818
+        },
+        "step_3": {
+          "mean_logprob_gold": -0.12040581712184865,
+          "mean_logprob_call": -0.03502030146752077,
+          "gap_gold_minus_call": -0.08538551565432789,
+          "delta_gap_vs_base": 0.006967010574101429,
+          "delta_mean_logprob_gold_vs_base": 0.005965336497086235,
+          "delta_mean_logprob_call_vs_base": -0.0010016740770152008
+        }
+      }
+    },
+    {
+      "rollout_id": "d0-g100",
+      "role": "control",
+      "amount_cents": 1620,
+      "episode_error_type": "none",
+      "models": {
+        "base": {
+          "mean_logprob_gold": -0.020113527837720215,
+          "mean_logprob_call": -0.15125814132625237,
+          "gap_gold_minus_call": 0.13114461348853215
+        },
+        "step_1": {
+          "mean_logprob_gold": -0.019723945532502642,
+          "mean_logprob_call": -0.1525220416065713,
+          "gap_gold_minus_call": 0.13279809607406864,
+          "delta_gap_vs_base": 0.001653482585536492,
+          "delta_mean_logprob_gold_vs_base": 0.00038958230521757287,
+          "delta_mean_logprob_call_vs_base": -0.0012639002803189192
+        },
+        "step_2": {
+          "mean_logprob_gold": -0.019316230217977397,
+          "mean_logprob_call": -0.15384787809372938,
+          "gap_gold_minus_call": 0.13453164787575198,
+          "delta_gap_vs_base": 0.0033870343872198228,
+          "delta_mean_logprob_gold_vs_base": 0.0007972976197428185,
+          "delta_mean_logprob_call_vs_base": -0.0025897367674770078
+        },
+        "step_3": {
+          "mean_logprob_gold": -0.018611248695151517,
+          "mean_logprob_call": -0.1569273525525932,
+          "gap_gold_minus_call": 0.1383161038574417,
+          "delta_gap_vs_base": 0.007171490368909544,
+          "delta_mean_logprob_gold_vs_base": 0.0015022791425686986,
+          "delta_mean_logprob_call_vs_base": -0.005669211226340842
+        }
+      }
+    },
+    {
+      "rollout_id": "d3-g100",
+      "role": "control",
+      "amount_cents": 2790,
+      "episode_error_type": "none",
+      "models": {
+        "base": {
+          "mean_logprob_gold": -0.023463124387961085,
+          "mean_logprob_call": -0.1300206865357177,
+          "gap_gold_minus_call": 0.10655756214775661
+        },
+        "step_1": {
+          "mean_logprob_gold": -0.023057170510664297,
+          "mean_logprob_call": -0.131347765353712,
+          "gap_gold_minus_call": 0.1082905948430477,
+          "delta_gap_vs_base": 0.001733032695291098,
+          "delta_mean_logprob_gold_vs_base": 0.00040595387729678786,
+          "delta_mean_logprob_call_vs_base": -0.0013270788179943205
+        },
+        "step_2": {
+          "mean_logprob_gold": -0.022222091774973966,
+          "mean_logprob_call": -0.13376882472686702,
+          "gap_gold_minus_call": 0.11154673295189305,
+          "delta_gap_vs_base": 0.004989170804136439,
+          "delta_mean_logprob_gold_vs_base": 0.001241032612987119,
+          "delta_mean_logprob_call_vs_base": -0.0037481381911493306
+        },
+        "step_3": {
+          "mean_logprob_gold": -0.02154684921289832,
+          "mean_logprob_call": -0.13642983993049712,
+          "gap_gold_minus_call": 0.1148829907175988,
+          "delta_gap_vs_base": 0.008325428569842197,
+          "delta_mean_logprob_gold_vs_base": 0.001916275175062765,
+          "delta_mean_logprob_call_vs_base": -0.006409153394779432
+        }
+      }
+    }
+  ],
+  "scores_raw": {
+    "base": {
+      "d1-g101": {
+        "rollout_id": "d1-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.11761480975979564,
+        "mean_logprob_call": -0.0347709022735944,
+        "gap_gold_minus_call": -0.08284390748620124,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.646607336637139,
+        "sum_logprob_call": -0.86927255683986
+      },
+      "d2-g101": {
+        "rollout_id": "d2-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.1263711536189349,
+        "mean_logprob_call": -0.03401862739050557,
+        "gap_gold_minus_call": -0.09235252622842932,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.7691961506650884,
+        "sum_logprob_call": -0.8504656847626393
+      },
+      "d0-g100": {
+        "rollout_id": "d0-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.020113527837720215,
+        "mean_logprob_call": -0.15125814132625237,
+        "gap_gold_minus_call": 0.13114461348853215,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.281589389728083,
+        "sum_logprob_call": -3.7814535331563093
+      },
+      "d3-g100": {
+        "rollout_id": "d3-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.023463124387961085,
+        "mean_logprob_call": -0.1300206865357177,
+        "gap_gold_minus_call": 0.10655756214775661,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.3284837414314552,
+        "sum_logprob_call": -3.250517163392942
+      }
+    },
+    "step_1": {
+      "d1-g101": {
+        "rollout_id": "d1-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.11605123131785179,
+        "mean_logprob_call": -0.034850225401023636,
+        "gap_gold_minus_call": -0.08120100591682816,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.624717238449925,
+        "sum_logprob_call": -0.8712556350255909
+      },
+      "d2-g101": {
+        "rollout_id": "d2-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.12549169380423106,
+        "mean_logprob_call": -0.034082380764193655,
+        "gap_gold_minus_call": -0.09140931304003741,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.756883713259235,
+        "sum_logprob_call": -0.8520595191048415
+      },
+      "d0-g100": {
+        "rollout_id": "d0-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.019723945532502642,
+        "mean_logprob_call": -0.1525220416065713,
+        "gap_gold_minus_call": 0.13279809607406864,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.276135237455037,
+        "sum_logprob_call": -3.8130510401642823
+      },
+      "d3-g100": {
+        "rollout_id": "d3-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.023057170510664297,
+        "mean_logprob_call": -0.131347765353712,
+        "gap_gold_minus_call": 0.1082905948430477,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.32280038714930015,
+        "sum_logprob_call": -3.2836941338428005
+      }
+    },
+    "step_2": {
+      "d1-g101": {
+        "rollout_id": "d1-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.11356528221441715,
+        "mean_logprob_call": -0.035579194464735335,
+        "gap_gold_minus_call": -0.07798608774968183,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.58991395100184,
+        "sum_logprob_call": -0.8894798616183834
+      },
+      "d2-g101": {
+        "rollout_id": "d2-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.12296227012086902,
+        "mean_logprob_call": -0.03452152172299975,
+        "gap_gold_minus_call": -0.08844074839786928,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.7214717816921663,
+        "sum_logprob_call": -0.8630380430749938
+      },
+      "d0-g100": {
+        "rollout_id": "d0-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.019316230217977397,
+        "mean_logprob_call": -0.15384787809372938,
+        "gap_gold_minus_call": 0.13453164787575198,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.27042722305168354,
+        "sum_logprob_call": -3.8461969523432344
+      },
+      "d3-g100": {
+        "rollout_id": "d3-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.022222091774973966,
+        "mean_logprob_call": -0.13376882472686702,
+        "gap_gold_minus_call": 0.11154673295189305,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.3111092848496355,
+        "sum_logprob_call": -3.3442206181716756
+      }
+    },
+    "step_3": {
+      "d1-g101": {
+        "rollout_id": "d1-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.10804986114393549,
+        "mean_logprob_call": -0.03657497585387318,
+        "gap_gold_minus_call": -0.0714748852900623,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.5126980560150969,
+        "sum_logprob_call": -0.9143743963468296
+      },
+      "d2-g101": {
+        "rollout_id": "d2-g101",
+        "role": "fail",
+        "mean_logprob_gold": -0.12040581712184865,
+        "mean_logprob_call": -0.03502030146752077,
+        "gap_gold_minus_call": -0.08538551565432789,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -1.6856814397058812,
+        "sum_logprob_call": -0.8755075366880192
+      },
+      "d0-g100": {
+        "rollout_id": "d0-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.018611248695151517,
+        "mean_logprob_call": -0.1569273525525932,
+        "gap_gold_minus_call": 0.1383161038574417,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.26055748173212123,
+        "sum_logprob_call": -3.9231838138148305
+      },
+      "d3-g100": {
+        "rollout_id": "d3-g100",
+        "role": "control",
+        "mean_logprob_gold": -0.02154684921289832,
+        "mean_logprob_call": -0.13642983993049712,
+        "gap_gold_minus_call": 0.1148829907175988,
+        "n_gold_tokens": 14,
+        "n_call_tokens": 25,
+        "sum_logprob_gold": -0.3016558889805765,
+        "sum_logprob_call": -3.4107459982624277
+      }
+    }
+  }
+}

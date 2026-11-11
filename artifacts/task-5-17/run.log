@@ -1,0 +1,35 @@
+W1111 19:30:05.879000 44300 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.17 pinned examples; scoring base + 5.16 adapters
+score[base]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:03<14:46,  3.07s/it]Loading weights:  56%|█████▌    | 163/290 [00:03<00:01, 71.75it/s]Loading weights:  84%|████████▍ | 243/290 [00:04<00:00, 68.70it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 58.60it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 52.10it/s]
+  d1-g101 (fail): gold=-0.117615 call=-0.034771 gap=-0.082844
+  d2-g101 (fail): gold=-0.126371 call=-0.034019 gap=-0.092353
+  d0-g100 (control): gold=-0.020114 call=-0.151258 gap=0.131145
+  d3-g100 (control): gold=-0.023463 call=-0.130021 gap=0.106558
+score[step_1]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<10:51,  2.25s/it]Loading weights:  42%|████▏     | 123/290 [00:02<00:02, 72.91it/s]Loading weights:  66%|██████▌   | 192/290 [00:03<00:01, 80.45it/s]Loading weights:  81%|████████  | 234/290 [00:03<00:00, 81.39it/s]Loading weights:  91%|█████████ | 263/290 [00:04<00:00, 53.15it/s]Loading weights:  97%|█████████▋| 282/290 [00:05<00:00, 56.63it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 56.28it/s]
+  d1-g101 (fail): gold=-0.116051 call=-0.034850 gap=-0.081201
+  d2-g101 (fail): gold=-0.125492 call=-0.034082 gap=-0.091409
+  d0-g100 (control): gold=-0.019724 call=-0.152522 gap=0.132798
+  d3-g100 (control): gold=-0.023057 call=-0.131348 gap=0.108291
+score[step_2]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<13:03,  2.71s/it]Loading weights:  45%|████▌     | 131/290 [00:02<00:02, 63.49it/s]Loading weights:  62%|██████▏   | 179/290 [00:03<00:01, 70.57it/s]Loading weights:  72%|███████▏  | 210/290 [00:03<00:01, 75.76it/s]Loading weights:  80%|████████  | 233/290 [00:04<00:00, 68.52it/s]Loading weights:  86%|████████▌ | 249/290 [00:05<00:00, 46.32it/s]Loading weights:  90%|█████████ | 261/290 [00:05<00:00, 46.97it/s]Loading weights:  93%|█████████▎| 271/290 [00:05<00:00, 50.79it/s]Loading weights:  97%|█████████▋| 281/290 [00:05<00:00, 54.19it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 51.54it/s]
+  d1-g101 (fail): gold=-0.113565 call=-0.035579 gap=-0.077986
+  d2-g101 (fail): gold=-0.122962 call=-0.034522 gap=-0.088441
+  d0-g100 (control): gold=-0.019316 call=-0.153848 gap=0.134532
+  d3-g100 (control): gold=-0.022222 call=-0.133769 gap=0.111547
+score[step_3]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<12:05,  2.51s/it]Loading weights:  42%|████▏     | 123/290 [00:02<00:02, 65.28it/s]Loading weights:  63%|██████▎   | 182/290 [00:03<00:01, 76.71it/s]Loading weights:  76%|███████▌  | 219/290 [00:03<00:00, 81.01it/s]Loading weights:  84%|████████▍ | 245/290 [00:04<00:00, 55.29it/s]Loading weights:  91%|█████████ | 263/290 [00:04<00:00, 58.91it/s]Loading weights:  96%|█████████▌| 278/290 [00:05<00:00, 59.50it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 56.43it/s]
+  d1-g101 (fail): gold=-0.108050 call=-0.036575 gap=-0.071475
+  d2-g101 (fail): gold=-0.120406 call=-0.035020 gap=-0.085386
+  d0-g100 (control): gold=-0.018611 call=-0.156927 gap=0.138316
+  d3-g100 (control): gold=-0.021547 call=-0.136430 gap=0.114883
+{
+  "n_examples": 4,
+  "models": [
+    "base",
+    "step_1",
+    "step_2",
+    "step_3"
+  ]
+}
