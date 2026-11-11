@@ -1,0 +1,149 @@
+{
+  "kind": "sft_pilot_5_15",
+  "method": "SFT",
+  "stop_reason": "base_dev_has_no_final_errors",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot.py",
+  "git_head": "d2439e573f5f8c8448c370eee6a0b90e77a27c5b",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "loaded_model": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "requested_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "config_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_class": "TokenizersBackend",
+    "vocab_size": 261000,
+    "device": "mps",
+    "dtype": "float16",
+    "quantization": null,
+    "distribution": "public_gated",
+    "local_token_configured": true,
+    "config_json": "loaded",
+    "tokenizer": "loaded"
+  },
+  "pinned_config": {
+    "kind": "sft_pilot_5_15",
+    "method": "SFT",
+    "written_before_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot.py",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "held_out_eval": {
+      "source": "artifacts/task-5-14",
+      "episode_ids": [
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5"
+      ],
+      "seeds": [
+        100,
+        101
+      ],
+      "n_pairs": 12,
+      "note": "All 12 pairs reserved for final comparison; never used in train/dev."
+    },
+    "train": {
+      "episode_ids": [
+        "t15_0",
+        "t15_1",
+        "t15_2",
+        "t15_3",
+        "t15_4",
+        "t15_5",
+        "t15_6",
+        "t15_7"
+      ],
+      "order_ids": [
+        "ORD-9501",
+        "ORD-9502",
+        "ORD-9503",
+        "ORD-9504",
+        "ORD-9505",
+        "ORD-9506",
+        "ORD-9507",
+        "ORD-9508"
+      ],
+      "collection_seeds": [
+        100
+      ],
+      "filter": "confirmed submit_refund only",
+      "gold_amount_source": "submit_refund tool arguments/structured_result"
+    },
+    "dev": {
+      "episode_ids": [
+        "v15_0",
+        "v15_1",
+        "v15_2",
+        "v15_3"
+      ],
+      "order_ids": [
+        "ORD-9601",
+        "ORD-9602",
+        "ORD-9603",
+        "ORD-9604"
+      ],
+      "collection_seeds": [
+        100
+      ],
+      "excluded_from_training": true
+    },
+    "generation_collection": {
+      "settings": "same as task-5-8 / 5.14 one-action",
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "max_new_tokens": 512,
+      "capture": "exact AgentTune final-turn input_ids via _TurnIdEngine"
+    },
+    "training": {
+      "learning_rate": 2e-05,
+      "max_optimizer_steps": 3,
+      "loss": "causal_lm_on_final_tokens_only",
+      "prefix_masked": true,
+      "include_end_response_in_target": true,
+      "lora": {
+        "r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj"
+        ]
+      }
+    },
+    "dev_gate": {
+      "parse": "task-5-12 truncate_at_end_response",
+      "stop_if_base_has_no_final_errors": true,
+      "select_checkpoint": "first step that fixes >=1 base-incorrect final and breaks 0 base-correct finals; also reject if <|END_RESPONSE|> becomes argmax first token on any previously correct base context"
+    },
+    "pilot_criteria_on_5_14": {
+      "full_success": "> 7/12",
+      "confirmed_returns": ">= 10/12",
+      "calls_after_confirmed_submit_total": "< 3"
+    }
+  },
+  "collection": {
+    "train_confirmed": 6,
+    "dev_confirmed": 4
+  },
+  "dev_base": {
+    "n": 4,
+    "n_correct": 4,
+    "n_final_errors": 0
+  },
+  "training": null,
+  "eval_514": null
+}

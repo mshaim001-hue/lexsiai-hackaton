@@ -1,0 +1,20 @@
+{
+  "train_rollouts": 8,
+  "train_confirmed_for_sft": 6,
+  "dev_rollouts": 4,
+  "dev_confirmed_for_probe": 4,
+  "train_ids": [
+    "t15_0-g100",
+    "t15_1-g100",
+    "t15_3-g100",
+    "t15_4-g100",
+    "t15_5-g100",
+    "t15_7-g100"
+  ],
+  "dev_ids": [
+    "v15_0-g100",
+    "v15_1-g100",
+    "v15_2-g100",
+    "v15_3-g100"
+  ]
+}

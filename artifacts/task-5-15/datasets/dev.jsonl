@@ -1,0 +1,4 @@
+{"episode_id": "v15_0", "order_id": "ORD-9601", "customer_id": "CUS-I01", "amount_cents": 1840, "split": "dev", "prompt": "I need a refund for order ORD-9601. Customer number CUS-I01. The yoga mat smell will not off-gas after a week aired out.", "seeds": [100]}
+{"episode_id": "v15_1", "order_id": "ORD-9602", "customer_id": "CUS-I02", "amount_cents": 2260, "split": "dev", "prompt": "Please reverse ORD-9602 for CUS-I02. Warehouse sent a floor model with scratched legs.", "seeds": [100]}
+{"episode_id": "v15_2", "order_id": "ORD-9603", "customer_id": "CUS-I03", "amount_cents": 1590, "split": "dev", "prompt": "Customer CUS-I03 about ORD-9603. Subscription box month-two charged after I cancelled month-one.", "seeds": [100]}
+{"episode_id": "v15_3", "order_id": "ORD-9604", "customer_id": "CUS-I04", "amount_cents": 2730, "split": "dev", "prompt": "Refund request: ORD-9604, id CUS-I04. Ceramic mug set had two chipped cups in the sealed carton.", "seeds": [100]}

@@ -1,0 +1,63 @@
+W1111 11:29:45.024000 58941 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+5.15 pinned train/dev; 5.14 held out
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<13:59,  2.90s/it]Loading weights:  56%|█████▌    | 163/290 [00:03<00:01, 74.11it/s]Loading weights:  77%|███████▋  | 222/290 [00:03<00:00, 70.69it/s]Loading weights:  89%|████████▊ | 257/290 [00:04<00:00, 69.99it/s]Loading weights:  97%|█████████▋| 281/290 [00:05<00:00, 61.53it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 55.12it/s]
+collect train t15_0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=1730 err=none post=2506
+collect train t15_1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2590 err=none post=2496
+collect train t15_2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False tool_amt=None err=submit_refund_not_confirmed post=2407
+collect train t15_3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2810 err=none post=2496
+collect train t15_4-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=1980 err=none post=2491
+collect train t15_5-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2320 err=none post=2515
+collect train t15_6-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False tool_amt=None err=submit_refund_not_confirmed post=2519
+collect train t15_7-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2450 err=final_answer_tool_call_after_submit post=2553
+collect dev v15_0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=1840 err=none post=2496
+collect dev v15_1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2260 err=none post=2508
+collect dev v15_2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=1590 err=none post=2501
+collect dev v15_3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True tool_amt=2730 err=none post=2501
+5.15 base probe on confirmed dev post-submit prefixes
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<11:47,  2.45s/it]Loading weights:  48%|████▊     | 139/290 [00:02<00:02, 74.55it/s]Loading weights:  67%|██████▋   | 195/290 [00:03<00:01, 79.63it/s]Loading weights:  79%|███████▉  | 230/290 [00:03<00:00, 80.58it/s]Loading weights:  88%|████████▊ | 254/290 [00:04<00:00, 52.42it/s]Loading weights:  93%|█████████▎| 271/290 [00:04<00:00, 54.98it/s]Loading weights:  98%|█████████▊| 285/290 [00:05<00:00, 57.23it/s]Loading weights: 100%|██████████| 290/290 [00:05<00:00, 55.97it/s]
+dev[base] v15_0-g100 correct=True empty=False end_first=False parsed='REFUND_SUBMITTED amount_cents=1840'
+dev[base] v15_1-g100 correct=True empty=False end_first=False parsed='REFUND_SUBMITTED amount_cents=2260'
+dev[base] v15_2-g100 correct=True empty=False end_first=False parsed='REFUND_SUBMITTED amount_cents=1590'
+dev[base] v15_3-g100 correct=True empty=False end_first=False parsed='REFUND_SUBMITTED amount_cents=2730'
+{
+  "stop_reason": "base_dev_has_no_final_errors"
+}

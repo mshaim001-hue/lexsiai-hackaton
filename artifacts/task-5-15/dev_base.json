@@ -1,0 +1,89 @@
+{
+  "label": "base",
+  "n": 4,
+  "n_correct": 4,
+  "n_final_errors": 0,
+  "n_end_response_first": 0,
+  "pairs": [
+    {
+      "rollout_id": "v15_0-g100",
+      "episode_id": "v15_0",
+      "amount_cents": 1840,
+      "seed": 300,
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1840<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1840",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7432236671447754,
+        "p_end_response": 0.00047684420133009553,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "v15_1-g100",
+      "episode_id": "v15_1",
+      "amount_cents": 2260,
+      "seed": 301,
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2260<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2260",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7404963970184326,
+        "p_end_response": 0.00035582928103394806,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "v15_2-g100",
+      "episode_id": "v15_2",
+      "amount_cents": 1590,
+      "seed": 302,
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1590<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1590",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7406880855560303,
+        "p_end_response": 0.0004464254598133266,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "v15_3-g100",
+      "episode_id": "v15_3",
+      "amount_cents": 2730,
+      "seed": 303,
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2730<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2730",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7613670229911804,
+        "p_end_response": 0.0004018166509922594,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    }
+  ]
+}
