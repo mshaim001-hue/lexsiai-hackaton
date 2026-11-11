@@ -1,0 +1,681 @@
+{
+  "n": 8,
+  "n_adapter_prefers_end_response": 8,
+  "n_base_prefers_end_response": 0,
+  "n_adapter_raised_end_response": 8,
+  "n_adapter_lowered_gold_first": 8,
+  "pairs": [
+    {
+      "episode_id": "p0",
+      "amount_cents": 1310,
+      "base": {
+        "n_prefix": 2496,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7665101885795593,
+        "p_end_response": 0.0004477749753277749,
+        "logp_gold_first": -0.26590800285339355,
+        "logp_end_response": -7.711220741271973,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7665101885795593
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06003772094845772
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.047493744641542435
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.038162294775247574
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.02406865917146206
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2496,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1310",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.020794222131371498,
+        "p_end_response": 0.9787122011184692,
+        "logp_gold_first": -3.873080015182495,
+        "logp_end_response": -0.021517517045140266,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9787122011184692
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.020794222131371498
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 8.498123497702181e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 6.881989975227043e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 5.573205271502957e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p1",
+      "amount_cents": 2420,
+      "base": {
+        "n_prefix": 2506,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7404095530509949,
+        "p_end_response": 0.0004750387161038816,
+        "logp_gold_first": -0.300552636384964,
+        "logp_end_response": -7.652115345001221,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7404095530509949
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06469627469778061
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.05405575782060623
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03517475351691246
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.028708796948194504
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2506,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2420",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.019559655338525772,
+        "p_end_response": 0.979979395866394,
+        "logp_gold_first": -3.934286594390869,
+        "logp_end_response": -0.02022407576441765,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.979979395866394
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.019559655338525772
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 7.687355537200347e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 5.3248753829393536e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 4.848354001296684e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p2",
+      "amount_cents": 3530,
+      "base": {
+        "n_prefix": 2508,
+        "gold_text": "REFUND_SUBMITTED amount_cents=3530",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7457374334335327,
+        "p_end_response": 0.0004936448531225324,
+        "logp_gold_first": -0.2933822274208069,
+        "logp_end_response": -7.613694667816162,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7457374334335327
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06828899681568146
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.050353143364191055
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03830665349960327
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.026122868061065674
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2508,
+        "gold_text": "REFUND_SUBMITTED amount_cents=3530",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.02535739168524742,
+        "p_end_response": 0.9740939736366272,
+        "logp_gold_first": -3.674685001373291,
+        "logp_end_response": -0.02624761313199997,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9740939736366272
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.02535739168524742
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 9.435606625629589e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 7.761518645565957e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 6.044676047167741e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p3",
+      "amount_cents": 1640,
+      "base": {
+        "n_prefix": 2504,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1640",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7627267241477966,
+        "p_end_response": 0.0005811260198242962,
+        "logp_gold_first": -0.27085646986961365,
+        "logp_end_response": -7.4505438804626465,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7627267241477966
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06716903299093246
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.04405052587389946
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03273557126522064
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.023578548803925514
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2504,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1640",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.02111489325761795,
+        "p_end_response": 0.9783976078033447,
+        "logp_gold_first": -3.857776641845703,
+        "logp_end_response": -0.02183912880718708,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9783976078033447
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.02111489325761795
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 8.106359018711373e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 7.438813918270171e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 5.838791184942238e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p4",
+      "amount_cents": 2750,
+      "base": {
+        "n_prefix": 2498,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2750",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7623335719108582,
+        "p_end_response": 0.0003232786257285625,
+        "logp_gold_first": -0.2713720500469208,
+        "logp_end_response": -8.036996841430664,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7623335719108582
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06306694447994232
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.047605425119400024
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03482887148857117
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.02508629858493805
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2498,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2750",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.02799028530716896,
+        "p_end_response": 0.9713942408561707,
+        "logp_gold_first": -3.5758981704711914,
+        "logp_end_response": -0.02902311459183693,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9713942408561707
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.02799028530716896
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 0.00011000767699442804
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 7.560710946563631e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 7.158336666179821e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p5",
+      "amount_cents": 1860,
+      "base": {
+        "n_prefix": 2500,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1860",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7701911926269531,
+        "p_end_response": 0.0005019279778935015,
+        "logp_gold_first": -0.26111724972724915,
+        "logp_end_response": -7.597054958343506,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7701911926269531
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.05535827949643135
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.04772182181477547
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03254345804452896
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.024565089493989944
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2500,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1860",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.02127581648528576,
+        "p_end_response": 0.9781821966171265,
+        "logp_gold_first": -3.850184440612793,
+        "logp_end_response": -0.022059427574276924,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9781821966171265
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.02127581648528576
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 9.475207480136305e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 6.563284841831774e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 5.702280759578571e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p6",
+      "amount_cents": 2970,
+      "base": {
+        "n_prefix": 2492,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2970",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7061372399330139,
+        "p_end_response": 0.00047479229397140443,
+        "logp_gold_first": -0.347946435213089,
+        "logp_end_response": -7.652634143829346,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7061372399330139
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.07922640442848206
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.05933783948421478
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.040464889258146286
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.028693903237581253
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2492,
+        "gold_text": "REFUND_SUBMITTED amount_cents=2970",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.024039091542363167,
+        "p_end_response": 0.9753596782684326,
+        "logp_gold_first": -3.728074073791504,
+        "logp_end_response": -0.024949001148343086,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9753596782684326
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.024039091542363167
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 0.00010457835014676675
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 8.208449435187504e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 7.076125621097162e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    },
+    {
+      "episode_id": "p7",
+      "amount_cents": 1080,
+      "base": {
+        "n_prefix": 2504,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1080",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.7490538954734802,
+        "p_end_response": 0.00045857724035158753,
+        "logp_gold_first": -0.28894567489624023,
+        "logp_end_response": -7.68738317489624,
+        "prefer_end_response_over_gold": false,
+        "top5": [
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.7490538954734802
+          },
+          {
+            "token_id": 73,
+            "token": "[",
+            "prob": 0.06805890053510666
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 0.04751276597380638
+          },
+          {
+            "token_id": 7979,
+            "token": "Ref",
+            "prob": 0.03969840332865715
+          },
+          {
+            "token_id": 5983,
+            "token": "```",
+            "prob": 0.02543175220489502
+          }
+        ]
+      },
+      "adapter": {
+        "n_prefix": 2504,
+        "gold_text": "REFUND_SUBMITTED amount_cents=1080",
+        "gold_first_token_id": 26501,
+        "gold_first_token": "REF",
+        "end_response_token_id": 261001,
+        "p_gold_first": 0.020322784781455994,
+        "p_end_response": 0.9792065620422363,
+        "logp_gold_first": -3.896012783050537,
+        "logp_end_response": -0.02101278491318226,
+        "prefer_end_response_over_gold": true,
+        "top5": [
+          {
+            "token_id": 261001,
+            "token": "<|END_RESPONSE|>",
+            "prob": 0.9792065620422363
+          },
+          {
+            "token_id": 26501,
+            "token": "REF",
+            "prob": 0.020322784781455994
+          },
+          {
+            "token_id": 48251,
+            "token": "UTF",
+            "prob": 7.272501534316689e-05
+          },
+          {
+            "token_id": 105823,
+            "token": "ETF",
+            "prob": 6.220500654308125e-05
+          },
+          {
+            "token_id": 94680,
+            "token": " REF",
+            "prob": 5.5326276196865365e-05
+          }
+        ]
+      },
+      "adapter_raised_end_response": true,
+      "adapter_lowered_gold_first": true
+    }
+  ]
+}

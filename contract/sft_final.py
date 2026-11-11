@@ -547,28 +547,77 @@ def _looks_like_tool_call(text: str | None) -> bool:
     )
 
 
+END_RESPONSE = "<|END_RESPONSE|>"
+
+
+def agenttune_eos_token_id(model, tokenizer):
+    """Same stop ids AgentTune's TransformersRolloutEngine passes to generate()."""
+    gen_cfg = getattr(model, "generation_config", None)
+    eos = getattr(gen_cfg, "eos_token_id", None) if gen_cfg is not None else None
+    return eos if eos is not None else tokenizer.eos_token_id
+
+
+def parse_final_like_rollout(text: str | None) -> dict[str, Any]:
+    """Truncate at the first <|END_RESPONSE|>.
+
+    Correct gold before the marker counts. A completion that starts with the
+    marker is treated as an empty final.
+    """
+    raw = text or ""
+    starts_with_marker = raw.lstrip().startswith(END_RESPONSE)
+    if starts_with_marker:
+        body = ""
+    elif END_RESPONSE in raw:
+        body = raw.split(END_RESPONSE, 1)[0]
+    else:
+        body = raw
+    body = body.strip()
+    return {
+        "raw": raw,
+        "parsed": body,
+        "starts_with_end_response": starts_with_marker,
+        "empty": body == "",
+        "looks_like_tool_call": _looks_like_tool_call(body) or _looks_like_tool_call(raw),
+    }
+
+
+def score_final(text: str | None, amount_cents: int) -> dict[str, Any]:
+    parsed = parse_final_like_rollout(text)
+    ok = (not parsed["empty"]) and (
+        answer_matches(parsed["parsed"], amount_cents)
+        or parsed["parsed"] == final_answer_text(amount_cents)
+    )
+    return {**parsed, "amount_cents": amount_cents, "correct": ok}
+
+
 def _clean_final(text: str | None) -> str:
-    if text is None:
-        return ""
-    body = text.strip()
-    for token in (
-        "<|END_RESPONSE|>",
-        "<EOS_TOKEN>",
-        "<|END_OF_TURN_TOKEN|>",
-        "<|START_RESPONSE|>",
-    ):
-        if body.endswith(token):
-            body = body[: -len(token)].rstrip()
-    return body
+    return parse_final_like_rollout(text)["parsed"]
 
 
-def generate_on_prefix(model, tokenizer, prefix_messages: list[dict], *, seed: int) -> str:
+def generate_on_prefix_aligned(
+    model,
+    tokenizer,
+    *,
+    prefix_messages: list[dict] | None = None,
+    prefix_ids: list[int] | None = None,
+    seed: int,
+    max_new_tokens: int = 128,
+    temperature: float = PROBE_TEMPERATURE,
+    top_p: float = PROBE_TOP_P,
+) -> dict[str, Any]:
+    """Generate one final turn with AgentTune eos_token_id; keep specials in raw text."""
     import torch
 
     device = next(model.parameters()).device
-    prompt = _render_prefix_text(tokenizer, prefix_messages)
-    input_ids = tokenizer.encode(prompt, add_special_tokens=False)
+    if prefix_ids is not None:
+        input_ids = list(prefix_ids)
+    else:
+        if prefix_messages is None:
+            raise ValueError("prefix_messages or prefix_ids required")
+        prompt = _render_prefix_text(tokenizer, prefix_messages)
+        input_ids = tokenizer.encode(prompt, add_special_tokens=False)
     ids = torch.tensor([input_ids], dtype=torch.long, device=device)
+    eos = agenttune_eos_token_id(model, tokenizer)
     torch.manual_seed(seed)
     if torch.backends.mps.is_available():
         torch.mps.manual_seed(seed)
@@ -576,15 +625,35 @@ def generate_on_prefix(model, tokenizer, prefix_messages: list[dict], *, seed: i
     with torch.no_grad():
         out = model.generate(
             ids,
-            max_new_tokens=128,
+            max_new_tokens=max_new_tokens,
             do_sample=True,
-            temperature=PROBE_TEMPERATURE,
-            top_p=PROBE_TOP_P,
+            temperature=temperature,
+            top_p=top_p,
             pad_token_id=tokenizer.pad_token_id or tokenizer.eos_token_id,
-            eos_token_id=tokenizer.eos_token_id,
+            eos_token_id=eos,
         )
     new = out[0, ids.shape[1] :].tolist()
-    return tokenizer.decode(new, skip_special_tokens=False)
+    raw = tokenizer.decode(new, skip_special_tokens=False)
+    return {
+        "raw": raw,
+        "new_token_ids": new,
+        "eos_token_id": eos,
+        "n_new_tokens": len(new),
+        "stopped_on_eos": bool(new)
+        and (new[-1] == eos if isinstance(eos, int) else new[-1] in set(eos)),
+    }
+
+
+def generate_on_prefix(model, tokenizer, prefix_messages: list[dict], *, seed: int) -> str:
+    return generate_on_prefix_aligned(
+        model,
+        tokenizer,
+        prefix_messages=prefix_messages,
+        seed=seed,
+        max_new_tokens=128,
+        temperature=PROBE_TEMPERATURE,
+        top_p=PROBE_TOP_P,
+    )["raw"]
 
 
 def run_probe(base_model, adapter_model, tokenizer, probe_chains: list[dict]) -> dict[str, Any]:
@@ -598,32 +667,31 @@ def run_probe(base_model, adapter_model, tokenizer, probe_chains: list[dict]) ->
             adapter_model, tokenizer, chain["prefix_messages"], seed=seed
         )
         amount = chain["amount_cents"]
-        base_clean = _clean_final(base_text)
-        ad_clean = _clean_final(ad_text)
-        base_ok = answer_matches(base_clean, amount) or base_clean == final_answer_text(amount)
-        ad_ok = answer_matches(ad_clean, amount) or ad_clean == final_answer_text(amount)
-        # answer_matches already strips ending tokens; also accept exact gold.
-        if not base_ok:
-            base_ok = base_clean == final_answer_text(amount)
-        if not ad_ok:
-            ad_ok = ad_clean == final_answer_text(amount)
-        # Prefer harness helper after stripping.
-        base_ok = answer_matches(base_text, amount)
-        ad_ok = answer_matches(ad_text, amount)
+        base_scored = score_final(base_text, amount)
+        ad_scored = score_final(ad_text, amount)
+        base_ok = bool(base_scored["correct"])
+        ad_ok = bool(ad_scored["correct"])
         pairs.append(
             {
                 "episode_id": chain["episode_id"],
                 "order_id": chain["order_id"],
                 "amount_cents": amount,
                 "seed": seed,
-                "base_final": base_clean,
-                "adapter_final": ad_clean,
+                "base_final": base_scored["parsed"],
+                "adapter_final": ad_scored["parsed"],
+                "base_final_raw": base_text,
+                "adapter_final_raw": ad_text,
                 "base_final_correct": base_ok,
                 "adapter_final_correct": ad_ok,
-                "base_extra_tool_call": _looks_like_tool_call(base_text),
-                "adapter_extra_tool_call": _looks_like_tool_call(ad_text),
+                "base_empty": base_scored["empty"],
+                "adapter_empty": ad_scored["empty"],
+                "base_starts_with_end_response": base_scored["starts_with_end_response"],
+                "adapter_starts_with_end_response": ad_scored["starts_with_end_response"],
+                "base_extra_tool_call": base_scored["looks_like_tool_call"],
+                "adapter_extra_tool_call": ad_scored["looks_like_tool_call"],
                 "fixed": (not base_ok) and ad_ok,
                 "broken": base_ok and (not ad_ok),
+                "parse": "truncate_at_end_response_agenttune_aligned",
             }
         )
         print(

@@ -1,0 +1,668 @@
+{
+  "end_response": "<|END_RESPONSE|>",
+  "end_response_token_ids": [
+    261001
+  ],
+  "n_train": 16,
+  "any_marker_in_target": false,
+  "any_marker_under_loss": false,
+  "note": "5.11 SFT supervised only the gold REFUND_SUBMITTED line after add_generation_prompt; chat-template <|END_RESPONSE|> was not appended to the target, so the marker is absent from labels.",
+  "rows": [
+    {
+      "episode_id": "s0",
+      "target_final": "REFUND_SUBMITTED amount_cents=1110",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        9956
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "110"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s1",
+      "target_final": "REFUND_SUBMITTED amount_cents=2220",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        16576
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "220"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s2",
+      "target_final": "REFUND_SUBMITTED amount_cents=3330",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        33,
+        24283
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "3",
+        "330"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s3",
+      "target_final": "REFUND_SUBMITTED amount_cents=1440",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        26199
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "440"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s4",
+      "target_final": "REFUND_SUBMITTED amount_cents=2550",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        30263
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "550"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s5",
+      "target_final": "REFUND_SUBMITTED amount_cents=1660",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        45612
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "660"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s6",
+      "target_final": "REFUND_SUBMITTED amount_cents=2770",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        47794
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "770"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s7",
+      "target_final": "REFUND_SUBMITTED amount_cents=1880",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        33981
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "880"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s8",
+      "target_final": "REFUND_SUBMITTED amount_cents=2990",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        15262
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "990"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s9",
+      "target_final": "REFUND_SUBMITTED amount_cents=1210",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        17976
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "210"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s10",
+      "target_final": "REFUND_SUBMITTED amount_cents=2320",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        25259
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "320"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s11",
+      "target_final": "REFUND_SUBMITTED amount_cents=3430",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        33,
+        37356
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "3",
+        "430"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s12",
+      "target_final": "REFUND_SUBMITTED amount_cents=1540",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        45004
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "540"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s13",
+      "target_final": "REFUND_SUBMITTED amount_cents=2650",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        25260
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "650"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s14",
+      "target_final": "REFUND_SUBMITTED amount_cents=1760",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        31,
+        56500
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "1",
+        "760"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    },
+    {
+      "episode_id": "s15",
+      "target_final": "REFUND_SUBMITTED amount_cents=2870",
+      "n_target": 12,
+      "target_ids": [
+        26501,
+        28609,
+        67544,
+        8489,
+        72276,
+        4114,
+        5742,
+        4864,
+        910,
+        43,
+        32,
+        36557
+      ],
+      "target_tokens": [
+        "REF",
+        "UND",
+        "_SU",
+        "BM",
+        "ITT",
+        "ED",
+        " amount",
+        "_c",
+        "ents",
+        "=",
+        "2",
+        "870"
+      ],
+      "end_response_token_ids": [
+        261001
+      ],
+      "marker_positions_in_target": [],
+      "marker_under_loss_positions": [],
+      "marker_in_supervised_target": false,
+      "first_supervised_token_id": 26501,
+      "first_supervised_token": "REF"
+    }
+  ]
+}

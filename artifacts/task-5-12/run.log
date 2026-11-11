@@ -1,0 +1,107 @@
+W1111 10:04:33.145000 36615 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.12 rescoring saved 5.11 probe answers
+5.12 checking whether <|END_RESPONSE|> is in the SFT target/loss
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+5.12 loading base + 5.11 adapter for logits and regen
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:03<15:38,  3.25s/it]Loading weights:  56%|█████▌    | 163/290 [00:03<00:01, 67.12it/s]Loading weights:  78%|███████▊  | 226/290 [00:04<00:01, 56.97it/s]Loading weights:  91%|█████████ | 263/290 [00:06<00:00, 46.48it/s]Loading weights:  99%|█████████▉| 287/290 [00:06<00:00, 44.13it/s]Loading weights: 100%|██████████| 290/290 [00:06<00:00, 42.85it/s]
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:05<26:41,  5.54s/it]Loading weights:  56%|█████▌    | 163/290 [00:05<00:03, 39.36it/s]Loading weights:  69%|██████▉   | 201/290 [00:06<00:02, 38.32it/s]Loading weights:  77%|███████▋  | 223/290 [00:07<00:01, 36.20it/s]Loading weights:  82%|████████▏ | 238/290 [00:08<00:01, 33.94it/s]Loading weights:  86%|████████▌ | 249/290 [00:08<00:01, 34.51it/s]Loading weights:  89%|████████▊ | 257/290 [00:08<00:00, 36.05it/s]Loading weights:  91%|█████████▏| 265/290 [00:08<00:00, 35.18it/s]Loading weights:  93%|█████████▎| 271/290 [00:09<00:00, 31.96it/s]Loading weights:  95%|█████████▌| 276/290 [00:09<00:00, 32.22it/s]Loading weights:  97%|█████████▋| 281/290 [00:09<00:00, 32.91it/s]Loading weights:  99%|█████████▊| 286/290 [00:09<00:00, 33.00it/s]Loading weights: 100%|██████████| 290/290 [00:09<00:00, 30.00it/s]
+5.12 first-token logits on saved 5.11 probe prefixes
+logits p0 base p_gold=0.7665 p_end=0.0004 | adapter p_gold=0.0208 p_end=0.9787
+logits p1 base p_gold=0.7404 p_end=0.0005 | adapter p_gold=0.0196 p_end=0.9800
+logits p2 base p_gold=0.7457 p_end=0.0005 | adapter p_gold=0.0254 p_end=0.9741
+logits p3 base p_gold=0.7627 p_end=0.0006 | adapter p_gold=0.0211 p_end=0.9784
+logits p4 base p_gold=0.7623 p_end=0.0003 | adapter p_gold=0.0280 p_end=0.9714
+logits p5 base p_gold=0.7702 p_end=0.0005 | adapter p_gold=0.0213 p_end=0.9782
+logits p6 base p_gold=0.7061 p_end=0.0005 | adapter p_gold=0.0240 p_end=0.9754
+logits p7 base p_gold=0.7491 p_end=0.0005 | adapter p_gold=0.0203 p_end=0.9792
+5.12 regenerating finals on known post-submit tool-call contexts
+regen v0-g102 base_tool=False base_ok=True adapter_ok=False adapter_empty=True
+regen v2-g102 base_tool=False base_ok=True adapter_ok=False adapter_empty=False
+regen u1-g102 base_tool=False base_ok=False adapter_ok=False adapter_empty=False
+regen u1-g103 base_tool=False base_ok=True adapter_ok=False adapter_empty=False
+{
+  "kind": "sft_probe_diagnosis",
+  "method_note": "diagnosis only; no new SFT training",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_probe_diag.py",
+  "git_head": "98df4d3c088413e61a36616761f52730334cfba1",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "stop_parse_alignment": {
+    "probe_eos_source": "model.generation_config.eos_token_id (AgentTune)",
+    "base_eos_token_id": 3,
+    "adapter_eos_token_id": 3,
+    "tokenizer_eos_token_id": 6,
+    "tokenizer_eos_token": "<|END_OF_TURN_TOKEN|>",
+    "end_response_token_ids": [
+      261001
+    ],
+    "parse_rule": "truncate at first <|END_RESPONSE|>; leading marker => empty final; then score with answer_matches / exact gold line",
+    "old_probe_eos_was": "tokenizer.eos_token_id",
+    "old_probe_parse_was": "answer_matches on raw/lightly cleaned text (trailing specials only)"
+  },
+  "training_target_marker_sample": {
+    "episode_id": "s0",
+    "target_final": "REFUND_SUBMITTED amount_cents=1110",
+    "n_target": 12,
+    "target_ids": [
+      26501,
+      28609,
+      67544,
+      8489,
+      72276,
+      4114,
+      5742,
+      4864,
+      910,
+      43,
+      31,
+      9956
+    ],
+    "target_tokens": [
+      "REF",
+      "UND",
+      "_SU",
+      "BM",
+      "ITT",
+      "ED",
+      " amount",
+      "_c",
+      "ents",
+      "=",
+      "1",
+      "110"
+    ],
+    "end_response_token_ids": [
+      261001
+    ],
+    "marker_positions_in_target": [],
+    "marker_under_loss_positions": [],
+    "marker_in_supervised_target": false,
+    "first_supervised_token_id": 26501,
+    "first_supervised_token": "REF"
+  },
+  "failure_regen_rows": [
+    {
+      "rollout_id": "v0-g102",
+      "base_tool_call_reproduced": false,
+      "base_correct": true,
+      "adapter_correct": fals
+{
+  "saved_base_correct_old_new": [
+    5,
+    8
+  ],
+  "adapter_leading_marker_empty": 8,
+  "marker_under_loss": false,
+  "adapter_prefers_end_response": 8,
+  "base_tool_call_reproduced": 0,
+  "proposed_next_split": false
+}

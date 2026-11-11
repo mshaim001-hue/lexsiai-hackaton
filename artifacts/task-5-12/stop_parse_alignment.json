@@ -1,0 +1,13 @@
+{
+  "probe_eos_source": "model.generation_config.eos_token_id (AgentTune)",
+  "base_eos_token_id": 3,
+  "adapter_eos_token_id": 3,
+  "tokenizer_eos_token_id": 6,
+  "tokenizer_eos_token": "<|END_OF_TURN_TOKEN|>",
+  "end_response_token_ids": [
+    261001
+  ],
+  "parse_rule": "truncate at first <|END_RESPONSE|>; leading marker => empty final; then score with answer_matches / exact gold line",
+  "old_probe_eos_was": "tokenizer.eos_token_id",
+  "old_probe_parse_was": "answer_matches on raw/lightly cleaned text (trailing specials only)"
+}
