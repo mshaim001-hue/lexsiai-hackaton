@@ -1,0 +1,77 @@
+{
+  "kind": "sft_pilot_5_16",
+  "method": "SFT",
+  "written_before_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_516.py",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "train": {
+    "source": "artifacts/task-5-15 confirmed train chains",
+    "n": 6,
+    "example_order": [
+      "t15_0-g100",
+      "t15_1-g100",
+      "t15_3-g100",
+      "t15_4-g100",
+      "t15_5-g100",
+      "t15_7-g100"
+    ],
+    "gold_amount_source": "submit_refund tool result (captured in 5.15)",
+    "include_end_response_in_target": true
+  },
+  "quick_check": {
+    "source": "artifacts/task-5-14 confirmed post-submit input_ids",
+    "n": 10,
+    "rollout_ids": [
+      "d0-g100",
+      "d0-g101",
+      "d1-g100",
+      "d1-g101",
+      "d2-g100",
+      "d2-g101",
+      "d3-g100",
+      "d3-g101",
+      "d4-g100",
+      "d5-g101"
+    ],
+    "parse": "task-5-12 truncate_at_end_response",
+    "compare_to": "fresh base regeneration on same input_ids and seeds",
+    "if_old_errors_not_reproduced": "use contexts for regression only; measure effect in full 5.14"
+  },
+  "training": {
+    "learning_rate": 2e-05,
+    "max_optimizer_steps": 3,
+    "loss": "causal_lm_on_final_tokens_only",
+    "prefix_masked": true,
+    "fresh_lora": true,
+    "lora": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "bias": "none",
+      "task_type": "CAUSAL_LM",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "stop_if_empty_finals": true
+  },
+  "checkpoint_selection": {
+    "at_most_one_full_514_eval": true,
+    "if_base_errors_reproduced": "first checkpoint that fixes >=1 base-incorrect and keeps all base-correct",
+    "if_no_base_errors": "last checkpoint that keeps all base-correct answers"
+  },
+  "pilot_criteria_on_5_14": {
+    "baseline": {
+      "full_success": 7,
+      "confirmed_returns": 10,
+      "calls_after_confirmed_submit_total": 3
+    },
+    "full_success": "> 7/12",
+    "confirmed_returns": ">= 10/12",
+    "calls_after_confirmed_submit_total": "< 3"
+  }
+}

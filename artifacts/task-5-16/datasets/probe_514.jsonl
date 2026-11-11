@@ -1,0 +1,10 @@
+{"rollout_id": "d0-g100", "episode_id": "d0", "generation_seed": 100, "gold_amount_cents": 1620, "n_prefix": 2510, "episode_error_type": "none"}
+{"rollout_id": "d0-g101", "episode_id": "d0", "generation_seed": 101, "gold_amount_cents": 1620, "n_prefix": 2510, "episode_error_type": "none"}
+{"rollout_id": "d1-g100", "episode_id": "d1", "generation_seed": 100, "gold_amount_cents": 2480, "n_prefix": 2525, "episode_error_type": "none"}
+{"rollout_id": "d1-g101", "episode_id": "d1", "generation_seed": 101, "gold_amount_cents": 2480, "n_prefix": 2537, "episode_error_type": "final_answer_tool_call_after_submit"}
+{"rollout_id": "d2-g100", "episode_id": "d2", "generation_seed": 100, "gold_amount_cents": 1350, "n_prefix": 2518, "episode_error_type": "none"}
+{"rollout_id": "d2-g101", "episode_id": "d2", "generation_seed": 101, "gold_amount_cents": 1350, "n_prefix": 2530, "episode_error_type": "final_answer_tool_call_after_submit"}
+{"rollout_id": "d3-g100", "episode_id": "d3", "generation_seed": 100, "gold_amount_cents": 2790, "n_prefix": 2504, "episode_error_type": "none"}
+{"rollout_id": "d3-g101", "episode_id": "d3", "generation_seed": 101, "gold_amount_cents": 2790, "n_prefix": 2504, "episode_error_type": "none"}
+{"rollout_id": "d4-g100", "episode_id": "d4", "generation_seed": 100, "gold_amount_cents": 1910, "n_prefix": 2569, "episode_error_type": "final_answer_tool_call_after_submit"}
+{"rollout_id": "d5-g101", "episode_id": "d5", "generation_seed": 101, "gold_amount_cents": 2240, "n_prefix": 2505, "episode_error_type": "none"}

@@ -1,0 +1,62 @@
+W1111 12:14:46.455000 68486 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.16 pinned lr=2e-05 steps<=3 train_order=['t15_0-g100', 't15_1-g100', 't15_3-g100', 't15_4-g100', 't15_5-g100', 't15_7-g100']
+5.16 base regen on 10 confirmed 5.14 post-submit prefixes
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:03<18:06,  3.76s/it]Loading weights:  56%|█████▌    | 163/290 [00:03<00:02, 57.34it/s]Loading weights:  72%|███████▏  | 210/290 [00:05<00:01, 50.61it/s]Loading weights:  82%|████████▏ | 238/290 [00:06<00:01, 43.45it/s]Loading weights:  88%|████████▊ | 256/290 [00:06<00:00, 41.37it/s]Loading weights:  93%|█████████▎| 269/290 [00:07<00:00, 37.47it/s]Loading weights:  96%|█████████▌| 278/290 [00:07<00:00, 36.04it/s]Loading weights:  98%|█████████▊| 285/290 [00:07<00:00, 35.82it/s]Loading weights: 100%|██████████| 290/290 [00:07<00:00, 37.20it/s]
+probe[base] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[base] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[base] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[base] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[base] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[base] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[base] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[base] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[base] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[base] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+5.16 base probe errors=2/10 mode=fix_errors; unreproduced_episode_fails=['d4-g100']
+5.16 training fresh LoRA lr=2e-05 max_steps=3
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<12:17,  2.55s/it]Loading weights:  43%|████▎     | 124/290 [00:02<00:02, 65.47it/s]Loading weights:  67%|██████▋   | 195/290 [00:04<00:01, 52.74it/s]Loading weights:  81%|████████▏ | 236/290 [00:05<00:01, 49.86it/s]Loading weights:  91%|█████████ | 263/290 [00:05<00:00, 49.59it/s]Loading weights:  97%|█████████▋| 282/290 [00:06<00:00, 52.98it/s]Loading weights: 100%|██████████| 290/290 [00:06<00:00, 47.16it/s]
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+probe[step_1] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_1] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_1] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_1] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_1] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_1] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_1] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_1] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_1] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_1] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft step=1 loss=0.024466 fixed=[] broken=[] empty=[]
+probe[step_2] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_2] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_2] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_2] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_2] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_2] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_2] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_2] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_2] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_2] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft step=2 loss=0.027116 fixed=[] broken=[] empty=[]
+probe[step_3] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_3] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_3] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_3] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_3] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_3] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_3] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_3] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_3] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_3] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft step=3 loss=0.000005 fixed=[] broken=[] empty=[]
+5.16 no checkpoint selected; skip full 5.14 eval
+python(97666) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+{
+  "stop_reason": "no_checkpoint_passed_selection",
+  "selected": null,
+  "base_probe_errors": 2,
+  "eval_514": null
+}
