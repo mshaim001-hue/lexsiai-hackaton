@@ -1,0 +1,45 @@
+{
+  "example_order": [
+    "c21_6-g101",
+    "c21_7-g100",
+    "c21_7-g101",
+    "c22_3-g101"
+  ],
+  "first_token_id_verified": 26501,
+  "first_token_weight": 5.0,
+  "other_final_token_weight": 1.0,
+  "examples": [
+    {
+      "rollout_id": "c21_6-g101",
+      "n_prefix": 2568,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=1930<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "c21_7-g100",
+      "n_prefix": 2567,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2670<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "c21_7-g101",
+      "n_prefix": 2567,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2670<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "c22_3-g101",
+      "n_prefix": 2523,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|>"
+    }
+  ]
+}

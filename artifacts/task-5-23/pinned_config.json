@@ -1,0 +1,80 @@
+{
+  "kind": "sft_pilot_5_23",
+  "method": "SFT",
+  "written_before_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_523.py",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "inherits_training_recipe_from": "artifacts/task-5-19",
+  "inherits_eval_from": "artifacts/task-5-20",
+  "train": {
+    "n": 4,
+    "example_order": [
+      "c21_6-g101",
+      "c21_7-g100",
+      "c21_7-g101",
+      "c22_3-g101"
+    ],
+    "sources": {
+      "c21_6-g101": "artifacts/task-5-21/collection/post_submit_contexts.json",
+      "c21_7-g100": "artifacts/task-5-21/collection/post_submit_contexts.json",
+      "c21_7-g101": "artifacts/task-5-21/collection/post_submit_contexts.json",
+      "c22_3-g101": "artifacts/task-5-22/collection/post_submit_contexts.json"
+    },
+    "inputs": "saved prefix_input_ids",
+    "targets": "verified REFUND_SUBMITTED (+ <|END_RESPONSE|>) gold_token_ids",
+    "optimizer_schedule": "one_pass_one_optimizer_step_per_example",
+    "n_optimizer_steps": 4
+  },
+  "training": {
+    "learning_rate": 2e-05,
+    "fresh_lora": true,
+    "lora": {
+      "r": 8,
+      "lora_alpha": 16,
+      "lora_dropout": 0.05,
+      "bias": "none",
+      "task_type": "CAUSAL_LM",
+      "target_modules": [
+        "q_proj",
+        "k_proj",
+        "v_proj",
+        "o_proj"
+      ]
+    },
+    "loss": "weighted_causal_lm_on_final_tokens_only",
+    "prefix_masked": true,
+    "first_final_token_id_required": 26501,
+    "first_final_token_text": "REF",
+    "first_final_token_weight": 5.0,
+    "other_final_token_weight": 1.0,
+    "loss_normalization": "sum_of_token_weights"
+  },
+  "delta_logp_probe": {
+    "contexts": "same four train prefixes",
+    "metric": "logp(REF) - logp([) at first divergence",
+    "when": [
+      "before_training",
+      "after_training"
+    ]
+  },
+  "eval": {
+    "matrix": "artifacts/task-5-14 d0–d5 × {100,101} (12 episodes)",
+    "adapter_pinned_before_training": "adapters/step_4",
+    "settings": "same as task-5-20 / task-5-14",
+    "condition_check_vs_5_14": {
+      "model_match": true,
+      "generation_mismatches": {},
+      "discovery_mismatches": {},
+      "prompt_mismatches": {},
+      "substantial_difference": false,
+      "comparison_source_if_match": "artifacts/task-5-14/baseline/per_pair.json",
+      "action": "use_saved_5_14_baseline"
+    },
+    "pass_criterion": {
+      "at_least_one_prev_fail_becomes_full_success": true,
+      "no_prev_success_breaks": true,
+      "invalid_calls_do_not_increase": true
+    }
+  }
+}

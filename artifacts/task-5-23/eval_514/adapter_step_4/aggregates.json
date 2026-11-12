@@ -1,0 +1,13 @@
+{
+  "n": 12,
+  "full_success": 8,
+  "confirmed_returns": 10,
+  "correct_finals": 8,
+  "invalid_calls_total": 0,
+  "calls_after_confirmed_submit_total": 2,
+  "error_type_counts": {
+    "none": 8,
+    "final_answer_tool_call_after_submit": 2,
+    "submit_refund_not_confirmed": 2
+  }
+}

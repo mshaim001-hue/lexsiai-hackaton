@@ -1,0 +1,66 @@
+{
+  "learning_rate": 2e-05,
+  "example_order": [
+    "c21_6-g101",
+    "c21_7-g100",
+    "c21_7-g101",
+    "c22_3-g101"
+  ],
+  "history": [
+    {
+      "step": 1,
+      "rollout_id": "c21_6-g101",
+      "train_loss": 0.44691920280456543,
+      "sum_weights": 17.0,
+      "n_supervised": 13,
+      "grad_norm": 558962.1875,
+      "adapter": "artifacts/task-5-23/adapters/step_1"
+    },
+    {
+      "step": 2,
+      "rollout_id": "c21_7-g100",
+      "train_loss": 0.48995983600616455,
+      "sum_weights": 17.0,
+      "n_supervised": 13,
+      "grad_norm": 4.885854721069336,
+      "adapter": "artifacts/task-5-23/adapters/step_2"
+    },
+    {
+      "step": 3,
+      "rollout_id": "c21_7-g101",
+      "train_loss": 0.47320613265037537,
+      "sum_weights": 17.0,
+      "n_supervised": 13,
+      "grad_norm": 556926.3125,
+      "adapter": "artifacts/task-5-23/adapters/step_3"
+    },
+    {
+      "step": 4,
+      "rollout_id": "c22_3-g101",
+      "train_loss": 0.48400992155075073,
+      "sum_weights": 17.0,
+      "n_supervised": 13,
+      "grad_norm": 5.659336566925049,
+      "adapter": "artifacts/task-5-23/adapters/step_4"
+    }
+  ],
+  "eval_adapter": "artifacts/task-5-23/adapters/step_4",
+  "delta_logp_before": {
+    "c21_6-g101": -0.71875,
+    "c21_7-g100": -1.03125,
+    "c21_7-g101": -1.03125,
+    "c22_3-g101": -1.484375
+  },
+  "delta_logp_after": {
+    "c21_6-g101": -0.234375,
+    "c21_7-g100": -0.5625,
+    "c21_7-g101": -0.5625,
+    "c22_3-g101": -1.0781249403953552
+  },
+  "delta_logp_change": {
+    "c21_6-g101": 0.484375,
+    "c21_7-g100": 0.46875,
+    "c21_7-g101": 0.46875,
+    "c22_3-g101": 0.4062500596046448
+  }
+}

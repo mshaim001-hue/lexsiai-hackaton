@@ -1,0 +1,53 @@
+{
+  "phase": "after_training",
+  "examples": {
+    "c21_6-g101": {
+      "rollout_id": "c21_6-g101",
+      "role": "train_fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.240837574005127,
+      "call_logp": -1.006462574005127,
+      "delta_logp_ref_minus_bracket": -0.234375
+    },
+    "c21_7-g100": {
+      "rollout_id": "c21_7-g100",
+      "role": "train_fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.4263074398040771,
+      "call_logp": -0.8638074398040771,
+      "delta_logp_ref_minus_bracket": -0.5625
+    },
+    "c21_7-g101": {
+      "rollout_id": "c21_7-g101",
+      "role": "train_fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.4263074398040771,
+      "call_logp": -0.8638074398040771,
+      "delta_logp_ref_minus_bracket": -0.5625
+    },
+    "c22_3-g101": {
+      "rollout_id": "c22_3-g101",
+      "role": "train_fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.5520830154418945,
+      "call_logp": -0.4739580750465393,
+      "delta_logp_ref_minus_bracket": -1.0781249403953552
+    }
+  }
+}

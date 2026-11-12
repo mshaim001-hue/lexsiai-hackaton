@@ -1,0 +1,132 @@
+W1112 20:47:19.678000 6159 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.23 pinned train=['c21_6-g101', 'c21_7-g100', 'c21_7-g101', 'c22_3-g101'] eval_adapter=step_4 substantial_diff=False
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<11:02,  2.29s/it]Loading weights:  56%|█████▌    | 163/290 [00:02<00:01, 91.74it/s]Loading weights:  76%|███████▌  | 220/290 [00:03<00:00, 82.81it/s]Loading weights:  88%|████████▊ | 254/290 [00:03<00:00, 81.19it/s]Loading weights:  96%|█████████▌| 278/290 [00:04<00:00, 77.24it/s]Loading weights: 100%|██████████| 290/290 [00:04<00:00, 68.99it/s]
+5.23 Δlogp before training (fresh LoRA)
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+sft523 step=1 rid=c21_6-g101 loss=0.446919 grad=5.59e+05
+sft523 step=2 rid=c21_7-g100 loss=0.489960 grad=4.886
+sft523 step=3 rid=c21_7-g101 loss=0.473206 grad=5.569e+05
+sft523 step=4 rid=c22_3-g101 loss=0.484010 grad=5.659
+5.23 Δlogp after training (step_4)
+5.23 using saved 5.14 baseline for comparison
+5.23 full 5.14 eval on /Users/Guest/lexsiai-hackaton/artifacts/task-5-23/adapters/step_4
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:04<19:44,  4.10s/it]Loading weights:  45%|████▌     | 131/290 [00:04<00:03, 40.70it/s]Loading weights:  53%|█████▎    | 154/290 [00:05<00:03, 40.31it/s]Loading weights:  58%|█████▊    | 168/290 [00:05<00:03, 38.28it/s]Loading weights:  61%|██████▏   | 178/290 [00:05<00:02, 37.71it/s]Loading weights:  64%|██████▍   | 186/290 [00:06<00:02, 36.16it/s]Loading weights:  66%|██████▌   | 192/290 [00:06<00:02, 35.75it/s]Loading weights:  68%|██████▊   | 198/290 [00:06<00:02, 32.96it/s]Loading weights:  70%|███████   | 203/290 [00:06<00:02, 32.04it/s]Loading weights:  71%|███████▏  | 207/290 [00:06<00:02, 31.01it/s]Loading weights:  73%|███████▎  | 211/290 [00:07<00:02, 30.04it/s]Loading weights:  74%|███████▍  | 215/290 [00:07<00:02, 30.33it/s]Loading weights:  76%|███████▌  | 219/290 [00:07<00:02, 28.73it/s]Loading weights:  78%|███████▊  | 227/290 [00:07<00:02, 28.74it/s]Loading weights:  81%|████████  | 235/290 [00:07<00:01, 32.41it/s]Loading weights:  82%|████████▏ | 239/290 [00:07<00:01, 31.56it/s]Loading weights:  84%|████████▍ | 243/290 [00:08<00:01, 30.68it/s]Loading weights:  85%|████████▌ | 247/290 [00:08<00:01, 30.24it/s]Loading weights:  87%|████████▋ | 251/290 [00:08<00:01, 27.03it/s]Loading weights:  89%|████████▉ | 259/290 [00:08<00:01, 25.63it/s]Loading weights:  92%|█████████▏| 267/290 [00:08<00:00, 31.20it/s]Loading weights:  93%|█████████▎| 271/290 [00:09<00:00, 30.51it/s]Loading weights:  95%|█████████▍| 275/290 [00:09<00:00, 28.34it/s]Loading weights:  96%|█████████▌| 278/290 [00:09<00:00, 26.84it/s]Loading weights:  98%|█████████▊| 283/290 [00:09<00:00, 28.30it/s]Loading weights: 100%|██████████| 290/290 [00:09<00:00, 30.56it/s]
+5.20[step_4] d0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d0-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d1-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d2-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=True final=False invalid=0 after=1 err=final_answer_tool_call_after_submit
+5.20[step_4] d3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d3-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+5.20[step_4] d4-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=True final=False invalid=0 after=1 err=final_answer_tool_call_after_submit
+5.20[step_4] d4-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=False final=False invalid=0 after=0 err=submit_refund_not_confirmed
+5.20[step_4] d5-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=False confirmed=False final=False invalid=0 after=0 err=submit_refund_not_confirmed
+5.20[step_4] d5-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  success=True confirmed=True final=True invalid=0 after=0 err=none
+{
+  "pass_criterion": {
+    "at_least_one_prev_fail_becomes_full_success": true,
+    "no_prev_success_breaks": true,
+    "invalid_calls_do_not_increase": true,
+    "passed": true
+  },
+  "base": {
+    "n": 12,
+    "full_success": 7,
+    "confirmed_returns": 10,
+    "correct_finals": 7,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 3,
+    "error_type_counts": {
+      "none": 7,
+      "final_answer_tool_call_after_submit": 3,
+      "submit_refund_not_confirmed": 2
+    }
+  },
+  "step_4": {
+    "n": 12,
+    "full_success": 8,
+    "confirmed_returns": 10,
+    "correct_finals": 8,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 2,
+    "error_type_counts": {
+      "none": 8,
+      "final_answer_tool_call_after_submit": 2,
+      "submit_refund_not_confirmed": 2
+    }
+  },
+  "changed": [
+    {
+      "rollout_id": "d1-g101",
+      "transition": "fail_to_success",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "adapter": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none"
+      }
+    }
+  ],
+  "delta_logp_before": {
+    "c21_6-g101": -0.71875,
+    "c21_7-g100": -1.03125,
+    "c21_7-g101": -1.03125,
+    "c22_3-g101": -1.484375
+  },
+  "delta_logp_after": {
+    "c21_6-g101": -0.234375,
+    "c21_7-g100": -0.5625,
+    "c21_7-g101": -0.5625,
+    "c22_3-g101": -1.0781249403953552
+  }
+}

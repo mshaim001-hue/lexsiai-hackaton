@@ -1,0 +1,476 @@
+{
+  "kind": "sft_pilot_5_23",
+  "method": "SFT",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_523.py",
+  "git_head": "4a9e88dc317ccb6e24803c74e6f1377fcaf1fa71",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 2357.7,
+  "pinned_config": {
+    "kind": "sft_pilot_5_23",
+    "method": "SFT",
+    "written_before_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_523.py",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "inherits_training_recipe_from": "artifacts/task-5-19",
+    "inherits_eval_from": "artifacts/task-5-20",
+    "train": {
+      "n": 4,
+      "example_order": [
+        "c21_6-g101",
+        "c21_7-g100",
+        "c21_7-g101",
+        "c22_3-g101"
+      ],
+      "sources": {
+        "c21_6-g101": "artifacts/task-5-21/collection/post_submit_contexts.json",
+        "c21_7-g100": "artifacts/task-5-21/collection/post_submit_contexts.json",
+        "c21_7-g101": "artifacts/task-5-21/collection/post_submit_contexts.json",
+        "c22_3-g101": "artifacts/task-5-22/collection/post_submit_contexts.json"
+      },
+      "inputs": "saved prefix_input_ids",
+      "targets": "verified REFUND_SUBMITTED (+ <|END_RESPONSE|>) gold_token_ids",
+      "optimizer_schedule": "one_pass_one_optimizer_step_per_example",
+      "n_optimizer_steps": 4
+    },
+    "training": {
+      "learning_rate": 2e-05,
+      "fresh_lora": true,
+      "lora": {
+        "r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj"
+        ]
+      },
+      "loss": "weighted_causal_lm_on_final_tokens_only",
+      "prefix_masked": true,
+      "first_final_token_id_required": 26501,
+      "first_final_token_text": "REF",
+      "first_final_token_weight": 5.0,
+      "other_final_token_weight": 1.0,
+      "loss_normalization": "sum_of_token_weights"
+    },
+    "delta_logp_probe": {
+      "contexts": "same four train prefixes",
+      "metric": "logp(REF) - logp([) at first divergence",
+      "when": [
+        "before_training",
+        "after_training"
+      ]
+    },
+    "eval": {
+      "matrix": "artifacts/task-5-14 d0–d5 × {100,101} (12 episodes)",
+      "adapter_pinned_before_training": "adapters/step_4",
+      "settings": "same as task-5-20 / task-5-14",
+      "condition_check_vs_5_14": {
+        "model_match": true,
+        "generation_mismatches": {},
+        "discovery_mismatches": {},
+        "prompt_mismatches": {},
+        "substantial_difference": false,
+        "comparison_source_if_match": "artifacts/task-5-14/baseline/per_pair.json",
+        "action": "use_saved_5_14_baseline"
+      },
+      "pass_criterion": {
+        "at_least_one_prev_fail_becomes_full_success": true,
+        "no_prev_success_breaks": true,
+        "invalid_calls_do_not_increase": true
+      }
+    }
+  },
+  "training": {
+    "learning_rate": 2e-05,
+    "example_order": [
+      "c21_6-g101",
+      "c21_7-g100",
+      "c21_7-g101",
+      "c22_3-g101"
+    ],
+    "history": [
+      {
+        "step": 1,
+        "rollout_id": "c21_6-g101",
+        "train_loss": 0.44691920280456543,
+        "sum_weights": 17.0,
+        "n_supervised": 13,
+        "grad_norm": 558962.1875,
+        "adapter": "artifacts/task-5-23/adapters/step_1"
+      },
+      {
+        "step": 2,
+        "rollout_id": "c21_7-g100",
+        "train_loss": 0.48995983600616455,
+        "sum_weights": 17.0,
+        "n_supervised": 13,
+        "grad_norm": 4.885854721069336,
+        "adapter": "artifacts/task-5-23/adapters/step_2"
+      },
+      {
+        "step": 3,
+        "rollout_id": "c21_7-g101",
+        "train_loss": 0.47320613265037537,
+        "sum_weights": 17.0,
+        "n_supervised": 13,
+        "grad_norm": 556926.3125,
+        "adapter": "artifacts/task-5-23/adapters/step_3"
+      },
+      {
+        "step": 4,
+        "rollout_id": "c22_3-g101",
+        "train_loss": 0.48400992155075073,
+        "sum_weights": 17.0,
+        "n_supervised": 13,
+        "grad_norm": 5.659336566925049,
+        "adapter": "artifacts/task-5-23/adapters/step_4"
+      }
+    ],
+    "eval_adapter": "artifacts/task-5-23/adapters/step_4",
+    "delta_logp_before": {
+      "c21_6-g101": -0.71875,
+      "c21_7-g100": -1.03125,
+      "c21_7-g101": -1.03125,
+      "c22_3-g101": -1.484375
+    },
+    "delta_logp_after": {
+      "c21_6-g101": -0.234375,
+      "c21_7-g100": -0.5625,
+      "c21_7-g101": -0.5625,
+      "c22_3-g101": -1.0781249403953552
+    },
+    "delta_logp_change": {
+      "c21_6-g101": 0.484375,
+      "c21_7-g100": 0.46875,
+      "c21_7-g101": 0.46875,
+      "c22_3-g101": 0.4062500596046448
+    }
+  },
+  "eval_514": {
+    "adapter": "artifacts/task-5-23/adapters/step_4",
+    "comparison_source": "artifacts/task-5-14/baseline/per_pair.json",
+    "condition_check": {
+      "model_match": true,
+      "generation_mismatches": {},
+      "discovery_mismatches": {},
+      "prompt_mismatches": {},
+      "substantial_difference": false,
+      "comparison_source_if_match": "artifacts/task-5-14/baseline/per_pair.json",
+      "action": "use_saved_5_14_baseline"
+    },
+    "base_aggregates": {
+      "n": 12,
+      "full_success": 7,
+      "confirmed_returns": 10,
+      "correct_finals": 7,
+      "invalid_calls_total": 0,
+      "calls_after_confirmed_submit_total": 3,
+      "error_type_counts": {
+        "none": 7,
+        "final_answer_tool_call_after_submit": 3,
+        "submit_refund_not_confirmed": 2
+      }
+    },
+    "adapter_aggregates": {
+      "n": 12,
+      "full_success": 8,
+      "confirmed_returns": 10,
+      "correct_finals": 8,
+      "invalid_calls_total": 0,
+      "calls_after_confirmed_submit_total": 2,
+      "error_type_counts": {
+        "none": 8,
+        "final_answer_tool_call_after_submit": 2,
+        "submit_refund_not_confirmed": 2
+      }
+    },
+    "newly_fixed_full_success": [
+      "d1-g101"
+    ],
+    "newly_broken_from_base_success": [],
+    "changed_outcomes": [
+      {
+        "rollout_id": "d1-g101",
+        "transition": "fail_to_success",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        }
+      }
+    ],
+    "pass_criterion": {
+      "at_least_one_prev_fail_becomes_full_success": true,
+      "no_prev_success_breaks": true,
+      "invalid_calls_do_not_increase": true,
+      "passed": true
+    },
+    "per_episode": [
+      {
+        "rollout_id": "d0-g100",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d0-g101",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d1-g100",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d1-g101",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "fail_to_success"
+      },
+      {
+        "rollout_id": "d2-g100",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d2-g101",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "adapter": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "transition": "unchanged_fail"
+      },
+      {
+        "rollout_id": "d3-g100",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d3-g101",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      },
+      {
+        "rollout_id": "d4-g100",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "adapter": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "transition": "unchanged_fail"
+      },
+      {
+        "rollout_id": "d4-g101",
+        "base": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "submit_refund_not_confirmed"
+        },
+        "adapter": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "submit_refund_not_confirmed"
+        },
+        "transition": "unchanged_fail"
+      },
+      {
+        "rollout_id": "d5-g100",
+        "base": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "submit_refund_not_confirmed"
+        },
+        "adapter": {
+          "task_success": false,
+          "confirmed": false,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "submit_refund_not_confirmed"
+        },
+        "transition": "unchanged_fail"
+      },
+      {
+        "rollout_id": "d5-g101",
+        "base": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "adapter": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        },
+        "transition": "unchanged_success"
+      }
+    ]
+  }
+}
