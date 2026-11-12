@@ -1,0 +1,907 @@
+{
+  "kind": "collect_post_submit_5_22",
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_collect_post_submit_522.py",
+  "git_head": "1d154a09ece780f13825dbadc6fec9302c0be721",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 1154.9,
+  "pinned_config": {
+    "kind": "collect_post_submit_5_22",
+    "written_before_run": true,
+    "no_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_collect_post_submit_522.py",
+    "git_head": "1d154a09ece780f13825dbadc6fec9302c0be721",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "condition": "A_untrained_tiny_aya_only",
+    "continues": "artifacts/task-5-21",
+    "capture_format": "same as artifacts/task-5-21/collection/post_submit_contexts.json",
+    "inherits_generation_from": "artifacts/task-5-21 / task-5-14",
+    "matrix": {
+      "n_queries": 4,
+      "episode_ids": [
+        "c22_0",
+        "c22_1",
+        "c22_2",
+        "c22_3"
+      ],
+      "order_ids": [
+        "ORD-9801",
+        "ORD-9802",
+        "ORD-9803",
+        "ORD-9804"
+      ],
+      "customer_ids": [
+        "CUS-K01",
+        "CUS-K02",
+        "CUS-K03",
+        "CUS-K04"
+      ],
+      "amounts_cents": [
+        1520,
+        2380,
+        1810,
+        2640
+      ],
+      "generation_seeds": [
+        100,
+        101
+      ],
+      "n_episodes": 8,
+      "max_episodes": 8
+    },
+    "generation": {
+      "settings": "same as task-5-21 / task-5-14 one-action",
+      "environment_seed": 0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "max_steps": 4,
+      "protocol": "one_action_per_turn",
+      "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+      "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+      "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+      "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+      "weights_updated": false
+    },
+    "gold_final": {
+      "include_end_response": true,
+      "amount_source": "confirmed submit_refund tool result"
+    }
+  },
+  "loaded_model": {
+    "model_id": "CohereLabs/tiny-aya-global",
+    "requested_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "config_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_json_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "tokenizer_class": "TokenizersBackend",
+    "vocab_size": 261000,
+    "device": "mps",
+    "dtype": "float16",
+    "quantization": null,
+    "distribution": "public_gated",
+    "local_token_configured": true,
+    "config_json": "loaded",
+    "tokenizer": "loaded"
+  },
+  "aggregates": {
+    "n_episodes": 8,
+    "full_success": 6,
+    "confirmed_returns": 7,
+    "correct_finals": 6,
+    "tool_call_after_submit_count": 1,
+    "tool_call_after_submit_rollout_ids": [
+      "c22_3-g101"
+    ],
+    "n_queries_with_tool_call_after_submit": 1,
+    "queries_with_tool_call_after_submit": [
+      "c22_3"
+    ],
+    "successful_post_submit_contexts": 6,
+    "calls_after_confirmed_submit_total": 1,
+    "invalid_calls_total": 1,
+    "error_type_counts": {
+      "none": 6,
+      "invalid:schema_invalid": 1,
+      "final_answer_tool_call_after_submit": 1
+    },
+    "verification_all_ok": true
+  },
+  "pairs": [
+    {
+      "rollout_id": "c22_0-g100",
+      "episode_id": "c22_0",
+      "generation_seed": 100,
+      "order_id": "ORD-9801",
+      "customer_id": "CUS-K01",
+      "episode_amount_cents": 1520,
+      "tool_amount_cents": 1520,
+      "prompt": "I need a refund on ORD-9801, customer CUS-K01. The electric kettle auto-shutoff failed and boiled dry, scorching the element.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1520",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1376,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9801\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1625,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K01\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1881,
+          "n_new_tokens": 51,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_27784f3071242c7e\", \"customer_validation_token\": \"customer_2ff13fb306925479\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2194,
+          "n_new_tokens": 65,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_7f02d4fcfd4595d0\", \"order_id\": \"ORD-9801\", \"customer_id\": \"CUS-K01\", \"amount_cents\": 1520}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2512,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2512,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2512,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=1520",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 1520,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_7f02d4fcfd4595d0",
+          "order_id": "ORD-9801",
+          "customer_id": "CUS-K01",
+          "amount_cents": 1520
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_0-g101",
+      "episode_id": "c22_0",
+      "generation_seed": 101,
+      "order_id": "ORD-9801",
+      "customer_id": "CUS-K01",
+      "episode_amount_cents": 1520,
+      "tool_amount_cents": 1520,
+      "prompt": "I need a refund on ORD-9801, customer CUS-K01. The electric kettle auto-shutoff failed and boiled dry, scorching the element.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1520",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1376,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9801\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1625,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K01\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1881,
+          "n_new_tokens": 51,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_27784f3071242c7e\", \"customer_validation_token\": \"customer_2ff13fb306925479\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2194,
+          "n_new_tokens": 65,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_7f02d4fcfd4595d0\", \"order_id\": \"ORD-9801\", \"customer_id\": \"CUS-K01\", \"amount_cents\": 1520}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2512,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2512,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2512,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=1520<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=1520",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 1520,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_7f02d4fcfd4595d0",
+          "order_id": "ORD-9801",
+          "customer_id": "CUS-K01",
+          "amount_cents": 1520
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_1-g100",
+      "episode_id": "c22_1",
+      "generation_seed": 100,
+      "order_id": "ORD-9802",
+      "customer_id": "CUS-K02",
+      "episode_amount_cents": 2380,
+      "tool_amount_cents": null,
+      "prompt": "CUS-K02 calling about order ORD-9802. The yoga blocks arrived crushed and crumbly; store credit is not an option.",
+      "task_success": false,
+      "confirmed": false,
+      "task_success_harness": false,
+      "task_success_answer": false,
+      "error_type": "invalid:schema_invalid",
+      "n_invalid": 1,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b5afe9ef0555002a\"}}]",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "lookup_order"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1371,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9802\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1619,
+          "n_new_tokens": 33,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b5afe9ef0555002a\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1852,
+          "n_new_tokens": 28,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUST-1234\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2103,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9802\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2351,
+          "n_new_tokens": 33,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b5afe9ef0555002a\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "submit_call_summary": null
+    },
+    {
+      "rollout_id": "c22_1-g101",
+      "episode_id": "c22_1",
+      "generation_seed": 101,
+      "order_id": "ORD-9802",
+      "customer_id": "CUS-K02",
+      "episode_amount_cents": 2380,
+      "tool_amount_cents": 2380,
+      "prompt": "CUS-K02 calling about order ORD-9802. The yoga blocks arrived crushed and crumbly; store credit is not an option.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=2380",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1371,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9802\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1619,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K02\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1878,
+          "n_new_tokens": 53,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b5afe9ef0555002a\", \"customer_validation_token\": \"customer_5c235b26feab76b5\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2191,
+          "n_new_tokens": 61,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_9e3771ed197020ff\", \"order_id\": \"ORD-9802\", \"customer_id\": \"CUS-K02\", \"amount_cents\": 2380}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2501,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=2380<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2501,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=2380<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=2380<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2501,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=2380<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=2380",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 2380,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_9e3771ed197020ff",
+          "order_id": "ORD-9802",
+          "customer_id": "CUS-K02",
+          "amount_cents": 2380
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_2-g100",
+      "episode_id": "c22_2",
+      "generation_seed": 100,
+      "order_id": "ORD-9803",
+      "customer_id": "CUS-K03",
+      "episode_amount_cents": 1810,
+      "tool_amount_cents": 1810,
+      "prompt": "Please reverse ORD-9803 for CUS-K03. The desk lamp flicker started on day three and the support chat never replied.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1810",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1370,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9803\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1621,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K03\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1877,
+          "n_new_tokens": 53,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_56d47f3f0b9cd816\", \"customer_validation_token\": \"customer_cea258d29376276e\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2190,
+          "n_new_tokens": 61,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_98dc69b077121dc2\", \"order_id\": \"ORD-9803\", \"customer_id\": \"CUS-K03\", \"amount_cents\": 1810}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2500,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2500,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2500,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=1810",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 1810,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_98dc69b077121dc2",
+          "order_id": "ORD-9803",
+          "customer_id": "CUS-K03",
+          "amount_cents": 1810
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_2-g101",
+      "episode_id": "c22_2",
+      "generation_seed": 101,
+      "order_id": "ORD-9803",
+      "customer_id": "CUS-K03",
+      "episode_amount_cents": 1810,
+      "tool_amount_cents": 1810,
+      "prompt": "Please reverse ORD-9803 for CUS-K03. The desk lamp flicker started on day three and the support chat never replied.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1810",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1370,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9803\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1621,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K03\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1877,
+          "n_new_tokens": 53,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_56d47f3f0b9cd816\", \"customer_validation_token\": \"customer_cea258d29376276e\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2190,
+          "n_new_tokens": 61,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_98dc69b077121dc2\", \"order_id\": \"ORD-9803\", \"customer_id\": \"CUS-K03\", \"amount_cents\": 1810}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2500,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2500,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2500,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=1810<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=1810",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 1810,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_98dc69b077121dc2",
+          "order_id": "ORD-9803",
+          "customer_id": "CUS-K03",
+          "amount_cents": 1810
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_3-g100",
+      "episode_id": "c22_3",
+      "generation_seed": 100,
+      "order_id": "ORD-9804",
+      "customer_id": "CUS-K04",
+      "episode_amount_cents": 2640,
+      "tool_amount_cents": 2640,
+      "prompt": "Refund request for ORD-9804 / CUS-K04. The mechanical keyboard's spacebar sticks after every other press out of the box.",
+      "task_success": true,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": true,
+      "error_type": "none",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=2640",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1372,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1621,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K04\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1880,
+          "n_new_tokens": 54,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_1d861a237f2aa459\", \"customer_validation_token\": \"customer_3c0280deca6cb51b\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2197,
+          "n_new_tokens": 63,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_51d936bde7e4fa05\", \"order_id\": \"ORD-9804\", \"customer_id\": \"CUS-K04\", \"amount_cents\": 2640}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2511,
+          "n_new_tokens": 14,
+          "generated_raw": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2511,
+        "n_new_tokens": 14,
+        "generated_raw": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2511,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=2640",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 2640,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_51d936bde7e4fa05",
+          "order_id": "ORD-9804",
+          "customer_id": "CUS-K04",
+          "amount_cents": 2640
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    },
+    {
+      "rollout_id": "c22_3-g101",
+      "episode_id": "c22_3",
+      "generation_seed": 101,
+      "order_id": "ORD-9804",
+      "customer_id": "CUS-K04",
+      "episode_amount_cents": 2640,
+      "tool_amount_cents": 2640,
+      "prompt": "Refund request for ORD-9804 / CUS-K04. The mechanical keyboard's spacebar sticks after every other press out of the box.",
+      "task_success": false,
+      "confirmed": true,
+      "task_success_harness": true,
+      "task_success_answer": false,
+      "error_type": "final_answer_tool_call_after_submit",
+      "n_invalid": 0,
+      "n_calls_after_confirmed_submit": 1,
+      "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "n_generate_calls": 5,
+      "turn_captures_summary": [
+        {
+          "turn_index": 0,
+          "n_input_ids": 1372,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 1,
+          "n_input_ids": 1621,
+          "n_new_tokens": 27,
+          "generated_raw": "[{\"tool_name\": \"get_customer\", \"parameters\": {\"customer_id\": \"CUS-K04\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 2,
+          "n_input_ids": 1880,
+          "n_new_tokens": 54,
+          "generated_raw": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_1d861a237f2aa459\", \"customer_validation_token\": \"customer_3c0280deca6cb51b\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 3,
+          "n_input_ids": 2197,
+          "n_new_tokens": 75,
+          "generated_raw": "[{\"tool_name\": \"submit_refund\", \"parameters\": {\"quote_token\": \"quote_51d936bde7e4fa05\", \"order_id\": \"ORD-9804\", \"customer_id\": \"CUS-K04\", \"amount_cents\": 2640}}]\nREFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|><EOS_TOKEN>"
+        },
+        {
+          "turn_index": 4,
+          "n_input_ids": 2523,
+          "n_new_tokens": 25,
+          "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]<|END_RESPONSE|><EOS_TOKEN>"
+        }
+      ],
+      "post_submit_capture": {
+        "n_prefix": 2523,
+        "n_new_tokens": 25,
+        "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+        "gold_text": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|>",
+        "verification": {
+          "input_ids_match_turn_capture": true,
+          "new_token_ids_match_turn_capture": true,
+          "turn_index": 4,
+          "gold_reencode_stable": true,
+          "gold_score_final_correct": true,
+          "matched_turn_n_input_ids": 2523,
+          "gold_score": {
+            "raw": "REFUND_SUBMITTED amount_cents=2640<|END_RESPONSE|>",
+            "parsed": "REFUND_SUBMITTED amount_cents=2640",
+            "starts_with_end_response": false,
+            "empty": false,
+            "looks_like_tool_call": false,
+            "amount_cents": 2640,
+            "correct": true
+          }
+        },
+        "ids_path": "collection/post_submit_contexts.json"
+      },
+      "submit_call_summary": {
+        "arguments": {
+          "quote_token": "quote_51d936bde7e4fa05",
+          "order_id": "ORD-9804",
+          "customer_id": "CUS-K04",
+          "amount_cents": 2640
+        },
+        "structured_result": {
+          "ok": true,
+          "tool": "submit_refund",
+          "execution": "success",
+          "order_or_token": false,
+          "submitted": true
+        },
+        "execution": "success"
+      }
+    }
+  ],
+  "n_tool_call_after_submit_saved": 1,
+  "n_success_post_submit_saved": 6,
+  "combined_5_21_plus_5_22": {
+    "task_5_21": {
+      "confirmed_returns": 11,
+      "tool_call_after_submit_count": 3,
+      "queries_with_tool_call_after_submit": [
+        "c21_6",
+        "c21_7"
+      ],
+      "tool_call_after_submit_rollout_ids": [
+        "c21_6-g101",
+        "c21_7-g100",
+        "c21_7-g101"
+      ]
+    },
+    "task_5_22": {
+      "confirmed_returns": 7,
+      "tool_call_after_submit_count": 1,
+      "queries_with_tool_call_after_submit": [
+        "c22_3"
+      ],
+      "tool_call_after_submit_rollout_ids": [
+        "c22_3-g101"
+      ]
+    },
+    "combined": {
+      "confirmed_returns": 18,
+      "tool_call_after_submit_count": 4,
+      "unique_queries_with_tool_call_after_submit": [
+        "c21_6",
+        "c21_7",
+        "c22_3"
+      ],
+      "n_unique_queries_with_tool_call_after_submit": 3,
+      "tool_call_after_submit_rollout_ids": [
+        "c21_6-g101",
+        "c21_7-g100",
+        "c21_7-g101",
+        "c22_3-g101"
+      ],
+      "new_fail_rollout_ids_in_5_22": [
+        "c22_3-g101"
+      ],
+      "new_fail_queries_in_5_22": [
+        "c22_3"
+      ]
+    }
+  }
+}

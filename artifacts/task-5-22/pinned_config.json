@@ -1,0 +1,65 @@
+{
+  "kind": "collect_post_submit_5_22",
+  "written_before_run": true,
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_collect_post_submit_522.py",
+  "git_head": "1d154a09ece780f13825dbadc6fec9302c0be721",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "condition": "A_untrained_tiny_aya_only",
+  "continues": "artifacts/task-5-21",
+  "capture_format": "same as artifacts/task-5-21/collection/post_submit_contexts.json",
+  "inherits_generation_from": "artifacts/task-5-21 / task-5-14",
+  "matrix": {
+    "n_queries": 4,
+    "episode_ids": [
+      "c22_0",
+      "c22_1",
+      "c22_2",
+      "c22_3"
+    ],
+    "order_ids": [
+      "ORD-9801",
+      "ORD-9802",
+      "ORD-9803",
+      "ORD-9804"
+    ],
+    "customer_ids": [
+      "CUS-K01",
+      "CUS-K02",
+      "CUS-K03",
+      "CUS-K04"
+    ],
+    "amounts_cents": [
+      1520,
+      2380,
+      1810,
+      2640
+    ],
+    "generation_seeds": [
+      100,
+      101
+    ],
+    "n_episodes": 8,
+    "max_episodes": 8
+  },
+  "generation": {
+    "settings": "same as task-5-21 / task-5-14 one-action",
+    "environment_seed": 0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn",
+    "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+    "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+    "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+    "weights_updated": false
+  },
+  "gold_final": {
+    "include_end_response": true,
+    "amount_source": "confirmed submit_refund tool result"
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "task_5_21": {
+    "confirmed_returns": 11,
+    "tool_call_after_submit_count": 3,
+    "queries_with_tool_call_after_submit": [
+      "c21_6",
+      "c21_7"
+    ],
+    "tool_call_after_submit_rollout_ids": [
+      "c21_6-g101",
+      "c21_7-g100",
+      "c21_7-g101"
+    ]
+  },
+  "task_5_22": {
+    "confirmed_returns": 7,
+    "tool_call_after_submit_count": 1,
+    "queries_with_tool_call_after_submit": [
+      "c22_3"
+    ],
+    "tool_call_after_submit_rollout_ids": [
+      "c22_3-g101"
+    ]
+  },
+  "combined": {
+    "confirmed_returns": 18,
+    "tool_call_after_submit_count": 4,
+    "unique_queries_with_tool_call_after_submit": [
+      "c21_6",
+      "c21_7",
+      "c22_3"
+    ],
+    "n_unique_queries_with_tool_call_after_submit": 3,
+    "tool_call_after_submit_rollout_ids": [
+      "c21_6-g101",
+      "c21_7-g100",
+      "c21_7-g101",
+      "c22_3-g101"
+    ],
+    "new_fail_rollout_ids_in_5_22": [
+      "c22_3-g101"
+    ],
+    "new_fail_queries_in_5_22": [
+      "c22_3"
+    ]
+  }
+}

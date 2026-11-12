@@ -1,0 +1,115 @@
+{
+  "rollouts": {
+    "c22_0-g100": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1520",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_0-g101": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1520",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_1-g100": {
+      "task_success": false,
+      "confirmed": false,
+      "error_type": "invalid:schema_invalid",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "[{\"tool_name\": \"calculate_refund\", \"parameters\": {\"order_context_token\": \"order_b5afe9ef0555002a\"}}]",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "lookup_order"
+      ],
+      "has_post_submit_capture": false
+    },
+    "c22_1-g101": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=2380",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_2-g100": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1810",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_2-g101": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=1810",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_3-g100": {
+      "task_success": true,
+      "confirmed": true,
+      "error_type": "none",
+      "n_calls_after_confirmed_submit": 0,
+      "final_answer": "REFUND_SUBMITTED amount_cents=2640",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    },
+    "c22_3-g101": {
+      "task_success": false,
+      "confirmed": true,
+      "error_type": "final_answer_tool_call_after_submit",
+      "n_calls_after_confirmed_submit": 1,
+      "final_answer": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9804\"}}]",
+      "function_entries": [
+        "lookup_order",
+        "get_customer",
+        "calculate_refund",
+        "submit_refund"
+      ],
+      "has_post_submit_capture": true
+    }
+  }
+}
