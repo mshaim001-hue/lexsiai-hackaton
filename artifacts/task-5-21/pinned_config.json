@@ -1,0 +1,87 @@
+{
+  "kind": "collect_post_submit_5_21",
+  "written_before_run": true,
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_collect_post_submit_521.py",
+  "git_head": "78d4b749af516021467c1478b969ec577e9508c3",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "condition": "A_untrained_tiny_aya_only",
+  "inherits_generation_from": "artifacts/task-5-14",
+  "matrix": {
+    "n_queries": 8,
+    "episode_ids": [
+      "c21_0",
+      "c21_1",
+      "c21_2",
+      "c21_3",
+      "c21_4",
+      "c21_5",
+      "c21_6",
+      "c21_7"
+    ],
+    "order_ids": [
+      "ORD-9701",
+      "ORD-9702",
+      "ORD-9703",
+      "ORD-9704",
+      "ORD-9705",
+      "ORD-9706",
+      "ORD-9707",
+      "ORD-9708"
+    ],
+    "customer_ids": [
+      "CUS-J01",
+      "CUS-J02",
+      "CUS-J03",
+      "CUS-J04",
+      "CUS-J05",
+      "CUS-J06",
+      "CUS-J07",
+      "CUS-J08"
+    ],
+    "amounts_cents": [
+      1580,
+      2410,
+      1290,
+      2860,
+      1740,
+      2190,
+      1930,
+      2670
+    ],
+    "generation_seeds": [
+      100,
+      101
+    ],
+    "n_episodes": 16,
+    "max_episodes": 16
+  },
+  "generation": {
+    "settings": "same as task-5-14 / task-5-8 one-action",
+    "environment_seed": 0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn",
+    "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+    "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+    "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+    "weights_updated": false
+  },
+  "captures": {
+    "full_episode_log": true,
+    "post_submit_input_ids_on_tool_call_after_submit": true,
+    "post_submit_input_ids_on_success": true,
+    "submit_tool_result": true,
+    "gold_refund_submitted": true,
+    "verification_against_traces_and_score_final": true
+  },
+  "gold_final": {
+    "include_end_response": true,
+    "amount_source": "confirmed submit_refund tool result"
+  }
+}

@@ -1,0 +1,97 @@
+W1112 19:19:28.887000 87808 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.21 pinned matrix=['c21_0', 'c21_1', 'c21_2', 'c21_3', 'c21_4', 'c21_5', 'c21_6', 'c21_7'] seeds=[100, 101]
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+[transformers] `torch_dtype` is deprecated! Use `dtype` instead!
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<07:45,  1.61s/it]Loading weights:  59%|█████▉    | 171/290 [00:01<00:00, 137.47it/s]Loading weights:  89%|████████▉ | 259/290 [00:03<00:00, 81.48it/s] Loading weights: 100%|██████████| 290/290 [00:03<00:00, 77.04it/s]
+5.21 collect c21_0-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=1580 post=2501
+5.21 collect c21_0-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False success=False err=submit_refund_not_confirmed after=0 tool_amt=None post=None
+5.21 collect c21_1-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False success=False err=invalid:schema_invalid after=0 tool_amt=None post=None
+5.21 collect c21_1-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=2410 post=2509
+5.21 collect c21_2-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False success=False err=invalid:schema_invalid after=0 tool_amt=None post=None
+5.21 collect c21_2-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=1290 post=2527
+5.21 collect c21_3-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=2860 post=2509
+5.21 collect c21_3-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=2860 post=2509
+5.21 collect c21_4-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=1740 post=2507
+5.21 collect c21_4-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=1740 post=2507
+5.21 collect c21_5-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False success=False err=invalid:schema_invalid after=0 tool_amt=None post=None
+5.21 collect c21_5-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=False success=False err=submit_refund_not_confirmed after=0 tool_amt=None post=None
+5.21 collect c21_6-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=True err=none after=0 tool_amt=1930 post=2512
+5.21 collect c21_6-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=False err=final_answer_tool_call_after_submit after=1 tool_amt=1930 post=2568
+5.21 collect c21_7-g100
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=False err=final_answer_tool_call_after_submit after=1 tool_amt=2670 post=2567
+5.21 collect c21_7-g101
+/Users/Guest/lexsiai-hackaton/vendor/AgentTune/src/agenttune/agentic/rollout_engines/rollout_factory.py:1737: UserWarning: The chat template of CohereLabs/tiny-aya-global ignores `tools`; adding the tool schemas to the system prompt and folding tool results into user turns (tools_fallback_prompt).
+  traj = _execute_trajectory(
+  confirmed=True success=False err=final_answer_tool_call_after_submit after=1 tool_amt=2670 post=2567
+{
+  "n_episodes": 16,
+  "full_success": 8,
+  "confirmed_returns": 11,
+  "correct_finals": 8,
+  "tool_call_after_submit_count": 3,
+  "tool_call_after_submit_rollout_ids": [
+    "c21_6-g101",
+    "c21_7-g100",
+    "c21_7-g101"
+  ],
+  "n_queries_with_tool_call_after_submit": 2,
+  "queries_with_tool_call_after_submit": [
+    "c21_6",
+    "c21_7"
+  ],
+  "successful_post_submit_contexts": 8,
+  "calls_after_confirmed_submit_total": 3,
+  "invalid_calls_total": 3,
+  "error_type_counts": {
+    "none": 8,
+    "submit_refund_not_confirmed": 2,
+    "invalid:schema_invalid": 3,
+    "final_answer_tool_call_after_submit": 3
+  },
+  "verification_all_ok": true
+}

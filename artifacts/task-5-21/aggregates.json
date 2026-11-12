@@ -1,0 +1,27 @@
+{
+  "n_episodes": 16,
+  "full_success": 8,
+  "confirmed_returns": 11,
+  "correct_finals": 8,
+  "tool_call_after_submit_count": 3,
+  "tool_call_after_submit_rollout_ids": [
+    "c21_6-g101",
+    "c21_7-g100",
+    "c21_7-g101"
+  ],
+  "n_queries_with_tool_call_after_submit": 2,
+  "queries_with_tool_call_after_submit": [
+    "c21_6",
+    "c21_7"
+  ],
+  "successful_post_submit_contexts": 8,
+  "calls_after_confirmed_submit_total": 3,
+  "invalid_calls_total": 3,
+  "error_type_counts": {
+    "none": 8,
+    "submit_refund_not_confirmed": 2,
+    "invalid:schema_invalid": 3,
+    "final_answer_tool_call_after_submit": 3
+  },
+  "verification_all_ok": true
+}
