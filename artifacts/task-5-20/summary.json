@@ -1,0 +1,228 @@
+{
+  "kind": "sft_eval_5_20",
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_eval_520.py",
+  "git_head": "1453a624d1dfab3f543c1f0875190c4a3768d96b",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 1600.4,
+  "adapter": "artifacts/task-5-19/adapters/step_3",
+  "comparison_source": "artifacts/task-5-14/baseline/per_pair.json",
+  "condition_check": {
+    "model_match": true,
+    "generation_mismatches": {},
+    "discovery_mismatches": {},
+    "prompt_mismatches": {},
+    "substantial_difference": false,
+    "comparison_source_if_match": "artifacts/task-5-14/baseline/per_pair.json",
+    "action": "use_saved_5_14_baseline"
+  },
+  "pinned_config": {
+    "kind": "sft_eval_5_20",
+    "written_before_run": true,
+    "no_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_eval_520.py",
+    "adapter": "artifacts/task-5-19/adapters/step_3",
+    "source_pilot": "artifacts/task-5-19",
+    "eval_matrix": "artifacts/task-5-14 discovery d0–d5 × {100,101}",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "discovery": {
+      "n_queries": 6,
+      "episode_ids": [
+        "d0",
+        "d1",
+        "d2",
+        "d3",
+        "d4",
+        "d5"
+      ],
+      "order_ids": [
+        "ORD-9401",
+        "ORD-9402",
+        "ORD-9403",
+        "ORD-9404",
+        "ORD-9405",
+        "ORD-9406"
+      ],
+      "customer_ids": [
+        "CUS-G01",
+        "CUS-G02",
+        "CUS-G03",
+        "CUS-G04",
+        "CUS-G05",
+        "CUS-G06"
+      ],
+      "amounts_cents": [
+        1620,
+        2480,
+        1350,
+        2790,
+        1910,
+        2240
+      ],
+      "generation_seeds": [
+        100,
+        101
+      ],
+      "n_episodes": 12,
+      "prompts": {
+        "d0": "Hi — please refund order ORD-9401. Customer CUS-G01. The wireless mouse double-clicks constantly after a week and I already tried a firmware reset from the FAQ.",
+        "d1": "Account CUS-G02: I need money back for ORD-9402. The camping tent seam split on the first rain. Photos are in the return portal; no exchange, original card only.",
+        "d2": "Customer service, customer CUS-G03. Order ORD-9403 arrived with the wrong region power brick. I am traveling and cannot wait for a reship.",
+        "d3": "Formal refund request for ORD-9404 under CUS-G04. We were charged for an annual plan after cancelling the trial in writing on the 12th.",
+        "d4": "Please reverse ORD-9405 for CUS-G05. The perfume sample set leaked in transit and ruined the packing paper; I still have the stained outer carton.",
+        "d5": "CUS-G06 here about order ORD-9406. The desk chair gas lift will not stay up. I do not want a replacement part — just the refund to the debit card."
+      }
+    },
+    "generation": {
+      "settings": "same as task-5-8 / task-5-14 one-action",
+      "environment_seed": 0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "max_steps": 4,
+      "protocol": "one_action_per_turn",
+      "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+      "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+      "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+      "user_prompt_style": "realistic_paraphrase_no_tool_sequence"
+    },
+    "scoring": {
+      "full_success": "task_success",
+      "confirmed_return": "task_success_harness",
+      "correct_final": "task_success_answer",
+      "invalid_calls": "n_invalid from _row_from_steps",
+      "calls_after_confirmed_submit": "_calls_after_submit (5.9/5.16 normalization)"
+    },
+    "pass_criterion": {
+      "at_least_one_prev_fail_becomes_full_success": true,
+      "no_prev_success_breaks": true,
+      "invalid_calls_do_not_increase": true
+    },
+    "condition_check_vs_5_14": {
+      "model_match": true,
+      "generation_mismatches": {},
+      "discovery_mismatches": {},
+      "prompt_mismatches": {},
+      "substantial_difference": false,
+      "comparison_source_if_match": "artifacts/task-5-14/baseline/per_pair.json",
+      "action": "use_saved_5_14_baseline"
+    }
+  },
+  "base_loaded": {
+    "label": "saved_5_14_baseline",
+    "adapter": null
+  },
+  "adapter_loaded": {
+    "label": "step_3",
+    "adapter": "artifacts/task-5-19/adapters/step_3",
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "base_aggregates": {
+    "n": 12,
+    "full_success": 7,
+    "confirmed_returns": 10,
+    "correct_finals": 7,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 3,
+    "error_type_counts": {
+      "none": 7,
+      "final_answer_tool_call_after_submit": 3,
+      "submit_refund_not_confirmed": 2
+    }
+  },
+  "adapter_aggregates": {
+    "n": 12,
+    "full_success": 7,
+    "confirmed_returns": 10,
+    "correct_finals": 7,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 3,
+    "error_type_counts": {
+      "none": 7,
+      "final_answer_tool_call_after_submit": 3,
+      "submit_refund_not_confirmed": 2
+    }
+  },
+  "newly_fixed_full_success": [],
+  "newly_broken_from_base_success": [],
+  "focus": {
+    "d1-g101": {
+      "rollout_id": "d1-g101",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "adapter": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "transition": "unchanged_fail"
+    },
+    "d2-g101": {
+      "rollout_id": "d2-g101",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "adapter": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "transition": "unchanged_fail"
+    },
+    "d4-g100": {
+      "rollout_id": "d4-g100",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "adapter": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "transition": "unchanged_fail"
+    }
+  },
+  "pass_criterion": {
+    "at_least_one_prev_fail_becomes_full_success": false,
+    "no_prev_success_breaks": true,
+    "invalid_calls_do_not_increase": true,
+    "passed": false
+  }
+}
