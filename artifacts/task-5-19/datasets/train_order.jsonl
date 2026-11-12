@@ -1,0 +1,6 @@
+{"order": 0, "rollout_id": "t15_0-g100", "episode_id": "t15_0", "gold_amount_cents": 1730, "n_prefix": 2506, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=1730<|END_RESPONSE|>"}
+{"order": 1, "rollout_id": "t15_1-g100", "episode_id": "t15_1", "gold_amount_cents": 2590, "n_prefix": 2496, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=2590<|END_RESPONSE|>"}
+{"order": 2, "rollout_id": "t15_3-g100", "episode_id": "t15_3", "gold_amount_cents": 2810, "n_prefix": 2496, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=2810<|END_RESPONSE|>"}
+{"order": 3, "rollout_id": "t15_4-g100", "episode_id": "t15_4", "gold_amount_cents": 1980, "n_prefix": 2491, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=1980<|END_RESPONSE|>"}
+{"order": 4, "rollout_id": "t15_5-g100", "episode_id": "t15_5", "gold_amount_cents": 2320, "n_prefix": 2515, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=2320<|END_RESPONSE|>"}
+{"order": 5, "rollout_id": "t15_7-g100", "episode_id": "t15_7", "gold_amount_cents": 2450, "n_prefix": 2553, "n_target": 13, "first_target_id": 26501, "target_text": "REFUND_SUBMITTED amount_cents=2450<|END_RESPONSE|>"}

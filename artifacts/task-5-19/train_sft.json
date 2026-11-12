@@ -1,0 +1,151 @@
+{
+  "learning_rate": 2e-05,
+  "max_optimizer_steps": 3,
+  "first_token_id": 26501,
+  "first_token_weight": 5.0,
+  "other_final_token_weight": 1.0,
+  "example_order": [
+    "t15_0-g100",
+    "t15_1-g100",
+    "t15_3-g100",
+    "t15_4-g100",
+    "t15_5-g100",
+    "t15_7-g100"
+  ],
+  "target_fail_ids": [
+    "d1-g101",
+    "d2-g101"
+  ],
+  "base_correct_ids": [
+    "d0-g100",
+    "d0-g101",
+    "d1-g100",
+    "d2-g100",
+    "d3-g100",
+    "d3-g101",
+    "d4-g100",
+    "d5-g101"
+  ],
+  "base_delta_logp": {
+    "d1-g101": -1.1718750298023224,
+    "d2-g101": -1.3281250596046448,
+    "d0-g100": 3.1249999701976776,
+    "d3-g100": 2.5390625
+  },
+  "history": [
+    {
+      "step": 1,
+      "mean_train_loss": 0.14807352299491564,
+      "mean_sum_weights": 17.0,
+      "grad_norm": 160996.890625,
+      "n_supervised_tokens_per_epoch": 78,
+      "adapter": "artifacts/task-5-19/adapters/step_1",
+      "probe_n_correct": 8,
+      "probe_n_final_errors": 2,
+      "probe_n_empty": 0,
+      "fixed_ids": [],
+      "broken_ids": [],
+      "empty_ids": [],
+      "keeps_all_base_correct": true,
+      "fixes_at_least_one_target_fail": false,
+      "passes_selection": false,
+      "delta_logp_ref_minus_bracket": {
+        "d1-g101": -1.1250000596046448,
+        "d2-g101": -1.2968750298023224,
+        "d0-g100": 3.1796874403953552,
+        "d3-g100": 2.5781250298023224
+      },
+      "delta_logp_on_fails": {
+        "d1-g101": -1.1250000596046448,
+        "d2-g101": -1.2968750298023224
+      }
+    },
+    {
+      "step": 2,
+      "mean_train_loss": 0.14530783767501512,
+      "mean_sum_weights": 17.0,
+      "grad_norm": 317542.96875,
+      "n_supervised_tokens_per_epoch": 78,
+      "adapter": "artifacts/task-5-19/adapters/step_2",
+      "probe_n_correct": 8,
+      "probe_n_final_errors": 2,
+      "probe_n_empty": 0,
+      "fixed_ids": [],
+      "broken_ids": [],
+      "empty_ids": [],
+      "keeps_all_base_correct": true,
+      "fixes_at_least_one_target_fail": false,
+      "passes_selection": false,
+      "delta_logp_ref_minus_bracket": {
+        "d1-g101": -1.0156249701976776,
+        "d2-g101": -1.1875,
+        "d0-g100": 3.328124985098839,
+        "d3-g100": 2.742187485098839
+      },
+      "delta_logp_on_fails": {
+        "d1-g101": -1.0156249701976776,
+        "d2-g101": -1.1875
+      }
+    },
+    {
+      "step": 3,
+      "mean_train_loss": 0.136862492809693,
+      "mean_sum_weights": 17.0,
+      "grad_norm": 164219.046875,
+      "n_supervised_tokens_per_epoch": 78,
+      "adapter": "artifacts/task-5-19/adapters/step_3",
+      "probe_n_correct": 9,
+      "probe_n_final_errors": 1,
+      "probe_n_empty": 0,
+      "fixed_ids": [
+        "d1-g101"
+      ],
+      "broken_ids": [],
+      "empty_ids": [],
+      "keeps_all_base_correct": true,
+      "fixes_at_least_one_target_fail": true,
+      "passes_selection": true,
+      "delta_logp_ref_minus_bracket": {
+        "d1-g101": -0.8906250596046448,
+        "d2-g101": -1.0312499403953552,
+        "d0-g100": 3.515625,
+        "d3-g100": 2.929687589406967
+      },
+      "delta_logp_on_fails": {
+        "d1-g101": -0.8906250596046448,
+        "d2-g101": -1.0312499403953552
+      }
+    }
+  ],
+  "selected": {
+    "step": 3,
+    "mean_train_loss": 0.136862492809693,
+    "mean_sum_weights": 17.0,
+    "grad_norm": 164219.046875,
+    "n_supervised_tokens_per_epoch": 78,
+    "adapter": "artifacts/task-5-19/adapters/step_3",
+    "probe_n_correct": 9,
+    "probe_n_final_errors": 1,
+    "probe_n_empty": 0,
+    "fixed_ids": [
+      "d1-g101"
+    ],
+    "broken_ids": [],
+    "empty_ids": [],
+    "keeps_all_base_correct": true,
+    "fixes_at_least_one_target_fail": true,
+    "passes_selection": true,
+    "delta_logp_ref_minus_bracket": {
+      "d1-g101": -0.8906250596046448,
+      "d2-g101": -1.0312499403953552,
+      "d0-g100": 3.515625,
+      "d3-g100": 2.929687589406967
+    },
+    "delta_logp_on_fails": {
+      "d1-g101": -0.8906250596046448,
+      "d2-g101": -1.0312499403953552
+    }
+  },
+  "train_stop_reason": "selection_criterion_met",
+  "stop_reason": "checkpoint_selected"
+}

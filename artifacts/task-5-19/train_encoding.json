@@ -1,0 +1,72 @@
+{
+  "n": 6,
+  "example_order": [
+    "t15_0-g100",
+    "t15_1-g100",
+    "t15_3-g100",
+    "t15_4-g100",
+    "t15_5-g100",
+    "t15_7-g100"
+  ],
+  "include_end_response": true,
+  "first_token_id_verified": 26501,
+  "first_token_text": "REF",
+  "first_token_weight": 5.0,
+  "other_final_token_weight": 1.0,
+  "examples": [
+    {
+      "rollout_id": "t15_0-g100",
+      "n_prefix": 2506,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=1730<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "t15_1-g100",
+      "n_prefix": 2496,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2590<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "t15_3-g100",
+      "n_prefix": 2496,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2810<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "t15_4-g100",
+      "n_prefix": 2491,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=1980<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "t15_5-g100",
+      "n_prefix": 2515,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2320<|END_RESPONSE|>"
+    },
+    {
+      "rollout_id": "t15_7-g100",
+      "n_prefix": 2553,
+      "n_target": 13,
+      "first_target_id": 26501,
+      "sum_weights": 17.0,
+      "expected_sum_weights": 17.0,
+      "target_text": "REFUND_SUBMITTED amount_cents=2450<|END_RESPONSE|>"
+    }
+  ]
+}

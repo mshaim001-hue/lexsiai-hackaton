@@ -1,0 +1,224 @@
+{
+  "label": "step_1",
+  "n": 10,
+  "n_correct": 8,
+  "n_final_errors": 2,
+  "n_empty": 0,
+  "error_ids": [
+    "d1-g101",
+    "d2-g101"
+  ],
+  "empty_ids": [],
+  "pairs": [
+    {
+      "rollout_id": "d0-g100",
+      "episode_id": "d0",
+      "generation_seed": 100,
+      "amount_cents": 1620,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1620<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1620",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.8129134178161621,
+        "p_end_response": 0.000264311907812953,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d0-g101",
+      "episode_id": "d0",
+      "generation_seed": 101,
+      "amount_cents": 1620,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1620<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1620",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.8129134178161621,
+        "p_end_response": 0.000264311907812953,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d1-g100",
+      "episode_id": "d1",
+      "generation_seed": 100,
+      "amount_cents": 2480,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2480<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2480",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7932008504867554,
+        "p_end_response": 0.000363700877642259,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d1-g101",
+      "episode_id": "d1",
+      "generation_seed": 101,
+      "amount_cents": 2480,
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9402\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9402\"}}]",
+      "correct": false,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": true,
+      "first_token": {
+        "p_gold_first": 0.20518550276756287,
+        "p_end_response": 0.003214476630091667,
+        "argmax_token_id": 73,
+        "argmax_token": "[",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d2-g100",
+      "episode_id": "d2",
+      "generation_seed": 100,
+      "amount_cents": 1350,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1350<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1350",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.784949004650116,
+        "p_end_response": 0.0003007221093866974,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d2-g101",
+      "episode_id": "d2",
+      "generation_seed": 101,
+      "amount_cents": 1350,
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "generated_raw": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9403\"}}]<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "[{\"tool_name\": \"lookup_order\", \"parameters\": {\"order_id\": \"ORD-9403\"}}]",
+      "correct": false,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": true,
+      "first_token": {
+        "p_gold_first": 0.18136383593082428,
+        "p_end_response": 0.002468548249453306,
+        "argmax_token_id": 73,
+        "argmax_token": "[",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d3-g100",
+      "episode_id": "d3",
+      "generation_seed": 100,
+      "amount_cents": 2790,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2790<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2790",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7627766728401184,
+        "p_end_response": 0.00027667556423693895,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d3-g101",
+      "episode_id": "d3",
+      "generation_seed": 101,
+      "amount_cents": 2790,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2790<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2790",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7627766728401184,
+        "p_end_response": 0.00027667556423693895,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d4-g100",
+      "episode_id": "d4",
+      "generation_seed": 100,
+      "amount_cents": 1910,
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=1910<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=1910",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.18271608650684357,
+        "p_end_response": 0.0014734712895005941,
+        "argmax_token_id": 73,
+        "argmax_token": "[",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    },
+    {
+      "rollout_id": "d5-g101",
+      "episode_id": "d5",
+      "generation_seed": 101,
+      "amount_cents": 2240,
+      "episode_error_type": "none",
+      "generated_raw": "REFUND_SUBMITTED amount_cents=2240<|END_RESPONSE|><EOS_TOKEN>",
+      "parsed": "REFUND_SUBMITTED amount_cents=2240",
+      "correct": true,
+      "empty": false,
+      "starts_with_end_response": false,
+      "looks_like_tool_call": false,
+      "first_token": {
+        "p_gold_first": 0.7748467326164246,
+        "p_end_response": 0.00044562737457454205,
+        "argmax_token_id": 26501,
+        "argmax_token": "REF",
+        "end_response_is_first": false,
+        "prefer_end_over_gold": false
+      }
+    }
+  ]
+}

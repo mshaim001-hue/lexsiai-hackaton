@@ -1,0 +1,291 @@
+{
+  "kind": "sft_pilot_5_19",
+  "method": "SFT",
+  "stop_reason": "selection_criterion_met",
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_519.py",
+  "git_head": "de7669b25c148e9ca605c8619be2ded02e7adfd4",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 8704.0,
+  "pinned_config": {
+    "kind": "sft_pilot_5_19",
+    "method": "SFT",
+    "written_before_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_pilot_519.py",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "inherits_from": "artifacts/task-5-16",
+    "train": {
+      "source": "artifacts/task-5-15 confirmed train chains",
+      "n": 6,
+      "example_order": [
+        "t15_0-g100",
+        "t15_1-g100",
+        "t15_3-g100",
+        "t15_4-g100",
+        "t15_5-g100",
+        "t15_7-g100"
+      ],
+      "gold_amount_source": "submit_refund tool result (captured in 5.15)",
+      "include_end_response_in_target": true,
+      "same_as_5_16_order": true
+    },
+    "quick_check": {
+      "source": "artifacts/task-5-14 confirmed post-submit input_ids",
+      "n": 10,
+      "rollout_ids": [
+        "d0-g100",
+        "d0-g101",
+        "d1-g100",
+        "d1-g101",
+        "d2-g100",
+        "d2-g101",
+        "d3-g100",
+        "d3-g101",
+        "d4-g100",
+        "d5-g101"
+      ],
+      "parse": "task-5-12 truncate_at_end_response",
+      "compare_to": "fresh base regeneration on same input_ids and seeds"
+    },
+    "divergence_probe": {
+      "source": "artifacts/task-5-18 four examples",
+      "fail_ids": [
+        "d1-g101",
+        "d2-g101"
+      ],
+      "control_ids": [
+        "d0-g100",
+        "d3-g100"
+      ],
+      "metric": "logp(REF) - logp([) at first divergence (div@0)",
+      "gold_token_id": 26501,
+      "call_token_id": 73
+    },
+    "training": {
+      "learning_rate": 2e-05,
+      "max_optimizer_steps": 3,
+      "loss": "weighted_causal_lm_on_final_tokens_only",
+      "prefix_masked": true,
+      "first_final_token_id_required": 26501,
+      "first_final_token_text": "REF",
+      "first_final_token_weight": 5.0,
+      "other_final_token_weight": 1.0,
+      "loss_normalization": "sum_of_token_weights",
+      "fresh_lora": true,
+      "lora": {
+        "r": 8,
+        "lora_alpha": 16,
+        "lora_dropout": 0.05,
+        "bias": "none",
+        "task_type": "CAUSAL_LM",
+        "target_modules": [
+          "q_proj",
+          "k_proj",
+          "v_proj",
+          "o_proj"
+        ]
+      },
+      "stop_if_empty_finals": true,
+      "stop_on_selection_criterion": true
+    },
+    "checkpoint_selection": {
+      "no_full_514_eval": true,
+      "criterion": "exact correct final on >=1 of reproducible fails ['d1-g101', 'd2-g101'] while keeping all eight base-correct probe finals",
+      "action_on_pass": "stop pilot and keep that adapter"
+    }
+  },
+  "train": {
+    "n": 6,
+    "example_order": [
+      "t15_0-g100",
+      "t15_1-g100",
+      "t15_3-g100",
+      "t15_4-g100",
+      "t15_5-g100",
+      "t15_7-g100"
+    ],
+    "source": "artifacts/task-5-15/collection/train/rollouts.json",
+    "first_token_id": 26501,
+    "first_token_weight": 5.0
+  },
+  "base_probe": {
+    "n": 10,
+    "n_correct": 8,
+    "n_final_errors": 2,
+    "error_ids": [
+      "d1-g101",
+      "d2-g101"
+    ],
+    "target_fail_ids": [
+      "d1-g101",
+      "d2-g101"
+    ],
+    "delta_logp_ref_minus_bracket": {
+      "d1-g101": -1.1718750298023224,
+      "d2-g101": -1.3281250596046448,
+      "d0-g100": 3.1249999701976776,
+      "d3-g100": 2.5390625
+    }
+  },
+  "training": {
+    "learning_rate": 2e-05,
+    "max_optimizer_steps": 3,
+    "first_token_id": 26501,
+    "first_token_weight": 5.0,
+    "other_final_token_weight": 1.0,
+    "example_order": [
+      "t15_0-g100",
+      "t15_1-g100",
+      "t15_3-g100",
+      "t15_4-g100",
+      "t15_5-g100",
+      "t15_7-g100"
+    ],
+    "target_fail_ids": [
+      "d1-g101",
+      "d2-g101"
+    ],
+    "base_correct_ids": [
+      "d0-g100",
+      "d0-g101",
+      "d1-g100",
+      "d2-g100",
+      "d3-g100",
+      "d3-g101",
+      "d4-g100",
+      "d5-g101"
+    ],
+    "base_delta_logp": {
+      "d1-g101": -1.1718750298023224,
+      "d2-g101": -1.3281250596046448,
+      "d0-g100": 3.1249999701976776,
+      "d3-g100": 2.5390625
+    },
+    "history": [
+      {
+        "step": 1,
+        "mean_train_loss": 0.14807352299491564,
+        "mean_sum_weights": 17.0,
+        "grad_norm": 160996.890625,
+        "n_supervised_tokens_per_epoch": 78,
+        "adapter": "artifacts/task-5-19/adapters/step_1",
+        "probe_n_correct": 8,
+        "probe_n_final_errors": 2,
+        "probe_n_empty": 0,
+        "fixed_ids": [],
+        "broken_ids": [],
+        "empty_ids": [],
+        "keeps_all_base_correct": true,
+        "fixes_at_least_one_target_fail": false,
+        "passes_selection": false,
+        "delta_logp_ref_minus_bracket": {
+          "d1-g101": -1.1250000596046448,
+          "d2-g101": -1.2968750298023224,
+          "d0-g100": 3.1796874403953552,
+          "d3-g100": 2.5781250298023224
+        },
+        "delta_logp_on_fails": {
+          "d1-g101": -1.1250000596046448,
+          "d2-g101": -1.2968750298023224
+        }
+      },
+      {
+        "step": 2,
+        "mean_train_loss": 0.14530783767501512,
+        "mean_sum_weights": 17.0,
+        "grad_norm": 317542.96875,
+        "n_supervised_tokens_per_epoch": 78,
+        "adapter": "artifacts/task-5-19/adapters/step_2",
+        "probe_n_correct": 8,
+        "probe_n_final_errors": 2,
+        "probe_n_empty": 0,
+        "fixed_ids": [],
+        "broken_ids": [],
+        "empty_ids": [],
+        "keeps_all_base_correct": true,
+        "fixes_at_least_one_target_fail": false,
+        "passes_selection": false,
+        "delta_logp_ref_minus_bracket": {
+          "d1-g101": -1.0156249701976776,
+          "d2-g101": -1.1875,
+          "d0-g100": 3.328124985098839,
+          "d3-g100": 2.742187485098839
+        },
+        "delta_logp_on_fails": {
+          "d1-g101": -1.0156249701976776,
+          "d2-g101": -1.1875
+        }
+      },
+      {
+        "step": 3,
+        "mean_train_loss": 0.136862492809693,
+        "mean_sum_weights": 17.0,
+        "grad_norm": 164219.046875,
+        "n_supervised_tokens_per_epoch": 78,
+        "adapter": "artifacts/task-5-19/adapters/step_3",
+        "probe_n_correct": 9,
+        "probe_n_final_errors": 1,
+        "probe_n_empty": 0,
+        "fixed_ids": [
+          "d1-g101"
+        ],
+        "broken_ids": [],
+        "empty_ids": [],
+        "keeps_all_base_correct": true,
+        "fixes_at_least_one_target_fail": true,
+        "passes_selection": true,
+        "delta_logp_ref_minus_bracket": {
+          "d1-g101": -0.8906250596046448,
+          "d2-g101": -1.0312499403953552,
+          "d0-g100": 3.515625,
+          "d3-g100": 2.929687589406967
+        },
+        "delta_logp_on_fails": {
+          "d1-g101": -0.8906250596046448,
+          "d2-g101": -1.0312499403953552
+        }
+      }
+    ],
+    "selected": {
+      "step": 3,
+      "mean_train_loss": 0.136862492809693,
+      "mean_sum_weights": 17.0,
+      "grad_norm": 164219.046875,
+      "n_supervised_tokens_per_epoch": 78,
+      "adapter": "artifacts/task-5-19/adapters/step_3",
+      "probe_n_correct": 9,
+      "probe_n_final_errors": 1,
+      "probe_n_empty": 0,
+      "fixed_ids": [
+        "d1-g101"
+      ],
+      "broken_ids": [],
+      "empty_ids": [],
+      "keeps_all_base_correct": true,
+      "fixes_at_least_one_target_fail": true,
+      "passes_selection": true,
+      "delta_logp_ref_minus_bracket": {
+        "d1-g101": -0.8906250596046448,
+        "d2-g101": -1.0312499403953552,
+        "d0-g100": 3.515625,
+        "d3-g100": 2.929687589406967
+      },
+      "delta_logp_on_fails": {
+        "d1-g101": -0.8906250596046448,
+        "d2-g101": -1.0312499403953552
+      }
+    },
+    "train_stop_reason": "selection_criterion_met",
+    "stop_reason": "checkpoint_selected"
+  },
+  "eval_514": null
+}

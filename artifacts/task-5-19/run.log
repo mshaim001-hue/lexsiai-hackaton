@@ -1,0 +1,122 @@
+W1112 12:32:57.281000 11265 .venv/lib/python3.12/site-packages/torch/distributed/elastic/multiprocessing/redirects.py:29] NOTE: Redirects are currently not supported in Windows or MacOs.
+5.19 pinned lr=2e-05 steps<=3 first_token=26501×5.0 train_order=['t15_0-g100', 't15_1-g100', 't15_3-g100', 't15_4-g100', 't15_5-g100', 't15_7-g100']
+5.19 base regen on 10 confirmed 5.14 post-submit prefixes
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:01<07:55,  1.65s/it]Loading weights:  59%|█████▉    | 171/290 [00:01<00:00, 135.26it/s]Loading weights:  90%|█████████ | 262/290 [00:03<00:00, 83.01it/s] Loading weights: 100%|██████████| 290/290 [00:03<00:00, 78.06it/s]
+probe[base] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[base] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[base] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[base] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[base] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[base] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[base] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[base] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[base] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[base] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+5.19 base probe correct=8/10 errors=['d1-g101', 'd2-g101']; Δlogp_fails={'d1-g101': -1.1718750298023224, 'd2-g101': -1.3281250596046448}
+5.19 training fresh LoRA with weighted CE; no full episode eval
+WandB not available. Install with: pip install wandb
+TensorBoard not available. Install with: pip install tensorboard
+Loading weights:   0%|          | 0/290 [00:00<?, ?it/s]Loading weights:   0%|          | 1/290 [00:02<11:44,  2.44s/it]Loading weights:  45%|████▌     | 131/290 [00:02<00:02, 71.56it/s]Loading weights:  68%|██████▊   | 196/290 [00:03<00:01, 80.56it/s]Loading weights:  81%|████████▏ | 236/290 [00:04<00:00, 63.97it/s]Loading weights:  90%|█████████ | 262/290 [00:04<00:00, 63.08it/s]Loading weights:  97%|█████████▋| 281/290 [00:04<00:00, 65.63it/s]Loading weights: 100%|██████████| 290/290 [00:04<00:00, 58.68it/s]
+/Users/Guest/lexsiai-hackaton/.venv/lib/python3.12/site-packages/peft/utils/save_and_load.py:313: UserWarning: Could not find a config file in CohereLabs/tiny-aya-global - will assume that the vocabulary was not modified.
+  warnings.warn(
+probe[step_1] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_1] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_1] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_1] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_1] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_1] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_1] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_1] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_1] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_1] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft519 step=1 loss=0.148074 fixed=[] broken=[] empty=[] Δlogp_fails={'d1-g101': -1.1250000596046448, 'd2-g101': -1.2968750298023224}
+probe[step_2] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_2] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_2] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_2] d1-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_2] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_2] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_2] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_2] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_2] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_2] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft519 step=2 loss=0.145308 fixed=[] broken=[] empty=[] Δlogp_fails={'d1-g101': -1.0156249701976776, 'd2-g101': -1.1875}
+probe[step_3] d0-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_3] d0-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1620'
+probe[step_3] d1-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_3] d1-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2480'
+probe[step_3] d2-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1350'
+probe[step_3] d2-g101 seed=101 correct=False empty=False toolish=True parsed='[{"tool_name": "lookup_order", "parameters": {"order_id": "O'
+probe[step_3] d3-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_3] d3-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2790'
+probe[step_3] d4-g100 seed=100 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=1910'
+probe[step_3] d5-g101 seed=101 correct=True empty=False toolish=False parsed='REFUND_SUBMITTED amount_cents=2240'
+sft519 step=3 loss=0.136862 fixed=['d1-g101'] broken=[] empty=[] Δlogp_fails={'d1-g101': -0.8906250596046448, 'd2-g101': -1.0312499403953552}
+5.19 stop: criterion met at step 3; keeping /Users/Guest/lexsiai-hackaton/artifacts/task-5-19/adapters/step_3
+python(42265) MallocStackLogging: can't turn off malloc stack logging because it was not enabled.
+{
+  "stop_reason": "selection_criterion_met",
+  "selected": {
+    "step": 3,
+    "mean_train_loss": 0.136862492809693,
+    "mean_sum_weights": 17.0,
+    "grad_norm": 164219.046875,
+    "n_supervised_tokens_per_epoch": 78,
+    "adapter": "artifacts/task-5-19/adapters/step_3",
+    "probe_n_correct": 9,
+    "probe_n_final_errors": 1,
+    "probe_n_empty": 0,
+    "fixed_ids": [
+      "d1-g101"
+    ],
+    "broken_ids": [],
+    "empty_ids": [],
+    "keeps_all_base_correct": true,
+    "fixes_at_least_one_target_fail": true,
+    "passes_selection": true,
+    "delta_logp_ref_minus_bracket": {
+      "d1-g101": -0.8906250596046448,
+      "d2-g101": -1.0312499403953552,
+      "d0-g100": 3.515625,
+      "d3-g100": 2.929687589406967
+    },
+    "delta_logp_on_fails": {
+      "d1-g101": -0.8906250596046448,
+      "d2-g101": -1.0312499403953552
+    }
+  },
+  "history_fixed_broken": [
+    {
+      "step": 1,
+      "fixed": [],
+      "broken": [],
+      "empty": [],
+      "delta_fails": {
+        "d1-g101": -1.1250000596046448,
+        "d2-g101": -1.2968750298023224
+      }
+    },
+    {
+      "step": 2,
+      "fixed": [],
+      "broken": [],
+      "empty": [],
+      "delta_fails": {
+        "d1-g101": -1.0156249701976776,
+        "d2-g101": -1.1875
+      }
+    },
+    {
+      "step": 3,
+      "fixed": [
+        "d1-g101"
+      ],
+      "broken": [],
+      "empty": [],
+      "delta_fails": {
+        "d1-g101": -0.8906250596046448,
+        "d2-g101": -1.0312499403953552
+      }
+    }
+  ]
+}

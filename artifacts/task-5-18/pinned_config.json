@@ -1,0 +1,99 @@
+{
+  "kind": "sft_first_diverge_diag_5_18",
+  "method": "first_divergence_token_logp_and_rank",
+  "no_training": true,
+  "no_full_episode_generation": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_sft_first_diverge_518.py",
+  "source_task": "artifacts/task-5-17",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "fail_ids": [
+    "d1-g101",
+    "d2-g101"
+  ],
+  "control_ids": [
+    "d0-g100",
+    "d3-g100"
+  ],
+  "models": [
+    "base",
+    "step_3"
+  ],
+  "adapters": [
+    "artifacts/task-5-16/adapters/step_3"
+  ],
+  "metric": {
+    "name": "delta_logp_at_first_divergence",
+    "definition": "At context = post-submit prefix + shared continuation prefix, logp(gold_token) - logp(call_token); ranks are 1-based (1 = most probable)."
+  },
+  "examples": [
+    {
+      "rollout_id": "d1-g101",
+      "role": "fail",
+      "amount_cents": 2480,
+      "order_id": "ORD-9402",
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "n_prefix": 2537,
+      "diverge_index": 0,
+      "n_shared_continuation": 0,
+      "shared_prefix_ids": [],
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_source": "encoded_refund_submitted_end_eos",
+      "call_source": "saved_new_token_ids"
+    },
+    {
+      "rollout_id": "d2-g101",
+      "role": "fail",
+      "amount_cents": 1350,
+      "order_id": "ORD-9403",
+      "episode_error_type": "final_answer_tool_call_after_submit",
+      "n_prefix": 2530,
+      "diverge_index": 0,
+      "n_shared_continuation": 0,
+      "shared_prefix_ids": [],
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_source": "encoded_refund_submitted_end_eos",
+      "call_source": "saved_new_token_ids"
+    },
+    {
+      "rollout_id": "d0-g100",
+      "role": "control",
+      "amount_cents": 1620,
+      "order_id": "ORD-9401",
+      "episode_error_type": "none",
+      "n_prefix": 2510,
+      "diverge_index": 0,
+      "n_shared_continuation": 0,
+      "shared_prefix_ids": [],
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_source": "saved_new_token_ids",
+      "call_source": "encoded_lookup_order_matched_fail_template"
+    },
+    {
+      "rollout_id": "d3-g100",
+      "role": "control",
+      "amount_cents": 2790,
+      "order_id": "ORD-9404",
+      "episode_error_type": "none",
+      "n_prefix": 2504,
+      "diverge_index": 0,
+      "n_shared_continuation": 0,
+      "shared_prefix_ids": [],
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_source": "saved_new_token_ids",
+      "call_source": "encoded_lookup_order_matched_fail_template"
+    }
+  ]
+}

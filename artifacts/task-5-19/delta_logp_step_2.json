@@ -1,0 +1,52 @@
+{
+  "examples": {
+    "d1-g101": {
+      "rollout_id": "d1-g101",
+      "role": "fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.5054261684417725,
+      "call_logp": -0.48980119824409485,
+      "delta_logp_ref_minus_bracket": -1.0156249701976776
+    },
+    "d2-g101": {
+      "rollout_id": "d2-g101",
+      "role": "fail",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -1.625227451324463,
+      "call_logp": -0.4377274513244629,
+      "delta_logp_ref_minus_bracket": -1.1875
+    },
+    "d0-g100": {
+      "rollout_id": "d0-g100",
+      "role": "control",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -0.19256140291690826,
+      "call_logp": -3.520686388015747,
+      "delta_logp_ref_minus_bracket": 3.328124985098839
+    },
+    "d3-g100": {
+      "rollout_id": "d3-g100",
+      "role": "control",
+      "diverge_index": 0,
+      "gold_token_id": 26501,
+      "gold_token_text": "REF",
+      "call_token_id": 73,
+      "call_token_text": "[",
+      "gold_logp": -0.24984337389469147,
+      "call_logp": -2.9920308589935303,
+      "delta_logp_ref_minus_bracket": 2.742187485098839
+    }
+  }
+}
