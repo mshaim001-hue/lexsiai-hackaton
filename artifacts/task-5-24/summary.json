@@ -1,0 +1,155 @@
+{
+  "kind": "holdout_eval_5_24",
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_holdout_eval_524.py",
+  "git_head": "f3aedfd20e1bcb348d1853cfc27165032b3b322f",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 4120.5,
+  "adapter": "artifacts/task-5-23/adapters/step_4",
+  "pinned_config": {
+    "kind": "holdout_eval_5_24",
+    "written_before_run": true,
+    "no_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_holdout_eval_524.py",
+    "git_head": "f3aedfd20e1bcb348d1853cfc27165032b3b322f",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "models": {
+      "base": "untrained Tiny Aya Global",
+      "adapter": "artifacts/task-5-23/adapters/step_4"
+    },
+    "inherits_generation_scoring_from": "artifacts/task-5-23 / task-5-14",
+    "matrix": {
+      "n_queries": 8,
+      "episode_ids": [
+        "h24_0",
+        "h24_1",
+        "h24_2",
+        "h24_3",
+        "h24_4",
+        "h24_5",
+        "h24_6",
+        "h24_7"
+      ],
+      "order_ids": [
+        "ORD-9901",
+        "ORD-9902",
+        "ORD-9903",
+        "ORD-9904",
+        "ORD-9905",
+        "ORD-9906",
+        "ORD-9907",
+        "ORD-9908"
+      ],
+      "customer_ids": [
+        "CUS-L01",
+        "CUS-L02",
+        "CUS-L03",
+        "CUS-L04",
+        "CUS-L05",
+        "CUS-L06",
+        "CUS-L07",
+        "CUS-L08"
+      ],
+      "amounts_cents": [
+        1470,
+        2290,
+        1680,
+        2530,
+        1860,
+        2140,
+        1750,
+        2710
+      ],
+      "generation_seeds": [
+        100,
+        101
+      ],
+      "n_episodes_per_model": 16,
+      "max_episodes_per_model": 16
+    },
+    "generation": {
+      "settings": "same as task-5-23 / task-5-14 one-action",
+      "environment_seed": 0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "max_steps": 4,
+      "protocol": "one_action_per_turn",
+      "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+      "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+      "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+      "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+      "weights_updated": false
+    },
+    "transfer_criterion": {
+      "at_least_one_fail_to_success": true,
+      "no_success_to_fail": true,
+      "invalid_calls_do_not_increase": true,
+      "note_if_base_has_zero_tool_call_after_submit": "matrix does not exercise the target after-submit failure mode"
+    }
+  },
+  "base_loaded": {
+    "label": "base",
+    "adapter": null,
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "adapter_loaded": {
+    "label": "step_4",
+    "adapter": "artifacts/task-5-23/adapters/step_4",
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "base_aggregates": {
+    "n": 16,
+    "full_success": 11,
+    "confirmed_returns": 12,
+    "correct_finals": 11,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 1,
+    "tool_call_after_submit_count": 1,
+    "error_type_counts": {
+      "none": 11,
+      "submit_refund_not_confirmed": 4,
+      "final_answer_tool_call_after_submit": 1
+    }
+  },
+  "step_4_aggregates": {
+    "n": 16,
+    "full_success": 11,
+    "confirmed_returns": 12,
+    "correct_finals": 11,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 1,
+    "tool_call_after_submit_count": 1,
+    "error_type_counts": {
+      "none": 11,
+      "submit_refund_not_confirmed": 4,
+      "final_answer_tool_call_after_submit": 1
+    }
+  },
+  "fail_to_success": [],
+  "success_to_fail": [],
+  "transfer_criterion": {
+    "at_least_one_fail_to_success": false,
+    "no_success_to_fail": true,
+    "invalid_calls_do_not_increase": true,
+    "passed": false
+  },
+  "target_error_coverage": {
+    "base_tool_call_after_submit_count": 1,
+    "matrix_exercises_target_failure": true,
+    "note": null
+  }
+}
