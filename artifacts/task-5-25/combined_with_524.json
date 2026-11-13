@@ -1,0 +1,88 @@
+{
+  "available": true,
+  "n_episodes_per_model": 40,
+  "base_aggregates": {
+    "n": 40,
+    "full_success": 27,
+    "confirmed_returns": 29,
+    "correct_finals": 27,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 2,
+    "tool_call_after_submit_count": 2,
+    "error_type_counts": {
+      "none": 27,
+      "submit_refund_not_confirmed": 11,
+      "final_answer_tool_call_after_submit": 2
+    }
+  },
+  "step_4_aggregates": {
+    "n": 40,
+    "full_success": 28,
+    "confirmed_returns": 29,
+    "correct_finals": 28,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 1,
+    "tool_call_after_submit_count": 1,
+    "error_type_counts": {
+      "none": 28,
+      "submit_refund_not_confirmed": 11,
+      "final_answer_tool_call_after_submit": 1
+    }
+  },
+  "fail_to_success": [
+    "h25_7-g101"
+  ],
+  "success_to_fail": [],
+  "base_after_submit_cases": [
+    {
+      "source": "5.24",
+      "rollout_id": "h24_7-g100",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "transition": "unchanged_fail"
+    },
+    {
+      "source": "5.25",
+      "rollout_id": "h25_7-g101",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit",
+        "failure_stage": "post_submit_final"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "transition": "fail_to_success"
+    }
+  ],
+  "transfer_criterion": {
+    "at_least_one_fail_to_success": true,
+    "no_success_to_fail": true,
+    "invalid_calls_do_not_increase": true,
+    "passed": true
+  }
+}

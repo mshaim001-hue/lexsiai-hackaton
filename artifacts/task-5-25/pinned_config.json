@@ -1,0 +1,96 @@
+{
+  "kind": "holdout_eval_5_25",
+  "written_before_run": true,
+  "no_training": true,
+  "no_query_selection_by_base_results": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_holdout_eval_525.py",
+  "git_head": "c53732d4396a7e79bce210774be1829c5d189278",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "models": {
+    "base": "untrained Tiny Aya Global",
+    "adapter": "artifacts/task-5-23/adapters/step_4"
+  },
+  "inherits_generation_scoring_from": "artifacts/task-5-24 / task-5-23 / task-5-14",
+  "matrix": {
+    "n_queries": 12,
+    "episode_ids": [
+      "h25_0",
+      "h25_1",
+      "h25_2",
+      "h25_3",
+      "h25_4",
+      "h25_5",
+      "h25_6",
+      "h25_7",
+      "h25_8",
+      "h25_9",
+      "h25_10",
+      "h25_11"
+    ],
+    "order_ids": [
+      "ORD-9911",
+      "ORD-9912",
+      "ORD-9913",
+      "ORD-9914",
+      "ORD-9915",
+      "ORD-9916",
+      "ORD-9917",
+      "ORD-9918",
+      "ORD-9919",
+      "ORD-9920",
+      "ORD-9921",
+      "ORD-9922"
+    ],
+    "customer_ids": [
+      "CUS-M01",
+      "CUS-M02",
+      "CUS-M03",
+      "CUS-M04",
+      "CUS-M05",
+      "CUS-M06",
+      "CUS-M07",
+      "CUS-M08",
+      "CUS-M09",
+      "CUS-M10",
+      "CUS-M11",
+      "CUS-M12"
+    ],
+    "amounts_cents": [
+      1920,
+      2380,
+      1540,
+      2670,
+      1810,
+      2090,
+      1730,
+      2460,
+      1590,
+      2840,
+      1980,
+      2210
+    ],
+    "generation_seeds": [
+      100,
+      101
+    ],
+    "n_episodes_per_model": 24,
+    "max_episodes_per_model": 24
+  },
+  "generation": {
+    "settings": "same as task-5-24 / task-5-23 / task-5-14 one-action",
+    "environment_seed": 0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn",
+    "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+    "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+    "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+    "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+    "weights_updated": false
+  },
+  "prior_holdout": "artifacts/task-5-24"
+}

@@ -1,0 +1,17 @@
+{
+  "n": 24,
+  "full_success": 17,
+  "confirmed_returns": 17,
+  "correct_finals": 17,
+  "invalid_calls_total": 0,
+  "calls_after_confirmed_submit_total": 0,
+  "tool_call_after_submit_count": 0,
+  "error_type_counts": {
+    "none": 17,
+    "submit_refund_not_confirmed": 7
+  },
+  "failure_stage_counts": {
+    "none": 17,
+    "submit": 7
+  }
+}

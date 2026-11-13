@@ -1,0 +1,532 @@
+{
+  "per_episode": [
+    {
+      "rollout_id": "h25_0-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_0-g101",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_1-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_1-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_10-g100",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_10-g101",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_11-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_11-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_2-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_2-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_3-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_3-g101",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_4-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_4-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_5-g100",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_5-g101",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    },
+    {
+      "rollout_id": "h25_6-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_6-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_7-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_7-g101",
+      "transition": "fail_to_success",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit",
+        "failure_stage": "post_submit_final"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_8-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_8-g101",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_9-g100",
+      "transition": "unchanged_success",
+      "base": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      }
+    },
+    {
+      "rollout_id": "h25_9-g101",
+      "transition": "unchanged_fail",
+      "base": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": false,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "submit_refund_not_confirmed",
+        "failure_stage": "submit"
+      }
+    }
+  ]
+}

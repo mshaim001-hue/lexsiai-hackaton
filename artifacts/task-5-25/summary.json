@@ -1,0 +1,296 @@
+{
+  "kind": "holdout_eval_5_25",
+  "no_training": true,
+  "no_query_selection_by_base_results": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_holdout_eval_525.py",
+  "git_head": "c53732d4396a7e79bce210774be1829c5d189278",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 6831.8,
+  "adapter": "artifacts/task-5-23/adapters/step_4",
+  "pinned_config": {
+    "kind": "holdout_eval_5_25",
+    "written_before_run": true,
+    "no_training": true,
+    "no_query_selection_by_base_results": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_holdout_eval_525.py",
+    "git_head": "c53732d4396a7e79bce210774be1829c5d189278",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "models": {
+      "base": "untrained Tiny Aya Global",
+      "adapter": "artifacts/task-5-23/adapters/step_4"
+    },
+    "inherits_generation_scoring_from": "artifacts/task-5-24 / task-5-23 / task-5-14",
+    "matrix": {
+      "n_queries": 12,
+      "episode_ids": [
+        "h25_0",
+        "h25_1",
+        "h25_2",
+        "h25_3",
+        "h25_4",
+        "h25_5",
+        "h25_6",
+        "h25_7",
+        "h25_8",
+        "h25_9",
+        "h25_10",
+        "h25_11"
+      ],
+      "order_ids": [
+        "ORD-9911",
+        "ORD-9912",
+        "ORD-9913",
+        "ORD-9914",
+        "ORD-9915",
+        "ORD-9916",
+        "ORD-9917",
+        "ORD-9918",
+        "ORD-9919",
+        "ORD-9920",
+        "ORD-9921",
+        "ORD-9922"
+      ],
+      "customer_ids": [
+        "CUS-M01",
+        "CUS-M02",
+        "CUS-M03",
+        "CUS-M04",
+        "CUS-M05",
+        "CUS-M06",
+        "CUS-M07",
+        "CUS-M08",
+        "CUS-M09",
+        "CUS-M10",
+        "CUS-M11",
+        "CUS-M12"
+      ],
+      "amounts_cents": [
+        1920,
+        2380,
+        1540,
+        2670,
+        1810,
+        2090,
+        1730,
+        2460,
+        1590,
+        2840,
+        1980,
+        2210
+      ],
+      "generation_seeds": [
+        100,
+        101
+      ],
+      "n_episodes_per_model": 24,
+      "max_episodes_per_model": 24
+    },
+    "generation": {
+      "settings": "same as task-5-24 / task-5-23 / task-5-14 one-action",
+      "environment_seed": 0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "max_steps": 4,
+      "protocol": "one_action_per_turn",
+      "system_prompt": "ONE_ACTION_SYSTEM_PROMPT",
+      "tools_fallback_prompt": "ONE_ACTION_TOOLS_FALLBACK_PROMPT",
+      "tool_result_format": "ONE_ACTION_TOOL_RESULT_FORMAT",
+      "user_prompt_style": "realistic_paraphrase_no_tool_sequence",
+      "weights_updated": false
+    },
+    "prior_holdout": "artifacts/task-5-24"
+  },
+  "base_loaded": {
+    "label": "base",
+    "adapter": null,
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "adapter_loaded": {
+    "label": "step_4",
+    "adapter": "artifacts/task-5-23/adapters/step_4",
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "base_aggregates": {
+    "n": 24,
+    "full_success": 16,
+    "confirmed_returns": 17,
+    "correct_finals": 16,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 1,
+    "tool_call_after_submit_count": 1,
+    "error_type_counts": {
+      "none": 16,
+      "submit_refund_not_confirmed": 7,
+      "final_answer_tool_call_after_submit": 1
+    },
+    "failure_stage_counts": {
+      "none": 16,
+      "submit": 7,
+      "post_submit_final": 1
+    }
+  },
+  "step_4_aggregates": {
+    "n": 24,
+    "full_success": 17,
+    "confirmed_returns": 17,
+    "correct_finals": 17,
+    "invalid_calls_total": 0,
+    "calls_after_confirmed_submit_total": 0,
+    "tool_call_after_submit_count": 0,
+    "error_type_counts": {
+      "none": 17,
+      "submit_refund_not_confirmed": 7
+    },
+    "failure_stage_counts": {
+      "none": 17,
+      "submit": 7
+    }
+  },
+  "fail_to_success": [
+    {
+      "rollout_id": "h25_7-g101",
+      "base_error_type": "final_answer_tool_call_after_submit",
+      "base_failure_stage": "post_submit_final",
+      "base_n_invalid": 0,
+      "adapter_n_invalid": 0
+    }
+  ],
+  "success_to_fail": [],
+  "base_after_submit_cases": [
+    {
+      "rollout_id": "h25_7-g101",
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit",
+        "failure_stage": "post_submit_final"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none",
+        "failure_stage": "none"
+      },
+      "transition": "fail_to_success"
+    }
+  ],
+  "transfer_criterion": {
+    "at_least_one_fail_to_success": true,
+    "no_success_to_fail": true,
+    "invalid_calls_do_not_increase": true,
+    "passed": true
+  },
+  "target_error_coverage": {
+    "base_tool_call_after_submit_count": 1,
+    "matrix_exercises_target_failure": true,
+    "note": null
+  },
+  "combined_with_524": {
+    "available": true,
+    "n_episodes_per_model": 40,
+    "base_aggregates": {
+      "n": 40,
+      "full_success": 27,
+      "confirmed_returns": 29,
+      "correct_finals": 27,
+      "invalid_calls_total": 0,
+      "calls_after_confirmed_submit_total": 2,
+      "tool_call_after_submit_count": 2,
+      "error_type_counts": {
+        "none": 27,
+        "submit_refund_not_confirmed": 11,
+        "final_answer_tool_call_after_submit": 2
+      }
+    },
+    "step_4_aggregates": {
+      "n": 40,
+      "full_success": 28,
+      "confirmed_returns": 29,
+      "correct_finals": 28,
+      "invalid_calls_total": 0,
+      "calls_after_confirmed_submit_total": 1,
+      "tool_call_after_submit_count": 1,
+      "error_type_counts": {
+        "none": 28,
+        "submit_refund_not_confirmed": 11,
+        "final_answer_tool_call_after_submit": 1
+      }
+    },
+    "fail_to_success": [
+      "h25_7-g101"
+    ],
+    "success_to_fail": [],
+    "base_after_submit_cases": [
+      {
+        "source": "5.24",
+        "rollout_id": "h24_7-g100",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "step_4": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "transition": "unchanged_fail"
+      },
+      {
+        "source": "5.25",
+        "rollout_id": "h25_7-g101",
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit",
+          "failure_stage": "post_submit_final"
+        },
+        "step_4": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none",
+          "failure_stage": "none"
+        },
+        "transition": "fail_to_success"
+      }
+    ],
+    "transfer_criterion": {
+      "at_least_one_fail_to_success": true,
+      "no_success_to_fail": true,
+      "invalid_calls_do_not_increase": true,
+      "passed": true
+    }
+  }
+}
