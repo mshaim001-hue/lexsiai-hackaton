@@ -33,23 +33,29 @@ Release-candidate write-up:
 - [ ] Short project description / title field (if separate from the annotation)
 - [ ] Any required team / affiliation fields
 
-## Still needed on Hugging Face (optional until form requires URLs)
+## Hugging Face — publication complete
 
-Create **public** collection(s) or model/dataset cards and paste URLs:
+Audit notes: [hf/HF_PUBLISH.md](hf/HF_PUBLISH.md). Cards:
+[hf/model_card_step4.md](hf/model_card_step4.md),
+[hf/dataset_card_traces_523_525.md](hf/dataset_card_traces_523_525.md).
+Form not re-submitted.
 
-- [ ] **Adapter** repo with `artifacts/task-5-23/adapters/step_4`
-- [ ] **Traces / paired tables** for 5.23 eval_514 and 5.24+5.25 holdouts
-- [ ] Model card: base revision, AgentTune pin, one-action protocol, seeds,
-      independent-holdout caveat (target error 2→1 fixed)
-- [ ] License / gated-base note: HF access to Tiny Aya Global required
-- [ ] Do **not** upload Hugging Face tokens or private `.env` files
+### Direct links (anonymous OK)
 
-## Suggested HF layout (names only — create manually later)
+- Adapter: https://huggingface.co/mshaim001/lexsi-t3-refund-adapter-5-23-step4
+- Traces / paired results: https://huggingface.co/datasets/mshaim001/lexsi-t3-refund-traces-5-23-5-25
 
-```
-mshaim001/lexsi-t3-refund-adapter-step4
-mshaim001/lexsi-t3-refund-traces-5-23-5-25
-```
+### Collections (anonymous OK; new repos listed)
+
+- [Refund Model Adapters](https://huggingface.co/collections/mshaim001/lexsi-hackathon-refund-model-adapters-6af3073f5bd1f23d4e0a82fe) — includes `…-adapter-5-23-step4`
+- [Refund Data and Traces](https://huggingface.co/collections/mshaim001/lexsi-hackathon-refund-data-and-traces-6af306a596f1197ded3aab30) — includes `…-traces-5-23-5-25`
+
+### Done
+
+- [x] Public model `mshaim001/lexsi-t3-refund-adapter-5-23-step4` (README card + weights)
+- [x] Public dataset `mshaim001/lexsi-t3-refund-traces-5-23-5-25` (README card + zip)
+- [x] Both repos added to the first-submission collections
+- [x] Do **not** upload Hugging Face tokens or private `.env` files
 
 ## Earlier pilots (not the RC claim)
 
