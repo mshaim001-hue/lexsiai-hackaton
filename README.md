@@ -8,7 +8,24 @@ stop with exactly `REFUND_SUBMITTED amount_cents=<integer>`.
 
 Public repo: [mshaim001-hue/lexsiai-hackaton](https://github.com/mshaim001-hue/lexsiai-hackaton).
 
-## Main result (realistic matrix 5.8 → pilot 5.9)
+## Release candidate (frozen `step_4`)
+
+Adapter [`artifacts/task-5-23/adapters/step_4`](artifacts/task-5-23/adapters/step_4/)
+on `CohereLabs/tiny-aya-global` @ `af89d219b53ed9b13b8a4645f9c8028973510324`.
+
+| Eval | Full success (base → step_4) | After-submit calls | Invalid |
+| --- | --- | --- | --- |
+| 5.23 on 5.14 (dev) | **7/12 → 8/12** | 3 → 2 | 0 → 0 |
+| 5.24 + 5.25 (independent) | **27/40 → 28/40** | **2 → 1** | **0 → 0** |
+
+On the independent matrix the target error
+`final_answer_tool_call_after_submit` hit the base **twice**; the adapter
+**fixed one** (`h25_7-g101`) and left one unchanged (`h24_7-g100`). Clean-checkout
+load + those two control replays:
+[artifacts/release-candidate/](artifacts/release-candidate/). Submission pack:
+[submission/RELEASE_CANDIDATE.md](submission/RELEASE_CANDIDATE.md).
+
+## Earlier main table (realistic matrix 5.8 → pilot 5.9)
 
 Fixed test: paraphrased refund requests **v0–v3 × seeds 100–103** (16 pairs),
 **without** tool-sequence coaching. Generation: `T=0.7`, `top_p=0.9`,

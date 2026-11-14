@@ -1,0 +1,57 @@
+{
+  "kind": "release_candidate_verify",
+  "written_before_run": true,
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_release_candidate_verify.py",
+  "git_head": "a5a3094ce2044144f2a9949bdc392c111e8b8d54",
+  "repo_root": "/private/tmp/lexsi-rc-verify",
+  "clean_checkout_note": "git worktree at /tmp/lexsi-rc-verify detached HEAD a5a3094; .venv and vendor symlinked from main checkout; RC verify scripts copied in (not yet on that commit); adapter loaded from artifacts/task-5-23/adapters/step_4 over CohereLabs/tiny-aya-global@af89d219… per README/RESUME",
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "adapter": "artifacts/task-5-23/adapters/step_4",
+  "control_episodes": [
+    {
+      "rollout_id": "h25_7-g101",
+      "episode_id": "h25_7",
+      "order_id": "ORD-9918",
+      "customer_id": "CUS-M08",
+      "amount_cents": 2460,
+      "generation_seed": 101,
+      "source": "artifacts/task-5-25",
+      "expected_prior": {
+        "base_error_type": "final_answer_tool_call_after_submit",
+        "adapter_transition": "fail_to_success"
+      },
+      "prompt": "Process a refund for ORD-9918. Customer CUS-M08. The wireless earbuds lose pairing every few minutes outdoors."
+    },
+    {
+      "rollout_id": "h24_7-g100",
+      "episode_id": "h24_7",
+      "order_id": "ORD-9908",
+      "customer_id": "CUS-L08",
+      "amount_cents": 2710,
+      "generation_seed": 100,
+      "source": "artifacts/task-5-24",
+      "expected_prior": {
+        "base_error_type": "final_answer_tool_call_after_submit",
+        "adapter_transition": "unchanged_fail"
+      },
+      "prompt": "Process a refund for ORD-9908. Customer CUS-L08. The white-noise machine randomizes volume spikes that wake the baby."
+    }
+  ],
+  "generation": {
+    "settings": "same as task-5-24 / task-5-25 / task-5-14 one-action",
+    "environment_seed": 0,
+    "temperature": 0.7,
+    "top_p": 0.9,
+    "do_sample": true,
+    "max_new_tokens": 512,
+    "max_steps": 4,
+    "protocol": "one_action_per_turn"
+  },
+  "load_instructions": {
+    "base": "AutoModelForCausalLM.from_pretrained('CohereLabs/tiny-aya-global', revision='af89d219b53ed9b13b8a4645f9c8028973510324', local_files_only=True)",
+    "adapter": "PeftModel.from_pretrained(base, 'artifacts/task-5-23/adapters/step_4')",
+    "engine": "contract.sft_eval_520._load_engine"
+  }
+}

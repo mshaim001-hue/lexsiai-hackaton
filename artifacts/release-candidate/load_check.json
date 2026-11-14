@@ -1,0 +1,16 @@
+{
+  "ok": true,
+  "elapsed_s": 7.79,
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "base_config_model_type": "cohere2",
+  "tokenizer_vocab_size": 261008,
+  "adapter_path": "artifacts/task-5-23/adapters/step_4",
+  "adapter_base_model_name_or_path": "CohereLabs/tiny-aya-global",
+  "adapter_peft_type": "LORA",
+  "adapter_r": 8,
+  "adapter_alpha": 16,
+  "peft_active": true,
+  "dtype": "float16",
+  "device_probe": "mps"
+}

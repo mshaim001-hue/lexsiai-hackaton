@@ -1,0 +1,5 @@
+# Clean-checkout release-candidate verify (no training)
+# 1) Fresh worktree or clone of this commit
+# 2) Env + AgentTune per README.md / RESUME.md
+# 3) Model cached at pinned revision, then:
+HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_release_candidate_verify.py

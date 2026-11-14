@@ -1,0 +1,48 @@
+{
+  "per_episode": [
+    {
+      "rollout_id": "h25_7-g101",
+      "transition": "fail_to_success",
+      "expected_prior_transition": "fail_to_success",
+      "matches_prior_holdout": true,
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "step_4": {
+        "task_success": true,
+        "confirmed": true,
+        "correct_final": true,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 0,
+        "error_type": "none"
+      }
+    },
+    {
+      "rollout_id": "h24_7-g100",
+      "transition": "unchanged_fail",
+      "expected_prior_transition": "unchanged_fail",
+      "matches_prior_holdout": true,
+      "base": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      },
+      "step_4": {
+        "task_success": false,
+        "confirmed": true,
+        "correct_final": false,
+        "n_invalid": 0,
+        "n_calls_after_confirmed_submit": 1,
+        "error_type": "final_answer_tool_call_after_submit"
+      }
+    }
+  ]
+}

@@ -1,0 +1,155 @@
+{
+  "kind": "release_candidate_verify",
+  "no_training": true,
+  "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_release_candidate_verify.py",
+  "git_head": "a5a3094ce2044144f2a9949bdc392c111e8b8d54",
+  "repo_root": "/private/tmp/lexsi-rc-verify",
+  "clean_checkout_note": "git worktree at /tmp/lexsi-rc-verify detached HEAD a5a3094; .venv and vendor symlinked from main checkout; RC verify scripts copied in (not yet on that commit); adapter loaded from artifacts/task-5-23/adapters/step_4 over CohereLabs/tiny-aya-global@af89d219… per README/RESUME",
+  "python": "3.12.14",
+  "versions": {
+    "agenttune": "1.1.4.dev0",
+    "agenttune_git": "d4db4c12d52342227c4113a70183d0f64aa2f345",
+    "trl": "1.7.1",
+    "transformers": "5.22.1",
+    "peft": "0.21.2",
+    "torch": "2.11.0",
+    "python": "3.12.14"
+  },
+  "elapsed_s": 542.6,
+  "model_id": "CohereLabs/tiny-aya-global",
+  "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+  "adapter": "artifacts/task-5-23/adapters/step_4",
+  "load_check": {
+    "ok": true,
+    "elapsed_s": 7.79,
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "base_config_model_type": "cohere2",
+    "tokenizer_vocab_size": 261008,
+    "adapter_path": "artifacts/task-5-23/adapters/step_4",
+    "adapter_base_model_name_or_path": "CohereLabs/tiny-aya-global",
+    "adapter_peft_type": "LORA",
+    "adapter_r": 8,
+    "adapter_alpha": 16,
+    "peft_active": true,
+    "dtype": "float16",
+    "device_probe": "mps"
+  },
+  "base_loaded": {
+    "label": "base",
+    "adapter": null,
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "adapter_loaded": {
+    "label": "step_4",
+    "adapter": "artifacts/task-5-23/adapters/step_4",
+    "device": "mps",
+    "dtype": "float16"
+  },
+  "comparison": {
+    "per_episode": [
+      {
+        "rollout_id": "h25_7-g101",
+        "transition": "fail_to_success",
+        "expected_prior_transition": "fail_to_success",
+        "matches_prior_holdout": true,
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "step_4": {
+          "task_success": true,
+          "confirmed": true,
+          "correct_final": true,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 0,
+          "error_type": "none"
+        }
+      },
+      {
+        "rollout_id": "h24_7-g100",
+        "transition": "unchanged_fail",
+        "expected_prior_transition": "unchanged_fail",
+        "matches_prior_holdout": true,
+        "base": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        },
+        "step_4": {
+          "task_success": false,
+          "confirmed": true,
+          "correct_final": false,
+          "n_invalid": 0,
+          "n_calls_after_confirmed_submit": 1,
+          "error_type": "final_answer_tool_call_after_submit"
+        }
+      }
+    ]
+  },
+  "pinned_config": {
+    "kind": "release_candidate_verify",
+    "written_before_run": true,
+    "no_training": true,
+    "command": "HF_HUB_OFFLINE=1 TOKENIZERS_PARALLELISM=false PYTHONUNBUFFERED=1 .venv/bin/python run_release_candidate_verify.py",
+    "git_head": "a5a3094ce2044144f2a9949bdc392c111e8b8d54",
+    "repo_root": "/private/tmp/lexsi-rc-verify",
+    "clean_checkout_note": "git worktree at /tmp/lexsi-rc-verify detached HEAD a5a3094; .venv and vendor symlinked from main checkout; RC verify scripts copied in (not yet on that commit); adapter loaded from artifacts/task-5-23/adapters/step_4 over CohereLabs/tiny-aya-global@af89d219… per README/RESUME",
+    "model_id": "CohereLabs/tiny-aya-global",
+    "model_revision": "af89d219b53ed9b13b8a4645f9c8028973510324",
+    "adapter": "artifacts/task-5-23/adapters/step_4",
+    "control_episodes": [
+      {
+        "rollout_id": "h25_7-g101",
+        "episode_id": "h25_7",
+        "order_id": "ORD-9918",
+        "customer_id": "CUS-M08",
+        "amount_cents": 2460,
+        "generation_seed": 101,
+        "source": "artifacts/task-5-25",
+        "expected_prior": {
+          "base_error_type": "final_answer_tool_call_after_submit",
+          "adapter_transition": "fail_to_success"
+        },
+        "prompt": "Process a refund for ORD-9918. Customer CUS-M08. The wireless earbuds lose pairing every few minutes outdoors."
+      },
+      {
+        "rollout_id": "h24_7-g100",
+        "episode_id": "h24_7",
+        "order_id": "ORD-9908",
+        "customer_id": "CUS-L08",
+        "amount_cents": 2710,
+        "generation_seed": 100,
+        "source": "artifacts/task-5-24",
+        "expected_prior": {
+          "base_error_type": "final_answer_tool_call_after_submit",
+          "adapter_transition": "unchanged_fail"
+        },
+        "prompt": "Process a refund for ORD-9908. Customer CUS-L08. The white-noise machine randomizes volume spikes that wake the baby."
+      }
+    ],
+    "generation": {
+      "settings": "same as task-5-24 / task-5-25 / task-5-14 one-action",
+      "environment_seed": 0,
+      "temperature": 0.7,
+      "top_p": 0.9,
+      "do_sample": true,
+      "max_new_tokens": 512,
+      "max_steps": 4,
+      "protocol": "one_action_per_turn"
+    },
+    "load_instructions": {
+      "base": "AutoModelForCausalLM.from_pretrained('CohereLabs/tiny-aya-global', revision='af89d219b53ed9b13b8a4645f9c8028973510324', local_files_only=True)",
+      "adapter": "PeftModel.from_pretrained(base, 'artifacts/task-5-23/adapters/step_4')",
+      "engine": "contract.sft_eval_520._load_engine"
+    }
+  }
+}
